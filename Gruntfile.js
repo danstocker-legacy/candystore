@@ -15,6 +15,8 @@ module.exports = function (grunt) {
                 'src/behaviors/AlignedPopup.js',
                 'src/behaviors/Option.js',
                 'src/behaviors/OptionList.js',
+                'src/widgets/utils/ResizeWatcher.js',
+                'src/widgets/utils/HotKeyWatcher.js',
                 'src/widgets/Label.js',
                 'src/widgets/HtmlLabel.js',
                 'src/widgets/DataLabel.js',
