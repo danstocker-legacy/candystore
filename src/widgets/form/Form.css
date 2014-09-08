@@ -1,0 +1,8 @@
+.Form > .inputs-container {
+    margin: 0;
+    padding: 0;
+}
+
+.Form > .inputs-container > li {
+    list-style: none;
+}

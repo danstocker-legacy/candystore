@@ -1,0 +1,57 @@
+/*global dessert, troop, sntls, app */
+/*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
+(function () {
+    "use strict";
+
+    module("Debouncer");
+
+    test("Instantiation", function () {
+        raises(function () {
+            app.utils.Debouncer.create();
+        }, "should raise exception on missing argument");
+
+        raises(function () {
+            app.utils.Debouncer.create('foo');
+        }, "should raise exception on invalid argument");
+
+        function originalFunction() {
+        }
+
+        var debounced = app.utils.Debouncer.create(originalFunction);
+
+        strictEqual(debounced.originalFunction, originalFunction, "should set originalFunction property to argument");
+        ok(debounced.hasOwnProperty('debounceTimer'), "should add debounceTimer property");
+        equal(typeof debounced.debounceTimer, 'undefined', "should set debounceTimer property to undefined");
+    });
+
+    test("Method invocation", function () {
+        expect(5);
+
+        var args = [];
+
+        function foo() {
+            args = Array.prototype.slice.call(arguments);
+        }
+
+        var debounced = app.utils.Debouncer.create(foo);
+
+        debounced.debounceTimer = 5;
+
+        debounced.addMocks({
+            _clearTimeoutProxy: function (timer) {
+                equal(timer, 5, "should clear timeout when timer is set");
+            },
+
+            _setTimeoutProxy: function (func, delay) {
+                equal(delay, 100, "should pass delay to setTimeout");
+                func();
+                return 10;
+            }
+        });
+
+        strictEqual(debounced.runDebounced(100, 'hello'), debounced, "should be chainable");
+
+        equal(debounced.debounceTimer, 10, "should set new timer");
+        deepEqual(args, ['hello'], "should pass arguments to debounced method");
+    });
+}());
