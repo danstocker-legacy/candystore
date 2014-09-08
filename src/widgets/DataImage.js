@@ -45,8 +45,8 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
                 this._updateImageUrl();
 
                 this
-                    .bindToEntityNodeChange(this.fieldKey, 'onImageChange')
-                    .bindToEntityNodeChange(this.fieldKey.documentKey, 'onDocumentReplace');
+                    .bindToEntityNodeChange(this.entityKey, 'onImageChange')
+                    .bindToEntityNodeChange(this.entityKey.documentKey, 'onDocumentReplace');
             },
 
             /** @ignore */
