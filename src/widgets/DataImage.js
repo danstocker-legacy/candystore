@@ -24,7 +24,7 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
         .addPrivateMethods(/** @lends candystore.DataImage# */{
             /** @private */
             _updateImageUrl: function () {
-                this.setImageUrl(this.entityKey.toField().getValue());
+                this.setImageUrl([this.imageRoot, this.entityKey.toField().getValue()].join('/'));
             }
         })
         .addMethods(/** @lends candystore.DataImage# */{
@@ -36,6 +36,9 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
                 base.init.call(this);
                 bookworm.EntityBound.init.call(this);
                 candystore.EntityWidget.init.call(this, urlFieldKey);
+
+                /** @type {string} */
+                this.imageRoot = undefined;
             },
 
             /** @ignore */
@@ -53,6 +56,15 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
             afterRemove: function () {
                 base.afterRemove.call(this);
                 this.unbindAll();
+            },
+
+            /**
+             * @param {string} imageRoot
+             * @returns {candystore.DataImage}
+             */
+            setImageRoot: function (imageRoot) {
+                this.imageRoot = imageRoot;
+                return this;
             },
 
             /** @ignore */
