@@ -1,16 +1,16 @@
-/*global dessert, troop, sntls, e$, s$, jQuery, app */
-troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'Form', function (ns, className) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className)
-            .addTrait(s$.JqueryWidget);
+            .addTrait(shoeshine.JqueryWidget);
 
     /**
      * Creates a Form widget instance.
-     * @name app.widgets.Form.create
+     * @name candystore.Form.create
      * @function
-     * @returns {app.widgets.Form}
+     * @returns {candystore.Form}
      */
 
     /**
@@ -18,8 +18,8 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
      * @extends shoeshine.Widget
      * @extends shoeshine.JqueryWidget
      */
-    app.widgets.Form = self
-        .addConstants(/** @lends app.widgets.Form */{
+    candystore.Form = self
+        .addConstants(/** @lends candystore.Form */{
             /** @constant */
             EVENT_FORM_VALID: 'form-valid',
 
@@ -29,7 +29,7 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
             /** @constant */
             EVENT_FORM_SUBMIT: 'form-submit'
         })
-        .addPrivateMethods(/** @lends app.widgets.Form# */{
+        .addPrivateMethods(/** @lends candystore.Form# */{
             /** @private */
             _updateCounters: function () {
                 var formFields = this.getFormFields(),
@@ -67,7 +67,7 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
                 }
             }
         })
-        .addMethods(/** @lends app.widgets.Form# */{
+        .addMethods(/** @lends candystore.Form# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -92,9 +92,9 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
                 this._updateCounters();
 
                 this
-                    .subscribeTo(widgets.Input.EVENT_INPUT_SUBMIT, this.onInputSubmit)
-                    .subscribeTo(widgets.Input.EVENT_INPUT_VALID, this.onInputValid)
-                    .subscribeTo(widgets.Input.EVENT_INPUT_INVALID, this.onInputInvalid);
+                    .subscribeTo(candystore.Input.EVENT_INPUT_SUBMIT, this.onInputSubmit)
+                    .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid)
+                    .subscribeTo(candystore.Input.EVENT_INPUT_INVALID, this.onInputInvalid);
             },
 
             /** @ignore */
@@ -123,8 +123,8 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
             },
 
             /**
-             * @param {app.widgets.FormField} formField
-             * @returns {app.widgets.Form}
+             * @param {candystore.FormField} formField
+             * @returns {candystore.Form}
              */
             addFormField: function (formField) {
                 dessert
@@ -148,7 +148,7 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
             /**
              * TODO: make sure returned value is either FormField instance or undefined
              * @param {string} fieldName
-             * @returns {app.widgets.FormField}
+             * @returns {candystore.FormField}
              */
             getFormField: function (fieldName) {
                 return this.getChild(fieldName);
@@ -156,12 +156,12 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
 
             /** @returns {shoeshine.WidgetCollection} */
             getFormFields: function () {
-                return this.children.filterByType(widgets.FormField);
+                return this.children.filterByType(candystore.FormField);
             },
 
             /**
              * Attempts to submit form.
-             * @returns {app.widgets.Form}
+             * @returns {candystore.Form}
              */
             trySubmittingForm: function () {
                 this._triggerSubmissionEvent();
@@ -170,11 +170,11 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
 
             /**
              * Puts focus on first field of the form.
-             * @returns {app.widgets.Form}
+             * @returns {candystore.Form}
              */
             focusOnFirstField: function () {
                 var firstField = this.children
-                    .filterByType(widgets.FormField)
+                    .filterByType(candystore.FormField)
                     .getSortedValues()[0];
 
                 if (firstField) {
@@ -234,17 +234,17 @@ troop.postpone(app.widgets, 'Form', function (/**app.widgets*/widgets, className
     self.on('submit', '', 'onSubmit');
 });
 
-(function (/**app.widgets*/widgets) {
+(function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
         isForm: function (expr) {
-            return widgets.Form.isBaseOf(expr);
+            return candystore.Form.isBaseOf(expr);
         },
 
         isFormOptional: function (expr) {
             return expr === undefined ||
-                   widgets.Form.isBaseOf(expr);
+                   candystore.Form.isBaseOf(expr);
         }
     });
-}(app.widgets));
+}());

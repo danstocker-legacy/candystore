@@ -14,6 +14,7 @@
         "sntls"    : "~0.17.0",
         "evan"     : "~0.4.1",
         "jquery"   : "~2.1.0",
+        "bookworm" : "~0.1.1",
         "shoeshine": "~0.1.5"
     },
     "devDependencies": {

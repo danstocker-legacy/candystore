@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, e$, s$, jQuery, app */
-troop.postpone(app.widgets, 'TextButton', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'TextButton', function (ns, className) {
     "use strict";
 
-    var base = widgets.Button,
+    var base = candystore.Button,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.TextButton.create
+     * @name candystore.TextButton.create
      * @function
-     * @returns {app.widgets.TextButton}
+     * @returns {candystore.TextButton}
      */
 
     /**
      * @class
-     * @extends app.widgets.Button
+     * @extends candystore.Button
      */
-    app.widgets.TextButton = self
-        .addMethods(/** @lends app.widgets.TextButton# */{
+    candystore.TextButton = self
+        .addMethods(/** @lends candystore.TextButton# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -36,15 +36,15 @@ troop.postpone(app.widgets, 'TextButton', function (/**app.widgets*/widgets, cla
 
             /**
              * Override for button-specific Label implementation.
-             * @returns {app.widgets.Label}
+             * @returns {candystore.Label}
              */
             createLabelWidget: function () {
-                return widgets.Label.create();
+                return candystore.Label.create();
             },
 
             /**
              * @param {string} caption
-             * @returns {app.widgets.TextButton}
+             * @returns {candystore.TextButton}
              */
             setCaption: function (caption) {
                 dessert.isString(caption, "Invalid label text");

@@ -1,5 +1,5 @@
-/*global dessert, troop, sntls, app */
-troop.postpone(app.utils, 'Debouncer', function () {
+/*global dessert, troop, sntls, candystore */
+troop.postpone(candystore, 'Debouncer', function () {
     "use strict";
 
     var base = troop.Base,
@@ -7,10 +7,10 @@ troop.postpone(app.utils, 'Debouncer', function () {
         slice = Array.prototype.slice;
 
     /**
-     * @name app.utils.Debouncer.create
+     * @name candystore.Debouncer.create
      * @function
      * @param {function} originalFunction Function to debounce
-     * @returns {app.utils.Debouncer}
+     * @returns {candystore.Debouncer}
      */
 
     /**
@@ -19,8 +19,8 @@ troop.postpone(app.utils, 'Debouncer', function () {
      * @class
      * @extends troop.Base
      */
-    app.utils.Debouncer = self
-        .addPrivateMethods(/** @lends app.utils.Debouncer# */{
+    candystore.Debouncer = self
+        .addPrivateMethods(/** @lends candystore.Debouncer# */{
             /**
              * @param {function} func
              * @param {number} delay
@@ -39,7 +39,7 @@ troop.postpone(app.utils, 'Debouncer', function () {
                 return window.clearTimeout(timer);
             }
         })
-        .addMethods(/** @lends app.utils.Debouncer# */{
+        .addMethods(/** @lends candystore.Debouncer# */{
             /**
              * @param {function} originalFunction Function to debounce
              * @ignore
@@ -56,7 +56,7 @@ troop.postpone(app.utils, 'Debouncer', function () {
 
             /**
              * @param {number} delay
-             * @returns {app.utils.Debouncer}
+             * @returns {candystore.Debouncer}
              */
             runDebounced: function (delay) {
                 var debounceTimer = this.debounceTimer;

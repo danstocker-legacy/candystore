@@ -1,23 +1,23 @@
-/*global dessert, troop, sntls, s$, app */
-troop.postpone(app.widgets, 'DropdownButton', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, shoeshine, candystore */
+troop.postpone(candystore, 'DropdownButton', function (ns, className) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className)
-            .addTrait(s$.JqueryWidget);
+            .addTrait(shoeshine.JqueryWidget);
 
     /**
-     * @name app.widgets.DropdownButton.create
+     * @name candystore.DropdownButton.create
      * @function
-     * @returns {app.widgets.DropdownButton}
+     * @returns {candystore.DropdownButton}
      */
 
     /**
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.DropdownButton = self
-        .addPrivateMethods(/** @lends app.widgets.DropdownButton# */{
+    candystore.DropdownButton = self
+        .addPrivateMethods(/** @lends candystore.DropdownButton# */{
             /** @private */
             _updateCssClasses: function () {
                 if (this.dropdownList.isOpen) {
@@ -31,7 +31,7 @@ troop.postpone(app.widgets, 'DropdownButton', function (/**app.widgets*/widgets,
                 }
             }
         })
-        .addMethods(/** @lends app.widgets.DropdownButton# */{
+        .addMethods(/** @lends candystore.DropdownButton# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -44,7 +44,7 @@ troop.postpone(app.widgets, 'DropdownButton', function (/**app.widgets*/widgets,
                     .setChildName('dropdown-label')
                     .addToParent(this);
 
-                /** @type {app.widgets.Dropdown} */
+                /** @type {candystore.Dropdown} */
                 this.dropdownList = this.createDropdownListWidget();
             },
 
@@ -55,8 +55,8 @@ troop.postpone(app.widgets, 'DropdownButton', function (/**app.widgets*/widgets,
                 this._updateCssClasses();
 
                 this
-                    .subscribeTo(widgets.Popup.EVENT_POPUP_OPEN, this.onDropdownOpen)
-                    .subscribeTo(widgets.Popup.EVENT_POPUP_CLOSE, this.onDropdownClose);
+                    .subscribeTo(candystore.Popup.EVENT_POPUP_OPEN, this.onDropdownOpen)
+                    .subscribeTo(candystore.Popup.EVENT_POPUP_CLOSE, this.onDropdownClose);
             },
 
             /**
@@ -69,18 +69,18 @@ troop.postpone(app.widgets, 'DropdownButton', function (/**app.widgets*/widgets,
 
             /**
              * Override to specify custom label.
-             * @returns {app.widgets.Label}
+             * @returns {candystore.Label}
              */
             createLabelWidget: function () {
-                return widgets.Label.create();
+                return candystore.Label.create();
             },
 
             /**
              * Override to specify custom dropdown list.
-             * @returns {app.widgets.Dropdown}
+             * @returns {candystore.Dropdown}
              */
             createDropdownListWidget: function () {
-                return widgets.Dropdown.create();
+                return candystore.Dropdown.create();
             },
 
             /**

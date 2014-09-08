@@ -1,16 +1,16 @@
-/*global dessert, troop, sntls, e$, s$, app */
-troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, e$, shoeshine, candystore */
+troop.postpone(candystore, 'FormField', function (ns, className) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className);
 
     /**
      * Creates a FormField widget instance.
-     * @name app.widgets.FormField.create
+     * @name candystore.FormField.create
      * @function
      * @param {string} [inputType] Corresponds to the input tag's type argument. Defaults to 'text'.
-     * @returns {app.widgets.FormField}
+     * @returns {candystore.FormField}
      */
 
     /**
@@ -19,8 +19,8 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.FormField = self
-        .addPrivateMethods(/** @lends app.widgets.FormField# */{
+    candystore.FormField = self
+        .addPrivateMethods(/** @lends candystore.FormField# */{
             /** @private */
             _updateStyle: function () {
                 var inputWidget = this.getInputWidget();
@@ -31,7 +31,7 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
                 }
             }
         })
-        .addMethods(/** @lends app.widgets.FormField# */{
+        .addMethods(/** @lends candystore.FormField# */{
             /**
              * @param {string} [inputType]
              * @ignore
@@ -48,12 +48,12 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
                 /** @type {string} */
                 this.inputType = inputType || 'text';
 
-                /** @type {app.widgets.Label} */
-                this.commentLabel = widgets.Label.create()
+                /** @type {candystore.Label} */
+                this.commentLabel = candystore.Label.create()
                     .setChildName('comment');
 
-                /** @type {app.widgets.Label} */
-                this.warningLabel = widgets.Label.create()
+                /** @type {candystore.Label} */
+                this.warningLabel = candystore.Label.create()
                     .setChildName('warning');
 
                 this.createInputWidget()
@@ -65,8 +65,8 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
             afterAdd: function () {
                 base.afterAdd.call(this);
                 this
-                    .subscribeTo(widgets.Input.EVENT_INPUT_BLUR, this.onInputBlur)
-                    .subscribeTo(widgets.Input.EVENT_INPUT_VALID, this.onInputValid);
+                    .subscribeTo(candystore.Input.EVENT_INPUT_BLUR, this.onInputBlur)
+                    .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid);
             },
 
             /**
@@ -79,20 +79,20 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
 
             /**
              * Override to specify input widget included in the form field.
-             * @returns {app.widgets.Input}
+             * @returns {candystore.Input}
              */
             createInputWidget: function () {
-                return widgets.Input.create(this.inputType);
+                return candystore.Input.create(this.inputType);
             },
 
-            /** @returns {app.widgets.Input} */
+            /** @returns {candystore.Input} */
             getInputWidget: function () {
                 return this.getChild('input');
             },
 
             /**
              * @param {string} warningMessage
-             * @returns {app.widgets.FormField}
+             * @returns {candystore.FormField}
              */
             setWarningMessage: function (warningMessage) {
                 this.warningLabel
@@ -106,7 +106,7 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
                 return this;
             },
 
-            /** @returns {app.widgets.FormField} */
+            /** @returns {candystore.FormField} */
             clearWarningMessage: function () {
                 this.warningLabel
                     .removeFromParent();
@@ -120,7 +120,7 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
 
             /**
              * @param {string} comment
-             * @returns {app.widgets.FormField}
+             * @returns {candystore.FormField}
              */
             setComment: function (comment) {
                 this.commentLabel
@@ -129,14 +129,14 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
                 return this;
             },
 
-            /** @returns {app.widgets.FormField} */
+            /** @returns {candystore.FormField} */
             clearComment: function () {
                 this.commentLabel
                     .removeFromParent();
                 return this;
             },
 
-            /** @returns {app.widgets.FormField} */
+            /** @returns {candystore.FormField} */
             focusOnField: function () {
                 this.getInputWidget()
                     .focusOnInput();
@@ -155,17 +155,17 @@ troop.postpone(app.widgets, 'FormField', function (/**app.widgets*/widgets, clas
         });
 });
 
-(function (/**app.widgets*/widgets) {
+(function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
         isFormField: function (expr) {
-            return widgets.FormField.isBaseOf(expr);
+            return candystore.FormField.isBaseOf(expr);
         },
 
         isFormFieldOptional: function (expr) {
             return expr === undefined ||
-                widgets.FormField.isBaseOf(expr);
+                candystore.FormField.isBaseOf(expr);
         }
     });
-}(app.widgets));
+}());

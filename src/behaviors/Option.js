@@ -1,5 +1,5 @@
-/*global dessert, troop, sntls, s$, jQuery, app */
-troop.postpone(app.widgets, 'Option', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'Option', function (ns, className) {
     "use strict";
 
     var base = troop.Base,
@@ -12,15 +12,15 @@ troop.postpone(app.widgets, 'Option', function (/**app.widgets*/widgets, classNa
      * @extends troop.Base
      * @extends shoeshine.Widget
      */
-    app.widgets.Option = self
-        .addConstants(/** @lends app.widgets.Option# */{
+    candystore.Option = self
+        .addConstants(/** @lends candystore.Option# */{
             /** @constant */
             EVENT_OPTION_CLICK: 'option-click',
 
             /** @constant */
             EVENT_OPTION_HOVER: 'option-hover'
         })
-        .addPrivateMethods(/** @lends app.widgets.Option# */{
+        .addPrivateMethods(/** @lends candystore.Option# */{
             /**
              * @param {jQuery.Event} event
              * @private
@@ -45,7 +45,7 @@ troop.postpone(app.widgets, 'Option', function (/**app.widgets*/widgets, classNa
                     .clearNextOriginalEvent();
             }
         })
-        .addMethods(/** @lends app.widgets.Option# */{
+        .addMethods(/** @lends candystore.Option# */{
             /**
              * Call from host's init.
              * @param {*} [optionValue]
@@ -57,7 +57,7 @@ troop.postpone(app.widgets, 'Option', function (/**app.widgets*/widgets, classNa
 
             /**
              * @param {*} optionValue
-             * @returns {app.widgets.Option}
+             * @returns {candystore.Option}
              */
             setOptionValue: function (optionValue) {
                 this.optionValue = optionValue;
@@ -65,7 +65,7 @@ troop.postpone(app.widgets, 'Option', function (/**app.widgets*/widgets, classNa
             }
         });
 
-    s$.JqueryWidget
+    shoeshine.JqueryWidget
         .on('click', '.Option', '_onOptionClick')
         .on('mouseenter', '.Option', '_onOptionHover');
 });

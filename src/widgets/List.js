@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, s$, app */
-troop.postpone(app.widgets, 'List', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, shoeshine, candystore */
+troop.postpone(candystore, 'List', function (ns, className) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.List.create
+     * @name candystore.List.create
      * @function
-     * @returns {app.widgets.List}
+     * @returns {candystore.List}
      */
 
     /**
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.List = self
-        .addMethods(/** @lends app.widgets.List# */{
+    candystore.List = self
+        .addMethods(/** @lends candystore.List# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -33,7 +33,7 @@ troop.postpone(app.widgets, 'List', function (/**app.widgets*/widgets, className
 
             /**
              * @param itemWidget
-             * @returns {app.widgets.List}
+             * @returns {candystore.List}
              */
             addItemWidget: function (itemWidget) {
                 itemWidget

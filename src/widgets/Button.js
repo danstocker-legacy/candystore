@@ -1,17 +1,17 @@
-/*global dessert, troop, sntls, e$, s$, app */
-troop.postpone(app.widgets, 'Button', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, e$, shoeshine, candystore */
+troop.postpone(candystore, 'Button', function (ns, className) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className)
-            .addTrait(s$.JqueryWidget)
-            .addTrait(widgets.Disableable);
+            .addTrait(shoeshine.JqueryWidget)
+            .addTrait(candystore.Disableable);
 
     /**
      * Creates a Button instance.
-     * @name app.widgets.Button.create
+     * @name candystore.Button.create
      * @function
-     * @returns {app.widgets.Button}
+     * @returns {candystore.Button}
      */
 
     /**
@@ -20,18 +20,18 @@ troop.postpone(app.widgets, 'Button', function (/**app.widgets*/widgets, classNa
      * @class
      * @extends shoeshine.Widget
      * @extends shoeshine.JqueryWidget
-     * @extends app.widgets.Disableable
+     * @extends candystore.Disableable
      */
-    app.widgets.Button = self
-        .addConstants(/** @lends app.widgets.Button */{
+    candystore.Button = self
+        .addConstants(/** @lends candystore.Button */{
             /** @constants */
             EVENT_BUTTON_CLICK: 'button-click'
         })
-        .addMethods(/** @lends app.widgets.Button# */{
+        .addMethods(/** @lends candystore.Button# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
-                widgets.Disableable.init.call(this);
+                candystore.Disableable.init.call(this);
             },
 
             /** @ignore */

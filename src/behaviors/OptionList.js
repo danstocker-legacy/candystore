@@ -1,5 +1,5 @@
-/*global dessert, troop, sntls, e$, s$, app */
-troop.postpone(app.widgets, 'OptionList', function (/**app.widgets*/widgets) {
+/*global dessert, troop, sntls, e$, shoeshine, candystore */
+troop.postpone(candystore, 'OptionList', function (ns) {
     "use strict";
 
     var base = troop.Base,
@@ -10,10 +10,10 @@ troop.postpone(app.widgets, 'OptionList', function (/**app.widgets*/widgets) {
      * Should only accept widgets as list items that implement the Option trait.
      * @class
      * @extends troop.Base
-     * @extends app.widgets.List
+     * @extends candystore.List
      */
-    app.widgets.OptionList = self
-        .addConstants(/** @lends app.widgets.OptionList */{
+    candystore.OptionList = self
+        .addConstants(/** @lends candystore.OptionList */{
             /** @constant */
             EVENT_OPTION_FOCUS: 'option-focus',
 
@@ -26,7 +26,7 @@ troop.postpone(app.widgets, 'OptionList', function (/**app.widgets*/widgets) {
             /** @constant */
             EVENT_OPTIONS_ESCAPE: 'options-escape'
         })
-        .addPrivateMethods(/** @lends app.widgets.OptionList# */{
+        .addPrivateMethods(/** @lends candystore.OptionList# */{
             /**
              * @param {number} index
              * @returns {string}
@@ -156,7 +156,7 @@ troop.postpone(app.widgets, 'OptionList', function (/**app.widgets*/widgets) {
                 this.clearNextOriginalEvent();
             }
         })
-        .addMethods(/** @lends app.widgets.OptionList# */{
+        .addMethods(/** @lends candystore.OptionList# */{
             /**
              * Call from host's init.
              */
@@ -187,9 +187,9 @@ troop.postpone(app.widgets, 'OptionList', function (/**app.widgets*/widgets) {
             afterAdd: function () {
                 this._updateFocusedOptionName(this._getChildNameAtIndex(0));
                 this
-                    .subscribeTo(widgets.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
-                    .subscribeTo(widgets.Option.EVENT_OPTION_HOVER, this._onOptionHover)
-                    .subscribeTo(widgets.Option.EVENT_OPTION_CLICK, this._onOptionClick);
+                    .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_HOVER, this._onOptionHover)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_CLICK, this._onOptionClick);
             }
         });
 });

@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, e$, s$, app */
-troop.postpone(app.widgets, 'PasswordInput', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, e$, shoeshine, candystore */
+troop.postpone(candystore, 'PasswordInput', function (ns, className) {
     "use strict";
 
-    var base = widgets.TextInput,
+    var base = candystore.TextInput,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.PasswordInput.create
+     * @name candystore.PasswordInput.create
      * @function
-     * @returns {app.widgets.PasswordInput}
+     * @returns {candystore.PasswordInput}
      */
 
     /**
      * @class
-     * @extends app.widgets.TextInput
+     * @extends candystore.TextInput
      */
-    app.widgets.PasswordInput = self
-        .addMethods(/** @lends app.widgets.PasswordInput# */{
+    candystore.PasswordInput = self
+        .addMethods(/** @lends candystore.PasswordInput# */{
             /** @ignore */
             init: function () {
                 base.init.call(this, 'password');
@@ -30,7 +30,7 @@ troop.postpone(app.widgets, 'PasswordInput', function (/**app.widgets*/widgets, 
                 return this.children.toString();
             },
 
-            /** @returns {app.widgets.PasswordInput} */
+            /** @returns {candystore.PasswordInput} */
             revealPassword: function () {
                 if (this.htmlAttributes.getItem('type') === 'password') {
                     this.addAttribute('type', 'text');
@@ -42,7 +42,7 @@ troop.postpone(app.widgets, 'PasswordInput', function (/**app.widgets*/widgets, 
                 return this;
             },
 
-            /** @returns {app.widgets.PasswordInput} */
+            /** @returns {candystore.PasswordInput} */
             obscurePassword: function () {
                 if (this.htmlAttributes.getItem('type') !== 'password') {
                     this.addAttribute('type', 'password');
@@ -61,11 +61,11 @@ troop.postpone(app.widgets, 'PasswordInput', function (/**app.widgets*/widgets, 
         });
 });
 
-troop.amendPostponed(app.widgets, 'Input', function (/**app.widgets*/widgets) {
+troop.amendPostponed(candystore, 'Input', function () {
     "use strict";
 
-    widgets.Input
-        .addSurrogate(widgets, 'PasswordInput', function (inputType) {
+    candystore.Input
+        .addSurrogate(candystore, 'PasswordInput', function (inputType) {
             return inputType === 'password';
         });
 });

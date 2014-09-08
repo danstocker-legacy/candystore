@@ -1,41 +1,41 @@
-/*global dessert, troop, sntls, b$, s$, app */
-troop.postpone(app.widgets, 'DataImage', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, bookworm, shoeshine, candystore */
+troop.postpone(candystore, 'DataImage', function (ns, className) {
     "use strict";
 
-    var base = app.widgets.Image,
+    var base = candystore.Image,
         self = base.extend(className)
-            .addTrait(b$.EntityBound)
-            .addTrait(widgets.EntityWidget);
+            .addTrait(bookworm.EntityBound)
+            .addTrait(candystore.EntityWidget);
 
     /**
-     * @name app.widgets.DataImage.create
+     * @name candystore.DataImage.create
      * @function
      * @param {bookworm.FieldKey} urlFieldKey Field holding image URL.
-     * @returns {app.widgets.DataImage}
+     * @returns {candystore.DataImage}
      */
 
     /**
      * @class
-     * @extends app.widgets.Image
+     * @extends candystore.Image
      * @extends bookworm.EntityBound
-     * @extends app.widgets.EntityWidget
+     * @extends candystore.EntityWidget
      */
-    app.widgets.DataImage = self
-        .addPrivateMethods(/** @lends app.widgets.DataImage# */{
+    candystore.DataImage = self
+        .addPrivateMethods(/** @lends candystore.DataImage# */{
             /** @private */
             _updateImageUrl: function () {
                 this.setImageUrl(this.entityKey.toField().getValue());
             }
         })
-        .addMethods(/** @lends app.widgets.DataImage# */{
+        .addMethods(/** @lends candystore.DataImage# */{
             /**
              * @param {bookworm.FieldKey} urlFieldKey
              * @ignore
              */
             init: function (urlFieldKey) {
                 base.init.call(this);
-                b$.EntityBound.init.call(this);
-                widgets.EntityWidget.init.call(this, urlFieldKey);
+                bookworm.EntityBound.init.call(this);
+                candystore.EntityWidget.init.call(this, urlFieldKey);
             },
 
             /** @ignore */

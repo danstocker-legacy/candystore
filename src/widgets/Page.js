@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, s$, jQuery, app */
-troop.postpone(app.widgets, 'Page', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.Page.create
+     * @name candystore.Page.create
      * @function
-     * @returns {app.widgets.Page}
+     * @returns {candystore.Page}
      */
 
     /**
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.Page = self
-        .addPrivateMethods(/** @lends app.widgets.Page# */{
+    candystore.Page = self
+        .addPrivateMethods(/** @lends candystore.Page# */{
             /**
              * @returns {sntls.Collection}
              * @private
@@ -28,7 +28,7 @@ troop.postpone(app.widgets, 'Page', function (/**app.widgets*/widgets, className
                     });
             }
         })
-        .addMethods(/** @lends app.widgets.Page# */{
+        .addMethods(/** @lends candystore.Page# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);

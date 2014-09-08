@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, e$, s$, app */
-troop.postpone(app.widgets, 'Image', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, e$, shoeshine, candystore */
+troop.postpone(candystore, 'Image', function (ns, className) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.Image.create
+     * @name candystore.Image.create
      * @function
-     * @returns {app.widgets.Image}
+     * @returns {candystore.Image}
      */
 
     /**
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.Image = self
-        .addMethods(/** @lends app.widgets.Image# */{
+    candystore.Image = self
+        .addMethods(/** @lends candystore.Image# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -26,7 +26,7 @@ troop.postpone(app.widgets, 'Image', function (/**app.widgets*/widgets, classNam
 
             /**
              * @param {string} imageUrl
-             * @returns {app.widgets.Image}
+             * @returns {candystore.Image}
              */
             setImageUrl: function (imageUrl) {
                 this.addAttribute('src', imageUrl);

@@ -1,25 +1,25 @@
-/*global dessert, troop, sntls, e$, s$, jQuery, app */
-troop.postpone(app.widgets, 'TextInput', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
     "use strict";
 
-    var base = widgets.Input,
+    var base = candystore.Input,
         self = base.extend(className)
-            .addTrait(s$.JqueryWidget);
+            .addTrait(shoeshine.JqueryWidget);
 
     /**
-     * @name app.widgets.TextInput.create
+     * @name candystore.TextInput.create
      * @function
      * @param {string} [textInputType]
-     * @returns {app.widgets.TextInput}
+     * @returns {candystore.TextInput}
      */
 
     /**
      * @class
-     * @extends app.widgets.Input
+     * @extends candystore.Input
      * @extends shoeshine.JqueryWidget
      */
-    app.widgets.TextInput = self
-        .addConstants(/** @lends app.widgets.Input */{
+    candystore.TextInput = self
+        .addConstants(/** @lends candystore.Input */{
             /** @constant */
             inputTypes: {
                 // basic input types
@@ -33,7 +33,7 @@ troop.postpone(app.widgets, 'TextInput', function (/**app.widgets*/widgets, clas
                 url   : 'url'
             }
         })
-        .addMethods(/** @lends app.widgets.TextInput# */{
+        .addMethods(/** @lends candystore.TextInput# */{
             /**
              * @param {string} textInputType
              * @ignore
@@ -112,7 +112,7 @@ troop.postpone(app.widgets, 'TextInput', function (/**app.widgets*/widgets, clas
     self.on('keypress', '', 'onKeyPress');
 }, jQuery);
 
-troop.amendPostponed(app.widgets, 'Input', function (/**app.widgets*/widgets) {
+troop.amendPostponed(candystore, 'Input', function (/**candystore*/widgets) {
     "use strict";
 
     widgets.Input
@@ -121,17 +121,17 @@ troop.amendPostponed(app.widgets, 'Input', function (/**app.widgets*/widgets) {
         });
 });
 
-(function (/**app.widgets*/widgets) {
+(function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
         isTextInputType: function (expr) {
-            return widgets.TextInput.inputTypes[expr] === expr;
+            return candystore.TextInput.inputTypes[expr] === expr;
         },
 
         isTextInputTypeOptional: function (expr) {
             return expr === undefined ||
-                widgets.TextInput.inputTypes[expr] === expr;
+                candystore.TextInput.inputTypes[expr] === expr;
         }
     });
-}(app.widgets));
+}());

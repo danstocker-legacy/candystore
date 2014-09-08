@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, app */
+/*global dessert, troop, sntls, candystore */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -7,17 +7,17 @@
 
     test("Instantiation", function () {
         raises(function () {
-            app.utils.Debouncer.create();
+            candystore.Debouncer.create();
         }, "should raise exception on missing argument");
 
         raises(function () {
-            app.utils.Debouncer.create('foo');
+            candystore.Debouncer.create('foo');
         }, "should raise exception on invalid argument");
 
         function originalFunction() {
         }
 
-        var debounced = app.utils.Debouncer.create(originalFunction);
+        var debounced = candystore.Debouncer.create(originalFunction);
 
         strictEqual(debounced.originalFunction, originalFunction, "should set originalFunction property to argument");
         ok(debounced.hasOwnProperty('debounceTimer'), "should add debounceTimer property");
@@ -33,7 +33,7 @@
             args = Array.prototype.slice.call(arguments);
         }
 
-        var debounced = app.utils.Debouncer.create(foo);
+        var debounced = candystore.Debouncer.create(foo);
 
         debounced.debounceTimer = 5;
 

@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, s$, app */
-troop.postpone(app.widgets, 'Flow', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, shoeshine, candystore */
+troop.postpone(candystore, 'Flow', function (ns, className) {
     "use strict";
 
-    var base = widgets.List,
+    var base = candystore.List,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.Flow.create
+     * @name candystore.Flow.create
      * @function
-     * @returns {app.widgets.Flow}
+     * @returns {candystore.Flow}
      */
 
     /**
      * @class
-     * @extends app.widgets.List
+     * @extends candystore.List
      */
-    app.widgets.Flow = self
-        .addMethods(/** @lends app.widgets.Flow# */{
+    candystore.Flow = self
+        .addMethods(/** @lends candystore.Flow# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -32,7 +32,7 @@ troop.postpone(app.widgets, 'Flow', function (/**app.widgets*/widgets, className
                  * Collection of available stage widgets.
                  * @type {shoeshine.WidgetCollection}
                  */
-                this.stages = s$.WidgetCollection.create();
+                this.stages = shoeshine.WidgetCollection.create();
             },
 
             /**
@@ -47,7 +47,7 @@ troop.postpone(app.widgets, 'Flow', function (/**app.widgets*/widgets, className
              * Adds a stage to the flow.
              * @param {string} stageName
              * @param {shoeshine.Widget} stageWidget
-             * @returns {app.widgets.Flow}
+             * @returns {candystore.Flow}
              */
             addStage: function (stageName, stageWidget) {
                 this.stages.setItem(stageName, stageWidget
@@ -59,7 +59,7 @@ troop.postpone(app.widgets, 'Flow', function (/**app.widgets*/widgets, className
             /**
              * Goes to the specified stage.
              * @param {string} stageName
-             * @returns {app.widgets.Flow}
+             * @returns {candystore.Flow}
              */
             goToStage: function (stageName) {
                 var stages = this.stages,

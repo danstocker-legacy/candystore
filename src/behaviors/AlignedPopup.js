@@ -1,16 +1,16 @@
-/*global dessert, troop, sntls, jQuery, app */
-troop.postpone(app.widgets, 'AlignedPopup', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, jQuery, candystore */
+troop.postpone(candystore, 'AlignedPopup', function (ns, className, /**jQuery*/$) {
     "use strict";
 
-    var base = app.widgets.Popup,
+    var base = candystore.Popup,
         self = base.extend();
 
     /**
      * @class
-     * @extends app.widgets.Popup
+     * @extends candystore.Popup
      */
-    app.widgets.AlignedPopup = self
-        .addPrivateMethods(/** @lends app.widgets.AlignedPopup# */{
+    candystore.AlignedPopup = self
+        .addPrivateMethods(/** @lends candystore.AlignedPopup# */{
             /** @private */
             _alignPopup: function () {
                 $(this.getElement()).position(this.positionOptions.items);
@@ -22,7 +22,7 @@ troop.postpone(app.widgets, 'AlignedPopup', function (/**app.widgets*/widgets, c
                 return this;
             }
         })
-        .addMethods(/** @lends app.widgets.AlignedPopup# */{
+        .addMethods(/** @lends candystore.AlignedPopup# */{
             /**
              * Call from host class' init.
              */
@@ -46,7 +46,7 @@ troop.postpone(app.widgets, 'AlignedPopup', function (/**app.widgets*/widgets, c
              */
             afterAdd: function () {
                 base.afterAdd.call(this);
-                this.subscribeTo(widgets.ResizeWatcher.EVENT_WINDOW_RESIZE_DEBOUNCED, this.onResize);
+                this.subscribeTo(candystore.ResizeWatcher.EVENT_WINDOW_RESIZE_DEBOUNCED, this.onResize);
             },
 
             /**
@@ -60,7 +60,7 @@ troop.postpone(app.widgets, 'AlignedPopup', function (/**app.widgets*/widgets, c
             /**
              * @param {string} optionName
              * @param {*} [optionValue]
-             * @returns {app.widgets.AlignedPopup}
+             * @returns {candystore.AlignedPopup}
              */
             setPositionOption: function (optionName, optionValue) {
                 if (typeof optionValue === 'undefined') {

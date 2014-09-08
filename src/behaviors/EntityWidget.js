@@ -1,5 +1,5 @@
-/*global dessert, troop, sntls, s$, app */
-troop.postpone(app.widgets, 'EntityWidget', function () {
+/*global dessert, troop, sntls, shoeshine, candystore */
+troop.postpone(candystore, 'EntityWidget', function () {
     "use strict";
 
     var base = troop.Base,
@@ -11,12 +11,12 @@ troop.postpone(app.widgets, 'EntityWidget', function () {
      * @extends troop.Base
      * @extends shoeshine.Widget
      */
-    app.widgets.EntityWidget = self
-        .addConstants(/** @lends app.widgets.EntityWidget */{
+    candystore.EntityWidget = self
+        .addConstants(/** @lends candystore.EntityWidget */{
             /** @constant */
             ATTRIBUTE_NAME_ENTITY_KEY: 'data-entity-key'
         })
-        .addMethods(/** @lends app.widgets.EntityWidget# */{
+        .addMethods(/** @lends candystore.EntityWidget# */{
             /**
              * @param {bookworm.EntityKey} entityKey
              */
@@ -26,7 +26,7 @@ troop.postpone(app.widgets, 'EntityWidget', function () {
             },
 
             /**
-             * @returns {app.widgets.EntityWidget}
+             * @returns {candystore.EntityWidget}
              */
             revealKey: function () {
                 this.addAttribute(this.ATTRIBUTE_NAME_ENTITY_KEY, this.entityKey.toString());
@@ -34,7 +34,7 @@ troop.postpone(app.widgets, 'EntityWidget', function () {
             },
 
             /**
-             * @returns {app.widgets.EntityWidget}
+             * @returns {candystore.EntityWidget}
              */
             hideKey: function () {
                 this.removeAttribute(this.ATTRIBUTE_NAME_ENTITY_KEY);
@@ -43,20 +43,20 @@ troop.postpone(app.widgets, 'EntityWidget', function () {
         });
 });
 
-troop.postpone(app, 'revealKeys', function () {
+troop.postpone(candystore, 'revealKeys', function () {
     "use strict";
 
-    app.revealKeys = function () {
-        s$.Widget.rootWidget.getAllDescendants()
+    candystore.revealKeys = function () {
+        shoeshine.Widget.rootWidget.getAllDescendants()
             .callOnEachItem('revealKey');
     };
 });
 
-troop.postpone(app, 'hideKeys', function () {
+troop.postpone(candystore, 'hideKeys', function () {
     "use strict";
 
-    app.hideKeys = function () {
-        s$.Widget.rootWidget.getAllDescendants()
+    candystore.hideKeys = function () {
+        shoeshine.Widget.rootWidget.getAllDescendants()
             .callOnEachItem('hideKey');
     };
 });

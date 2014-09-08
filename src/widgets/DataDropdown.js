@@ -1,37 +1,37 @@
-/*global dessert, troop, sntls, b$, s$, app */
-troop.postpone(app.widgets, 'DataDropdown', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, bookworm, shoeshine, candystore */
+troop.postpone(candystore, 'DataDropdown', function (ns, className) {
     "use strict";
 
-    var base = widgets.Dropdown,
+    var base = candystore.Dropdown,
         self = base.extend(className)
-            .addTrait(widgets.EntityWidget);
+            .addTrait(candystore.EntityWidget);
 
     /**
-     * @name app.widgets.DataDropdown.create
+     * @name candystore.DataDropdown.create
      * @function
      * @param {bookworm.FieldKey} fieldKey
-     * @returns {app.widgets.DataDropdown}
+     * @returns {candystore.DataDropdown}
      */
 
     /**
      * @class
-     * @extends app.widgets.Dropdown
-     * @extends app.widgets.EntityWidget
+     * @extends candystore.Dropdown
+     * @extends candystore.EntityWidget
      */
-    app.widgets.DataDropdown = self
-        .addMethods(/** @lends app.widgets.DataDropdown# */{
+    candystore.DataDropdown = self
+        .addMethods(/** @lends candystore.DataDropdown# */{
             /**
              * @param {bookworm.FieldKey} fieldKey
              * @ignore
              */
             init: function (fieldKey) {
-                widgets.EntityWidget.init.call(this, fieldKey);
+                candystore.EntityWidget.init.call(this, fieldKey);
                 base.init.call(this);
             },
 
-            /** @returns {app.widgets.DataList} */
+            /** @returns {candystore.DataList} */
             createListWidget: function () {
-                return widgets.DataList.create(this.entityKey);
+                return candystore.DataList.create(this.entityKey);
             }
         });
 });

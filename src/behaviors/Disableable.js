@@ -1,5 +1,5 @@
-/*global dessert, troop, sntls, e$, s$, app */
-troop.postpone(app.widgets, 'Disableable', function () {
+/*global dessert, troop, sntls, e$, shoeshine, candystore */
+troop.postpone(candystore, 'Disableable', function () {
     "use strict";
 
     var base = troop.Base,
@@ -14,8 +14,8 @@ troop.postpone(app.widgets, 'Disableable', function () {
      * @extends troop.Base
      * @extends shoeshine.Renderable
      */
-    app.widgets.Disableable = self
-        .addPrivateMethods(/** @lends app.widgets.Disableable# */{
+    candystore.Disableable = self
+        .addPrivateMethods(/** @lends candystore.Disableable# */{
             /** @private */
             _updateCssClasses: function () {
                 if (this.isDisabled()) {
@@ -27,7 +27,7 @@ troop.postpone(app.widgets, 'Disableable', function () {
                 }
             }
         })
-        .addMethods(/** @lends app.widgets.Disableable# */{
+        .addMethods(/** @lends candystore.Disableable# */{
             /** Call from host's init. */
             init: function () {
                 /** @type {sntls.Collection} */
@@ -37,7 +37,7 @@ troop.postpone(app.widgets, 'Disableable', function () {
 
             /**
              * Releases all disabling sources at once.
-             * @returns {app.widgets.Disableable}
+             * @returns {candystore.Disableable}
              */
             forceEnable: function () {
                 this.disablingSources.clear();
@@ -48,7 +48,7 @@ troop.postpone(app.widgets, 'Disableable', function () {
             /**
              * Enables the instance by the specified source.
              * @param {string} disablingSource
-             * @returns {app.widgets.Disableable}
+             * @returns {candystore.Disableable}
              */
             enableBy: function (disablingSource) {
                 this.disablingSources.deleteItem(disablingSource);
@@ -59,7 +59,7 @@ troop.postpone(app.widgets, 'Disableable', function () {
             /**
              * Disables the instance by the specified source.
              * @param {string} disablingSource
-             * @returns {app.widgets.Disableable}
+             * @returns {candystore.Disableable}
              */
             disableBy: function (disablingSource) {
                 this.disablingSources.setItem(disablingSource, disablingSource);

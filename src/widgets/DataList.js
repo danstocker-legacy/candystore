@@ -1,17 +1,17 @@
-/*global dessert, troop, sntls, b$, s$, app */
-troop.postpone(app.widgets, 'DataList', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, bookworm, shoeshine, candystore */
+troop.postpone(candystore, 'DataList', function (ns, className) {
     "use strict";
 
-    var base = widgets.List,
+    var base = candystore.List,
         self = base.extend(className)
-            .addTrait(b$.EntityBound)
-            .addTrait(widgets.EntityWidget);
+            .addTrait(bookworm.EntityBound)
+            .addTrait(candystore.EntityWidget);
 
     /**
-     * @name app.widgets.DataList.create
+     * @name candystore.DataList.create
      * @function
      * @param {shoeshine.FieldKey} fieldKey Key to an ordered reference collection.
-     * @returns {app.widgets.DataList}
+     * @returns {candystore.DataList}
      */
 
     /**
@@ -19,12 +19,12 @@ troop.postpone(app.widgets, 'DataList', function (/**app.widgets*/widgets, class
      * Expects to be bound to an *ordered* collection.
      * Expects to have items that are also EntityWidgets.
      * @class
-     * @extends app.widgets.List
+     * @extends candystore.List
      * @extends bookworm.EntityBound
-     * @extends app.widgets.EntityWidget
+     * @extends candystore.EntityWidget
      */
-    app.widgets.DataList = self
-        .addPrivateMethods(/** @lends app.widgets.DataList# */{
+    candystore.DataList = self
+        .addPrivateMethods(/** @lends candystore.DataList# */{
             /**
              * Updates list items.
              * Removes items that are no longer part of the list, and adds new ones.
@@ -57,15 +57,15 @@ troop.postpone(app.widgets, 'DataList', function (/**app.widgets*/widgets, class
                     .passEachItemTo(this.addItemWidget, this);
             }
         })
-        .addMethods(/** @lends app.widgets.DataList# */{
+        .addMethods(/** @lends candystore.DataList# */{
             /**
              * @param {shoeshine.FieldKey} fieldKey
              * @ignore
              */
             init: function (fieldKey) {
                 base.init.call(this);
-                b$.EntityBound.init.call(this);
-                widgets.EntityWidget.init.call(this, fieldKey);
+                bookworm.EntityBound.init.call(this);
+                candystore.EntityWidget.init.call(this, fieldKey);
             },
 
             /**
@@ -93,7 +93,7 @@ troop.postpone(app.widgets, 'DataList', function (/**app.widgets*/widgets, class
              * @returns {shoeshine.Widget}
              */
             createItemWidget: function (itemKey) {
-                return widgets.DataLabel.create(itemKey)
+                return candystore.DataLabel.create(itemKey)
                     .setChildName(itemKey.itemId);
             },
 

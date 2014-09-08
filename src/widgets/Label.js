@@ -1,22 +1,22 @@
-/*global dessert, troop, sntls, e$, s$, jQuery, app */
-troop.postpone(app.widgets, 'Label', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className);
 
     /**
-     * @name app.widgets.Label.create
+     * @name candystore.Label.create
      * @function
-     * @returns {app.widgets.Label}
+     * @returns {candystore.Label}
      */
 
     /**
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.Label = self
-        .addMethods(/** @lends app.widgets.Label# */{
+    candystore.Label = self
+        .addMethods(/** @lends candystore.Label# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
@@ -29,7 +29,7 @@ troop.postpone(app.widgets, 'Label', function (/**app.widgets*/widgets, classNam
 
             /**
              * @param {string} labelText
-             * @returns {app.widgets.Label}
+             * @returns {candystore.Label}
              */
             setLabelText: function (labelText) {
                 $(this.getElement())

@@ -1,16 +1,16 @@
-/*global dessert, troop, sntls, e$, s$, jQuery, app */
-troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className);
 
     /**
      * Creates an Input widget instance.
-     * @name app.widgets.Input.create
+     * @name candystore.Input.create
      * @function
      * @param {string} inputType Corresponds to the input tag's type argument.
-     * @returns {app.widgets.Input}
+     * @returns {candystore.Input}
      */
 
     /**
@@ -18,8 +18,8 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
      * @class
      * @extends shoeshine.Widget
      */
-    app.widgets.Input = self
-        .addConstants(/** @lends app.widgets.Input */{
+    candystore.Input = self
+        .addConstants(/** @lends candystore.Input */{
             /** @constant */
             EVENT_INPUT_GOT_VALUE: 'input-got-value',
 
@@ -74,7 +74,7 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
                 week    : 'week'
             }
         })
-        .addPrivateMethods(/** @lends app.widgets.Input# */{
+        .addPrivateMethods(/** @lends candystore.Input# */{
             /**
              * @param {string} inputValue
              * @private
@@ -135,7 +135,7 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
                 }
             }
         })
-        .addMethods(/** @lends app.widgets.Input# */{
+        .addMethods(/** @lends candystore.Input# */{
             /**
              * @param {string} inputType
              * @ignore
@@ -189,7 +189,7 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
 
             /**
              * @param {boolean} canSubmit
-             * @returns {app.widgets.Input}
+             * @returns {candystore.Input}
              */
             setCanSubmit: function (canSubmit) {
                 this.canSubmit = canSubmit;
@@ -209,7 +209,7 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
              * Sets input value and triggers corresponding events.
              * @param {string} inputValue
              * @param {boolean} [updateDom]
-             * @returns {app.widgets.Input}
+             * @returns {candystore.Input}
              */
             setInputValue: function (inputValue, updateDom) {
                 var oldInputValue = this.inputValue;
@@ -228,8 +228,8 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
             /**
              * Sets validator function.
              * @param {function} validatorFunction
-             * @returns {app.widgets.Input}
-             * @see app.widgets.Input#validatorFunction
+             * @returns {candystore.Input}
+             * @see candystore.Input#validatorFunction
              */
             setValidatorFunction: function (validatorFunction) {
                 dessert.isFunction(validatorFunction, "Invalid validatorFunction function");
@@ -237,7 +237,7 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
                 return this;
             },
 
-            /** @returns {app.widgets.Input} */
+            /** @returns {candystore.Input} */
             focusOnInput: function () {
                 var element = this.getElement();
                 if (element) {
@@ -246,7 +246,7 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
                 return this;
             },
 
-            /** @returns {app.widgets.Input} */
+            /** @returns {candystore.Input} */
             blurInput: function () {
                 var element = this.getElement();
                 if (element) {
@@ -284,17 +284,17 @@ troop.postpone(app.widgets, 'Input', function (/**app.widgets*/widgets, classNam
         });
 }, jQuery);
 
-(function (/**app.widgets*/widgets) {
+(function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
         isInputType: function (expr) {
-            return widgets.Input.inputTypes[expr] === expr;
+            return candystore.Input.inputTypes[expr] === expr;
         },
 
         isInputTypeOptional: function (expr) {
             return expr === undefined ||
-                widgets.Input.inputTypes[expr] === expr;
+                candystore.Input.inputTypes[expr] === expr;
         }
     });
-}(app.widgets));
+}());

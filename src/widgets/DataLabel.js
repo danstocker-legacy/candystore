@@ -1,33 +1,33 @@
-/*global dessert, troop, sntls, b$, s$, app */
-troop.postpone(app.widgets, 'DataLabel', function (/**app.widgets*/widgets, className) {
+/*global dessert, troop, sntls, bookworm, shoeshine, candystore */
+troop.postpone(candystore, 'DataLabel', function (ns, className) {
     "use strict";
 
-    var base = widgets.Label,
+    var base = candystore.Label,
         self = base.extend(className)
-            .addTrait(b$.EntityBound)
-            .addTrait(widgets.EntityWidget);
+            .addTrait(bookworm.EntityBound)
+            .addTrait(candystore.EntityWidget);
 
     /**
-     * @name app.widgets.DataLabel.create
+     * @name candystore.DataLabel.create
      * @function
      * @param {bookworm.FieldKey} textFieldKey Field holding text.
-     * @returns {app.widgets.DataLabel}
+     * @returns {candystore.DataLabel}
      */
 
     /**
      * @class
-     * @extends app.widgets.Label
+     * @extends candystore.Label
      * @extends bookworm.EntityBound
-     * @extends app.widgets.EntityWidget
+     * @extends candystore.EntityWidget
      */
-    app.widgets.DataLabel = self
-        .addPrivateMethods(/** @lends app.widgets.DataLabel# */{
+    candystore.DataLabel = self
+        .addPrivateMethods(/** @lends candystore.DataLabel# */{
             /** @private */
             _updateLabelText: function () {
                 this.setLabelText(this.entityKey.toField().getValue().toString());
             }
         })
-        .addMethods(/** @lends app.widgets.DataLabel# */{
+        .addMethods(/** @lends candystore.DataLabel# */{
             /**
              * @param {bookworm.FieldKey} fieldKey
              * @ignore
@@ -36,8 +36,8 @@ troop.postpone(app.widgets, 'DataLabel', function (/**app.widgets*/widgets, clas
                 dessert.isFieldKey(fieldKey, "Invalid field key");
 
                 base.init.call(this);
-                b$.EntityBound.init.call(this);
-                widgets.EntityWidget.init.call(this, fieldKey);
+                bookworm.EntityBound.init.call(this);
+                candystore.EntityWidget.init.call(this, fieldKey);
             },
 
             /** @ignore */

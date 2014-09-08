@@ -1,28 +1,28 @@
-/*global dessert, troop, sntls, s$, jQuery, app */
-troop.postpone(app.widgets, 'Dropdown', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
     "use strict";
 
-    var base = s$.Widget,
+    var base = shoeshine.Widget,
         self = base.extend(className)
-            .addTraitAndExtend(widgets.AlignedPopup, 'Popup');
+            .addTraitAndExtend(candystore.AlignedPopup, 'Popup');
 
     /**
-     * @name app.widgets.Dropdown.create
+     * @name candystore.Dropdown.create
      * @function
-     * @returns {app.widgets.Dropdown}
+     * @returns {candystore.Dropdown}
      */
 
     /**
      * @class
      * @extends shoeshine.Widget
-     * @extends app.widgets.AlignedPopup
+     * @extends candystore.AlignedPopup
      */
-    app.widgets.Dropdown = self
-        .addMethods(/** @lends app.widgets.Dropdown# */{
+    candystore.Dropdown = self
+        .addMethods(/** @lends candystore.Dropdown# */{
             /** @ignore */
             init: function () {
                 base.init.call(this);
-                widgets.AlignedPopup.init.call(this);
+                candystore.AlignedPopup.init.call(this);
 
                 this
                     .elevateMethod('onOptionFocus')
@@ -37,24 +37,24 @@ troop.postpone(app.widgets, 'Dropdown', function (/**app.widgets*/widgets, class
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
-                widgets.AlignedPopup.afterAdd.call(this);
+                candystore.AlignedPopup.afterAdd.call(this);
 
                 this
-                    .subscribeTo(widgets.OptionList.EVENT_OPTION_FOCUS, this.onOptionFocus)
-                    .subscribeTo(widgets.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect)
-                    .subscribeTo(widgets.OptionList.EVENT_OPTIONS_ESCAPE, this.onOptionsEscape);
+                    .subscribeTo(candystore.OptionList.EVENT_OPTION_FOCUS, this.onOptionFocus)
+                    .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect)
+                    .subscribeTo(candystore.OptionList.EVENT_OPTIONS_ESCAPE, this.onOptionsEscape);
             },
 
             /** @ignore */
             afterRemove: function () {
                 base.afterRemove.call(this);
-                widgets.AlignedPopup.afterRemove.call(this);
+                candystore.AlignedPopup.afterRemove.call(this);
             },
 
             /** @ignore */
             afterRender: function () {
                 base.afterRender.call(this);
-                widgets.AlignedPopup.afterRender.call(this);
+                candystore.AlignedPopup.afterRender.call(this);
             },
 
             /**
@@ -65,9 +65,9 @@ troop.postpone(app.widgets, 'Dropdown', function (/**app.widgets*/widgets, class
                 return this.children.toString();
             },
 
-            /** @returns {app.widgets.List} */
+            /** @returns {candystore.List} */
             createListWidget: function () {
-                return widgets.List.create();
+                return candystore.List.create();
             },
 
             /**

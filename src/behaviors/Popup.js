@@ -1,5 +1,5 @@
-/*global dessert, troop, sntls, jQuery, app */
-troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, className, /**jQuery*/$) {
+/*global dessert, troop, sntls, jQuery, candystore */
+troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = troop.Base,
@@ -12,8 +12,8 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
      * @extends troop.Base
      * @extends shoeshine.Widget
      */
-    app.widgets.Popup = self
-        .addConstants(/** @lends app.widgets.Popup */{
+    candystore.Popup = self
+        .addConstants(/** @lends candystore.Popup */{
             /** @constant */
             EVENT_POPUP_OUTSIDE_CLICK: 'popup-outside-click',
 
@@ -23,12 +23,12 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
             /** @constant */
             EVENT_POPUP_CLOSE: 'popup-close'
         })
-        .addPrivateMethods(/** @lends app.widgets.Popup# */{
+        .addPrivateMethods(/** @lends candystore.Popup# */{
             /**
              * @param {boolean} a
              * @param {boolean} b
              * @returns {boolean}
-             * @memberOf app.widgets.Popup
+             * @memberOf candystore.Popup
              * @private
              */
             _or: function (a, b) {
@@ -39,7 +39,7 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
              * @param {jQuery} $element
              * @param {string} selector
              * @returns {boolean}
-             * @memberOf app.widgets.Popup
+             * @memberOf candystore.Popup
              * @private
              */
             _hasClosest: function ($element, selector) {
@@ -90,7 +90,7 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
                 }
             }
         })
-        .addMethods(/** @lends app.widgets.Popup# */{
+        .addMethods(/** @lends candystore.Popup# */{
             /**
              * Call from host's init.
              */
@@ -133,7 +133,7 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
                     .on('click', this._onBodyClick);
             },
 
-            /** @returns {app.widgets.Popup} */
+            /** @returns {candystore.Popup} */
             openPopup: function () {
                 dessert.assert(this.parent, "Popup has no parent");
 
@@ -148,7 +148,7 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
                 return this;
             },
 
-            /** @returns {app.widgets.Popup} */
+            /** @returns {candystore.Popup} */
             closePopup: function () {
                 if (this.isOpen) {
                     this.triggerSync(this.EVENT_POPUP_CLOSE);
@@ -162,7 +162,7 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
 
             /**
              * @param {string} globalSelector
-             * @returns {app.widgets.Popup}
+             * @returns {candystore.Popup}
              */
             treatAsInside: function (globalSelector) {
                 if (this.outsideSelectors.getItem(globalSelector)) {
@@ -174,7 +174,7 @@ troop.postpone(app.widgets, 'Popup', function (/**app.widgets*/widgets, classNam
 
             /**
              * @param {string} selector
-             * @returns {app.widgets.Popup}
+             * @returns {candystore.Popup}
              */
             treatAsOutside: function (selector) {
                 if (this.insideSelectors.getItem(selector)) {
