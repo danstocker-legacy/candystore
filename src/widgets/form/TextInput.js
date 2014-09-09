@@ -1,4 +1,3 @@
-/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -24,13 +23,13 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
             inputTypes: {
                 // basic input types
                 password: 'password',
-                text  : 'text',
+                text    : 'text',
 
                 // HTML 5 types
-                email : 'email',
-                search: 'search',
-                tel   : 'tel',
-                url   : 'url'
+                email   : 'email',
+                search  : 'search',
+                tel     : 'tel',
+                url     : 'url'
             }
         })
         .addMethods(/** @lends candystore.TextInput# */{
@@ -63,27 +62,28 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @param {jQuery.Event} event
              * @ignore
              */
-            onKeyPress: function (event) {
+            onKeyDown: function (event) {
+                if (event.which === 13 && this.canSubmit) {
+                    // signaling that the input is attempting to submit the form
+                    this
+                        .setNextOriginalEvent(event)
+                        .triggerSync(this.EVENT_INPUT_SUBMIT)
+                        .clearNextOriginalEvent();
+                }
+            },
+
+            /**
+             * @param {jQuery.Event} event
+             * @ignore
+             */
+            onInput: function (event) {
                 var $element = $(this.getElement()),
                     newInputValue = $element.val();
 
-                this.setNextOriginalEvent(event);
-
-                switch (event.which) {
-                case 13:
-                    if (this.canSubmit) {
-                        // signaling that the input is attempting to submit the form
-                        this.triggerSync(this.EVENT_INPUT_SUBMIT);
-                    }
-                    break;
-
-                default:
-                    // setting new value
-                    this.setInputValue(newInputValue);
-                    break;
-                }
-
-                this.clearNextOriginalEvent();
+                this
+                    .setNextOriginalEvent(event)
+                    .setInputValue(newInputValue)
+                    .clearNextOriginalEvent();
             },
 
             /**
@@ -109,7 +109,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
             }
         });
 
-    self.on('keypress', '', 'onKeyPress');
+    self
+        .on('keydown', '', 'onKeyDown')
+        .on('input', '', 'onInput');
 }, jQuery);
 
 troop.amendPostponed(candystore, 'Input', function () {
