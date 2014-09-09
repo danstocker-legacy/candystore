@@ -22,6 +22,18 @@ troop.postpone(candystore, 'Image', function (ns, className) {
                 base.init.call(this);
 
                 this.setTagName('img');
+
+                /** @type {string} */
+                this.imageRoot = undefined;
+            },
+
+            /**
+             * @param {string} imageRoot
+             * @returns {candystore.Image}
+             */
+            setImageRoot: function (imageRoot) {
+                this.imageRoot = imageRoot;
+                return this;
             },
 
             /**
@@ -29,7 +41,7 @@ troop.postpone(candystore, 'Image', function (ns, className) {
              * @returns {candystore.Image}
              */
             setImageUrl: function (imageUrl) {
-                this.addAttribute('src', imageUrl);
+                this.addAttribute('src', [this.imageRoot, imageUrl].join('/'));
                 return this;
             }
         });

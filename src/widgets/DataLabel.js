@@ -5,7 +5,8 @@ troop.postpone(candystore, 'DataLabel', function (ns, className) {
     var base = candystore.Label,
         self = base.extend(className)
             .addTrait(bookworm.EntityBound)
-            .addTrait(candystore.EntityWidget);
+            .addTrait(candystore.EntityWidget)
+            .addTraitAndExtend(candystore.FieldBound);
 
     /**
      * @name candystore.DataLabel.create
@@ -19,14 +20,9 @@ troop.postpone(candystore, 'DataLabel', function (ns, className) {
      * @extends candystore.Label
      * @extends bookworm.EntityBound
      * @extends candystore.EntityWidget
+     * @extends candystore.FieldBound
      */
     candystore.DataLabel = self
-        .addPrivateMethods(/** @lends candystore.DataLabel# */{
-            /** @private */
-            _updateLabelText: function () {
-                this.setLabelText(this.entityKey.toField().getValue().toString());
-            }
-        })
         .addMethods(/** @lends candystore.DataLabel# */{
             /**
              * @param {bookworm.FieldKey} fieldKey
@@ -43,28 +39,22 @@ troop.postpone(candystore, 'DataLabel', function (ns, className) {
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
-
-                this._updateLabelText();
-
-                this
-                    .bindToEntityNodeChange(this.entityKey, 'onTextChange')
-                    .bindToEntityNodeChange(this.entityKey.documentKey, 'onTextChange');
+                candystore.FieldBound.afterAdd.call(this);
             },
 
             /** @ignore */
             afterRemove: function () {
                 base.afterRemove.call(this);
-                this.unbindAll();
+                candystore.FieldBound.afterRemove.call(this);
             },
 
-            /** @ignore */
-            onTextChange: function () {
-                this._updateLabelText();
-            },
-
-            /** @ignore */
-            onDocumentReplace: function () {
-                this._updateLabelText();
+            /**
+             * @param {*} fieldValue
+             * @returns {candystore.DataLabel}
+             */
+            setFieldValue: function (fieldValue) {
+                this.setLabelText(fieldValue.toString());
+                return this;
             }
         });
 });
