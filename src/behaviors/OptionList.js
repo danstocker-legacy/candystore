@@ -185,7 +185,11 @@ troop.postpone(candystore, 'OptionList', function () {
              * Call from host's afterAdd.
              */
             afterAdd: function () {
-                this._updateFocusedOptionName(this._getChildNameAtIndex(0));
+                var focusedOptionName = this._getChildNameAtIndex(0);
+                if (focusedOptionName) {
+                    this._updateFocusedOptionName(focusedOptionName);
+                }
+
                 this
                     .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
                     .subscribeTo(candystore.Option.EVENT_OPTION_HOVER, this._onOptionHover)
