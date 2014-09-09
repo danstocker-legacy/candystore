@@ -43,7 +43,14 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
 
                 this
                     .elevateMethod('onInputBlur')
+                    .elevateMethod('onInputTab')
                     .elevateMethod('onInputValid');
+
+                /** @type {boolean} */
+                this.allowsTabForwards = true;
+
+                /** @type {boolean} */
+                this.allowsTabBackwards = true;
 
                 /** @type {string} */
                 this.inputType = inputType || 'text';
@@ -66,6 +73,7 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 base.afterAdd.call(this);
                 this
                     .subscribeTo(candystore.Input.EVENT_INPUT_BLUR, this.onInputBlur)
+                    .subscribeTo(candystore.Input.EVENT_INPUT_TAB, this.onInputTab)
                     .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid);
             },
 
@@ -88,6 +96,30 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             /** @returns {candystore.Input} */
             getInputWidget: function () {
                 return this.getChild('input');
+            },
+
+            /** @returns {candystore.FormField} */
+            allowTabForwards: function () {
+                this.allowsTabForwards = true;
+                return this;
+            },
+
+            /** @returns {candystore.FormField} */
+            preventTabForwards: function () {
+                this.allowsTabForwards = false;
+                return this;
+            },
+
+            /** @returns {candystore.FormField} */
+            allowTabBackwards: function () {
+                this.allowsTabBackwards = true;
+                return this;
+            },
+
+            /** @returns {candystore.FormField} */
+            preventTabBackwards: function () {
+                this.allowsTabBackwards = false;
+                return this;
             },
 
             /**
@@ -146,6 +178,19 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             /** @ignore */
             onInputBlur: function () {
                 this._updateStyle();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onInputTab: function (event) {
+                var originalEvent = event.getOriginalEventByType(jQuery.Event);
+                if (!originalEvent.shiftKey && !this.allowsTabForwards ||
+                    originalEvent.shiftKey && !this.allowsTabBackwards
+                    ) {
+                    originalEvent.preventDefault();
+                }
             },
 
             /** @ignore */

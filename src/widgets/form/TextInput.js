@@ -63,12 +63,23 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onKeyDown: function (event) {
-                if (event.which === 13 && this.canSubmit) {
-                    // signaling that the input is attempting to submit the form
+                switch (event.which) {
+                case 13:
+                    if (this.canSubmit) {
+                        // signaling that the input is attempting to submit the form
+                        this
+                            .setNextOriginalEvent(event)
+                            .triggerSync(this.EVENT_INPUT_SUBMIT)
+                            .clearNextOriginalEvent();
+                    }
+                    break;
+
+                case 9:
                     this
                         .setNextOriginalEvent(event)
-                        .triggerSync(this.EVENT_INPUT_SUBMIT)
+                        .triggerSync(this.EVENT_INPUT_TAB)
                         .clearNextOriginalEvent();
+                    break;
                 }
             },
 

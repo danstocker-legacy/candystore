@@ -33,6 +33,9 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             EVENT_INPUT_BLUR: 'input-blur',
 
             /** @constant */
+            EVENT_INPUT_TAB: 'input-tab',
+
+            /** @constant */
             EVENT_INPUT_VALUE_CHANGE: 'input-value-change',
 
             /** @constant */
