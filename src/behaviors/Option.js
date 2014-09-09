@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls, shoeshine, jQuery, candystore */
-troop.postpone(candystore, 'Option', function (ns, className) {
+troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = troop.Base,
@@ -65,7 +65,7 @@ troop.postpone(candystore, 'Option', function (ns, className) {
             afterRender: function () {
                 $(this.getElement())
                     .on('click', this._onOptionClick)
-                    .on('mouseenter', this._onOptionHover)
+                    .on('mouseenter', this._onOptionHover);
             },
 
             /**
@@ -77,4 +77,4 @@ troop.postpone(candystore, 'Option', function (ns, className) {
                 return this;
             }
         });
-});
+}, jQuery);
