@@ -34,6 +34,7 @@ module.exports = function (grunt) {
                 'src/widgets/Page.js',
                 'src/widgets/form/Input.js',
                 'src/widgets/form/TextInput.js',
+                'src/widgets/form/DataTextInput.js',
                 'src/widgets/form/PasswordInput.js',
                 'src/widgets/form/FormField.js',
                 'src/widgets/form/Form.js',
