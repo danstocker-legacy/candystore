@@ -112,11 +112,11 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
     self.on('keypress', '', 'onKeyPress');
 }, jQuery);
 
-troop.amendPostponed(candystore, 'Input', function (/**candystore*/widgets) {
+troop.amendPostponed(candystore, 'Input', function () {
     "use strict";
 
-    widgets.Input
-        .addSurrogate(widgets, 'TextInput', function (inputType) {
+    candystore.Input
+        .addSurrogate(candystore, 'TextInput', function (inputType) {
             return inputType === 'text';
         });
 });
