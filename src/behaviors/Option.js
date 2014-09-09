@@ -51,8 +51,21 @@ troop.postpone(candystore, 'Option', function (ns, className) {
              * @param {*} [optionValue]
              */
             init: function (optionValue) {
+                this
+                    .elevateMethod('_onOptionClick')
+                    .elevateMethod('_onOptionHover');
+
                 /** @type {*} */
                 this.optionValue = optionValue;
+            },
+
+            /**
+             * Call from host's afterRender.
+             */
+            afterRender: function () {
+                $(this.getElement())
+                    .on('click', this._onOptionClick)
+                    .on('mouseenter', this._onOptionHover)
             },
 
             /**
@@ -64,8 +77,4 @@ troop.postpone(candystore, 'Option', function (ns, className) {
                 return this;
             }
         });
-
-    shoeshine.JqueryWidget
-        .on('click', '.Option', '_onOptionClick')
-        .on('mouseenter', '.Option', '_onOptionHover');
 });
