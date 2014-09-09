@@ -53,7 +53,7 @@ troop.postpone(candystore, 'DataLabel', function (ns, className) {
              * @returns {candystore.DataLabel}
              */
             setFieldValue: function (fieldValue) {
-                this.setLabelText(fieldValue.toString());
+                this.setLabelText(String(fieldValue));
                 return this;
             }
         });
