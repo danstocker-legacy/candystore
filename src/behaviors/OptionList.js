@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls, e$, shoeshine, candystore */
-troop.postpone(candystore, 'OptionList', function (ns) {
+troop.postpone(candystore, 'OptionList', function () {
     "use strict";
 
     var base = troop.Base,
