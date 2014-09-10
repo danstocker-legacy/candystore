@@ -33,14 +33,23 @@ troop.postpone(candystore, 'FieldBound', function () {
             },
 
             /**
-             * @private */
-            _onDocumentReplace: function () {
+             * @param {flock.ChangeEvent} event
+             * @private
+             */
+            _onDocumentReplace: function (event) {
+                this.setNextOriginalEvent(event);
                 this._updateInputValue();
+                this.clearNextOriginalEvent();
             },
 
-            /** @private */
-            _onFieldChange: function () {
+            /**
+             * @param {flock.ChangeEvent} event
+             * @private
+             */
+            _onFieldChange: function (event) {
+                this.setNextOriginalEvent(event);
                 this._updateInputValue();
+                this.clearNextOriginalEvent();
             }
         })
         .addMethods(/** @lends candystore.FieldBound# */{
