@@ -6,12 +6,14 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
         self = base.extend(className);
 
     /**
+     * Creates a Label instance.
      * @name candystore.Label.create
      * @function
      * @returns {candystore.Label}
      */
 
     /**
+     * The Label displays HTML encoded text.
      * @class
      * @extends shoeshine.Widget
      */
@@ -28,6 +30,8 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Sets text to display on label.
+             * Displayed text will be HTML encoded.
              * @param {string} labelText
              * @returns {candystore.Label}
              */

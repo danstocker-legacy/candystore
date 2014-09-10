@@ -9,13 +9,16 @@ troop.postpone(candystore, 'DataLabel', function (ns, className) {
             .addTraitAndExtend(candystore.FieldBound);
 
     /**
+     * Creates a DataLabel instance.
      * @name candystore.DataLabel.create
      * @function
-     * @param {bookworm.FieldKey} textFieldKey Field holding text.
+     * @param {bookworm.FieldKey} textFieldKey Key to a text field.
      * @returns {candystore.DataLabel}
      */
 
     /**
+     * The DataLabel displays text based on the value of a field in the cache.
+     * Keeps the text in sync with the changes of the corresponding field.
      * @class
      * @extends candystore.Label
      * @extends bookworm.EntityBound
@@ -51,6 +54,7 @@ troop.postpone(candystore, 'DataLabel', function (ns, className) {
             /**
              * @param {*} fieldValue
              * @returns {candystore.DataLabel}
+             * @ignore
              */
             setFieldValue: function (fieldValue) {
                 this.setLabelText(String(fieldValue));

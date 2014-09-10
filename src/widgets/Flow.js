@@ -6,12 +6,14 @@ troop.postpone(candystore, 'Flow', function (ns, className) {
         self = base.extend(className);
 
     /**
+     * Creates a Flow instance.
      * @name candystore.Flow.create
      * @function
      * @returns {candystore.Flow}
      */
 
     /**
+     * The Flow allows to navigate between a set of stage widgets.
      * @class
      * @extends candystore.List
      */
@@ -45,6 +47,7 @@ troop.postpone(candystore, 'Flow', function (ns, className) {
 
             /**
              * Adds a stage to the flow.
+             * Adds various CSS classes to the specified stage widget.
              * @param {string} stageName
              * @param {shoeshine.Widget} stageWidget
              * @returns {candystore.Flow}

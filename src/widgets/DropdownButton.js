@@ -7,12 +7,17 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
             .addTrait(shoeshine.JqueryWidget);
 
     /**
+     * Creates a DropdownButton instance.
      * @name candystore.DropdownButton.create
      * @function
      * @returns {candystore.DropdownButton}
      */
 
     /**
+     * The DropdownButton, when activated, pops up a dropdown, from which the user may select an option,
+     * and the selected option will be set as the dropdown button's current caption.
+     * The DropdownButton changes its state as the dropdown opens and closes.
+     * TODO: to be based on TextButton
      * @class
      * @extends shoeshine.Widget
      */
@@ -44,7 +49,12 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                     .setChildName('dropdown-label')
                     .addToParent(this);
 
-                /** @type {candystore.Dropdown} */
+                /**
+                 * Dropdown widget for showing the options.
+                 * Must have instance-level reference to it since this widget will be removed and re-added
+                 * to the widget hierarchy.
+                 * @type {candystore.Dropdown}
+                 */
                 this.dropdown = this.createDropdownWidget()
                     .setChildName('dropdown-popup');
             },
@@ -69,6 +79,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
             },
 
             /**
+             * Creates button label widget.
              * Override to specify custom label.
              * @returns {candystore.Label}
              */
@@ -77,7 +88,8 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
             },
 
             /**
-             * Override to specify custom dropdown list.
+             * Creates dropdown widget.
+             * Override to specify custom dropdown.
              * @returns {candystore.Dropdown}
              */
             createDropdownWidget: function () {

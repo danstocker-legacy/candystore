@@ -6,12 +6,14 @@ troop.postpone(candystore, 'Image', function (ns, className) {
         self = base.extend(className);
 
     /**
+     * Creates an Image instance.
      * @name candystore.Image.create
      * @function
      * @returns {candystore.Image}
      */
 
     /**
+     * The Image displays an <em>img</em> tag.
      * @class
      * @extends shoeshine.Widget
      */
@@ -23,11 +25,15 @@ troop.postpone(candystore, 'Image', function (ns, className) {
 
                 this.setTagName('img');
 
-                /** @type {string} */
+                /**
+                 * Root path or URL associated with Image instance.
+                 * @type {string}
+                 */
                 this.imageRoot = undefined;
             },
 
             /**
+             * Sets root path (URL) for the image.
              * @param {string} imageRoot
              * @returns {candystore.Image}
              */
@@ -37,8 +43,10 @@ troop.postpone(candystore, 'Image', function (ns, className) {
             },
 
             /**
+             * Sets Image URL or path relative to the image root specified by .setImageRoot()
              * @param {string} imageUrl
              * @returns {candystore.Image}
+             * @see candystore.Image#setImageRoot
              */
             setImageUrl: function (imageUrl) {
                 this.addAttribute('src', [this.imageRoot, imageUrl].join('/'));

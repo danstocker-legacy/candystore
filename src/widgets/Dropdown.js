@@ -7,12 +7,19 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
             .addTraitAndExtend(candystore.AlignedPopup, 'Popup');
 
     /**
+     * Creates a Dropdown instance.
      * @name candystore.Dropdown.create
      * @function
      * @returns {candystore.Dropdown}
      */
 
     /**
+     * The Dropdown is a navigable list wrapped inside a popup.
+     * The internal list can be of any List-based class, however, the Dropdown will only function properly
+     * when the internal list has the OptionList trait, and its items have the Option trait.
+     * The dropdown aligns to its parent widget's DOM using the settings provided via AlignedPopup.
+     * By default, it will align its top left corner to the parent's bottom left corner.
+     * The Dropdown controls scrolling of the internal list.
      * @class
      * @extends shoeshine.Widget
      * @extends candystore.AlignedPopup
@@ -65,7 +72,12 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
                 return this.children.toString();
             },
 
-            /** @returns {candystore.List} */
+            /**
+             * Creates the internal list widget.
+             * Override this method to specify other List-based widgets to use.
+             * Ones that have the OptionList trait, and its items have the Option trait, are the best.
+             * @returns {candystore.List}
+             */
             createListWidget: function () {
                 return candystore.List.create();
             },

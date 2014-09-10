@@ -9,6 +9,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             .addTraitAndExtend(candystore.FieldBound);
 
     /**
+     * Creates a DataList instance.
      * @name candystore.DataList.create
      * @function
      * @param {shoeshine.FieldKey} fieldKey Key to an ordered reference collection.
@@ -16,7 +17,8 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      */
 
     /**
-     * Data bound list of widgets.
+     * The DataList maintains a list of widgets based on a collection field in the cache.
+     * Keeps list in sync with the changes of the corresponding collection.
      * Expects to be bound to an *ordered* collection.
      * Expects to have items that are also EntityWidgets.
      * TODO: handle single item changes, perhaps with a modified FieldBound
@@ -33,6 +35,8 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * @ignore
              */
             init: function (fieldKey) {
+                dessert.isFieldKey(fieldKey, "Invalid field key");
+
                 base.init.call(this);
                 bookworm.EntityBound.init.call(this);
                 candystore.EntityWidget.init.call(this, fieldKey);
@@ -51,8 +55,10 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             },
 
             /**
-             * Override method to specify list item widget.
-             * Expected to set child name on the returned widget that determines its order within the list.
+             * Creates item widget for the specified item key.
+             * To specify a custom widget class, either override this method in a subclass, or provide
+             * a surrogate definition on DataLabel, in case the custom item widget is also DataLabel-based.
+             * Expected to set child name on the returned widget (and thus determining its position within the list).
              * @param {bookworm.ItemKey} itemKey
              * @returns {shoeshine.Widget}
              */
@@ -64,6 +70,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             /**
              * @param {object} fieldValue
              * @returns {candystore.DataList}
+             * @ignore
              */
             setFieldValue: function (fieldValue) {
                 var that = this,

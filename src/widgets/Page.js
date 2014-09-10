@@ -6,12 +6,18 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
         self = base.extend(className);
 
     /**
+     * Creates a Page instance.
      * @name candystore.Page.create
      * @function
      * @returns {candystore.Page}
      */
 
     /**
+     * The Page class endows all pages with basic features, such as
+     * adding relevant CSS classes to the <em>body</em> element.
+     * Subclass to create page classes, and add them to he hierarchy as root.
+     * @example
+     * MyPage.create().setRootWidget();
      * @class
      * @extends shoeshine.Widget
      */

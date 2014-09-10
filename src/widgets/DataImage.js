@@ -9,6 +9,7 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
             .addTraitAndExtend(candystore.FieldBound);
 
     /**
+     * Creates a DataImage instance.
      * @name candystore.DataImage.create
      * @function
      * @param {bookworm.FieldKey} urlFieldKey Field holding image URL.
@@ -16,6 +17,8 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
      */
 
     /**
+     * The DataImage displays an image based on the URL stored in a field in the cache.
+     * Keeps the image in sync with the changes of the corresponding field.
      * @class
      * @extends candystore.Image
      * @extends bookworm.EntityBound
@@ -28,6 +31,8 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
              * @ignore
              */
             init: function (urlFieldKey) {
+                dessert.isFieldKey(fieldKey, "Invalid field key");
+
                 base.init.call(this);
                 bookworm.EntityBound.init.call(this);
                 candystore.EntityWidget.init.call(this, urlFieldKey);
@@ -48,6 +53,7 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
             /**
              * @param {string} fieldValue
              * @returns {candystore.DataImage}
+             * @ignore
              */
             setFieldValue: function (fieldValue) {
                 this.setImageUrl(fieldValue);

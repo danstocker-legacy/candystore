@@ -6,12 +6,16 @@ troop.postpone(candystore, 'List', function (ns, className) {
         self = base.extend(className);
 
     /**
+     * Creates a List instance.
      * @name candystore.List.create
      * @function
      * @returns {candystore.List}
      */
 
     /**
+     * The List is an aggregation of other widgets.
+     * By default, it maps to the <em>ul</em> and <em>li</em> HTML elements, but that can be changed by subclassing.
+     * Item order follows the normal ordering child widgets, ie. in the order of their names.
      * @class
      * @extends shoeshine.Widget
      */
@@ -32,6 +36,8 @@ troop.postpone(candystore, 'List', function (ns, className) {
             },
 
             /**
+             * Adds a widget to the list as its item.
+             * Changes the specified widget's tag name to 'li'.
              * @param itemWidget
              * @returns {candystore.List}
              */

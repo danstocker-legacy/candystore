@@ -7,6 +7,7 @@ troop.postpone(candystore, 'DataDropdown', function (ns, className) {
             .addTrait(candystore.EntityWidget);
 
     /**
+     * Creates a DataDropdown instance.
      * @name candystore.DataDropdown.create
      * @function
      * @param {bookworm.FieldKey} fieldKey
@@ -14,6 +15,7 @@ troop.postpone(candystore, 'DataDropdown', function (ns, className) {
      */
 
     /**
+     * The DataDropdown extends the functionality of the Dropdown with a List that is bound to a field in the cache.
      * @class
      * @extends candystore.Dropdown
      * @extends candystore.EntityWidget
@@ -29,7 +31,17 @@ troop.postpone(candystore, 'DataDropdown', function (ns, className) {
                 base.init.call(this);
             },
 
-            /** @returns {candystore.DataList} */
+            /**
+             * Creates a DataList for the dropdown to use as its internal option list.
+             * To specify a custom DataList, you don't necessarily have to override the DataDropdown class,
+             * only delegate a surrogate definition to candystore.DataList that points to your implementation.
+             * @example
+             * candystore.DataList.addSurrogate(myNameSpace, 'MyDataList', function (fieldKey) {
+             *     return myCondition === true;
+             * })
+             * @returns {candystore.DataList}
+             * @see candystore.Dropdown#createListWidget
+             */
             createListWidget: function () {
                 return candystore.DataList.create(this.entityKey);
             }
