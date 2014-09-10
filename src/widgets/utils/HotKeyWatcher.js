@@ -6,6 +6,9 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
         self = base.extend();
 
     /**
+     * Static class that watches key events globally and broadcasts widget events in response.
+     * Listen to candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN in any widget to get notified of
+     * global key events. (Eg. for navigating within a custom control.)
      * @class
      * @extends troop.Base
      */

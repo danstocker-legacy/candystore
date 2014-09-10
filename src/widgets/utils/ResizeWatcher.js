@@ -7,13 +7,16 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
         $window = $(window);
 
     /**
+     * Creates a ResizeWatcher instance, or pulls up an existing one from registry.
      * @name candystore.ResizeWatcher.create
      * @function
      * @returns {candystore.ResizeWatcher}
      */
 
     /**
-     * Watches window resize events and broadcasts debounced widget events in response.
+     * Singleton that watches window resize events and broadcasts debounced (100ms) widget events in response.
+     * Listen to candystore.ResizeWatcher.EVENT_WINDOW_RESIZE_DEBOUNCED in any widget to get
+     * notified of changes to window size.
      * @class
      * @extends troop.Base
      */
@@ -33,9 +36,15 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
             RESIZE_DEBOUNCE_DELAY: 100
         })
         .addPrivateMethods(/** @lends candystore.ResizeWatcher# */{
-            /** @private */
-            _onWindowResize: function () {
+            /**
+             * @param {jQuery.Event} event
+             * @private
+             */
+            _onWindowResize: function (event) {
+                var rootWidget = s$.Widget.rootWidget;
+                rootWidget.setNextOriginalEvent(event);
                 this.updateDimensions();
+                rootWidget.clearNextOriginalEvent();
             }
         })
         .addMethods(/** @lends candystore.ResizeWatcher# */{
@@ -43,17 +52,29 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
             init: function () {
                 this.elevateMethod('_onWindowResize');
 
-                /** @type {number} */
+                /**
+                 * Stores current window width.
+                 * @type {number}
+                 */
                 this.curentWidth = undefined;
 
-                /** @type {number} */
+                /**
+                 * Stores current window height.
+                 * @type {number}
+                 */
                 this.curentHeight = undefined;
 
-                /** @type {candystore.Debouncer} */
+                /**
+                 * Debouncer instance for debouncing window resize events, which may come in rapid succession.
+                 * @type {candystore.Debouncer}
+                 */
                 this.windowResizeDebouncer = candystore.Debouncer.create(this._onWindowResize);
             },
 
-            /** @returns {candystore.ResizeWatcher} */
+            /**
+             * Updates window dimensions, and triggers widget event about resizing.
+             * @returns {candystore.ResizeWatcher}
+             */
             updateDimensions: function () {
                 var currentWidth = $window.width(),
                     currentHeight = $window.height(),
