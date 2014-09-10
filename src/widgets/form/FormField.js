@@ -6,7 +6,7 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
         self = base.extend(className);
 
     /**
-     * Creates a FormField widget instance.
+     * Creates a FormField instance.
      * @name candystore.FormField.create
      * @function
      * @param {string} [inputType] Corresponds to the input tag's type argument. Defaults to 'text'.
@@ -14,8 +14,10 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
      */
 
     /**
-     * Represents a single field inside the form, with input and other controls on the side,
+     * Represents a single field inside the form, with input and other accompanying controls,
      * such as comment and warning.
+     * Supports enabling/disabling TAB keys.
+     * TODO: add create... methods for comment and warning, too
      * @class
      * @extends shoeshine.Widget
      */
@@ -57,14 +59,14 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
 
                 /** @type {candystore.Label} */
                 this.commentLabel = candystore.Label.create()
-                    .setChildName('comment');
+                    .setChildName('field-comment');
 
                 /** @type {candystore.Label} */
                 this.warningLabel = candystore.Label.create()
-                    .setChildName('warning');
+                    .setChildName('field-warning');
 
                 this.createInputWidget()
-                    .setChildName('input')
+                    .setChildName('field-input')
                     .addToParent(this);
             },
 
@@ -86,43 +88,61 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             },
 
             /**
-             * Override to specify input widget included in the form field.
+             * Creates input widget.
+             * Override to specify custom input field.
+             * With the input type-based surrogates in place, overriding this method is rarely needed.
              * @returns {candystore.Input}
              */
             createInputWidget: function () {
                 return candystore.Input.create(this.inputType);
             },
 
-            /** @returns {candystore.Input} */
+            /**
+             * Fetches input widget.
+             * @returns {candystore.Input}
+             */
             getInputWidget: function () {
-                return this.getChild('input');
+                return this.getChild('field-input');
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Allows TAB to take effect on the input.
+             * @returns {candystore.FormField}
+             */
             allowTabForwards: function () {
                 this.allowsTabForwards = true;
                 return this;
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Prevents TAB to take effect on the input.
+             * @returns {candystore.FormField}
+             */
             preventTabForwards: function () {
                 this.allowsTabForwards = false;
                 return this;
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Allows Shift+TAB to take effect on the input.
+             * @returns {candystore.FormField}
+             */
             allowTabBackwards: function () {
                 this.allowsTabBackwards = true;
                 return this;
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Prevents Shift+TAB to take effect on the input.
+             * @returns {candystore.FormField}
+             */
             preventTabBackwards: function () {
                 this.allowsTabBackwards = false;
                 return this;
             },
 
             /**
+             * Sets warning message and sets the field to invalid state.
              * @param {string} warningMessage
              * @returns {candystore.FormField}
              */
@@ -138,7 +158,10 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 return this;
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Clears warning message and restores valid state of the field.
+             * @returns {candystore.FormField}
+             */
             clearWarningMessage: function () {
                 this.warningLabel
                     .removeFromParent();
@@ -151,6 +174,7 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             },
 
             /**
+             * Sets comment string.
              * @param {string} comment
              * @returns {candystore.FormField}
              */
@@ -161,14 +185,20 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 return this;
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Clears comment string.
+             * @returns {candystore.FormField}
+             */
             clearComment: function () {
                 this.commentLabel
                     .removeFromParent();
                 return this;
             },
 
-            /** @returns {candystore.FormField} */
+            /**
+             * Sets focus on the current field. (More precisely, on the current field's input widget.)
+             * @returns {candystore.FormField}
+             */
             focusOnField: function () {
                 this.getInputWidget()
                     .focusOnInput();

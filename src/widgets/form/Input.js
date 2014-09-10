@@ -6,7 +6,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
         self = base.extend(className);
 
     /**
-     * Creates an Input widget instance.
+     * Creates an Input instance.
      * @name candystore.Input.create
      * @function
      * @param {string} inputType Corresponds to the input tag's type argument.
@@ -14,7 +14,8 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
      */
 
     /**
-     * Base class for input elements, with validation.
+     * The Input is the base class for all input widgets: text, checkbox, radio button, etc.
+     * Inputs can be validated by supplying a validator function.
      * @class
      * @extends shoeshine.Widget
      */
@@ -50,31 +51,31 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             /** @constant */
             inputTypes: {
                 // basic input types
-                button  : 'button',
-                checkbox: 'checkbox',
-                file    : 'file',
-                hidden  : 'hidden',
-                image   : 'image',
-                password: 'password',
-                radio   : 'radio',
-                reset   : 'reset',
-                submit  : 'submit',
-                text    : 'text',
+                button          : 'button',
+                checkbox        : 'checkbox',
+                file            : 'file',
+                hidden          : 'hidden',
+                image           : 'image',
+                password        : 'password',
+                radio           : 'radio',
+                reset           : 'reset',
+                submit          : 'submit',
+                text            : 'text',
 
                 // HTML 5 types
-                color   : 'color',
-                date    : 'date',
-                datetime: 'datetime',
+                color           : 'color',
+                date            : 'date',
+                datetime        : 'datetime',
                 'datetime-local': 'datetime-local',
-                email   : 'email',
-                month   : 'month',
-                number  : 'number',
-                range   : 'range',
-                search  : 'search',
-                tel     : 'tel',
-                time    : 'time',
-                url     : 'url',
-                week    : 'week'
+                email           : 'email',
+                month           : 'month',
+                number          : 'number',
+                range           : 'range',
+                search          : 'search',
+                tel             : 'tel',
+                time            : 'time',
+                url             : 'url',
+                week            : 'week'
             }
         })
         .addPrivateMethods(/** @lends candystore.Input# */{
@@ -191,6 +192,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Sets whether the input can signal to submit the form (if it is in a form).
              * @param {boolean} canSubmit
              * @returns {candystore.Input}
              */
@@ -229,7 +231,8 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * Sets validator function.
+             * Sets validator function. The validator function will be passed the current input value
+             * and is expected to return a validation error (code or message) or undefined.
              * @param {function} validatorFunction
              * @returns {candystore.Input}
              * @see candystore.Input#validatorFunction
@@ -240,7 +243,10 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                 return this;
             },
 
-            /** @returns {candystore.Input} */
+            /**
+             * Focuses on the current input.
+             * @returns {candystore.Input}
+             */
             focusOnInput: function () {
                 var element = this.getElement();
                 if (element) {
@@ -249,7 +255,10 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                 return this;
             },
 
-            /** @returns {candystore.Input} */
+            /**
+             * Removes focus from the current input.
+             * @returns {candystore.Input}
+             */
             blurInput: function () {
                 var element = this.getElement();
                 if (element) {

@@ -6,6 +6,7 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
             .addTrait(shoeshine.JqueryWidget);
 
     /**
+     * Creates a TextInput instance.
      * @name candystore.TextInput.create
      * @function
      * @param {string} [textInputType]
@@ -13,6 +14,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
      */
 
     /**
+     * The TextInput extends the Input for text input specifically.
+     * Implements mostly UI event handlers, and channels them into widget events.
+     * Also delegates surrogate to Input: instantiating an Input with 'type'='text' will yield a TextInput instance.
      * @class
      * @extends candystore.Input
      * @extends shoeshine.JqueryWidget

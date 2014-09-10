@@ -7,13 +7,15 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             .addTrait(shoeshine.JqueryWidget);
 
     /**
-     * Creates a Form widget instance.
+     * Creates a Form instance.
      * @name candystore.Form.create
      * @function
      * @returns {candystore.Form}
      */
 
     /**
+     * The Form encloses multiple FormField's, provides validity events for the entire form,
+     * and supports submitting the form.
      * @class
      * @extends shoeshine.Widget
      * @extends shoeshine.JqueryWidget
@@ -78,10 +80,16 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                     .elevateMethod('onInputValid')
                     .elevateMethod('onInputInvalid');
 
-                /** @type {number} */
+                /**
+                 * Total number of fields in the form.
+                 * @type {number}
+                 */
                 this.fieldCount = undefined;
 
-                /** @type {number} */
+                /**
+                 * Total number of valid fields in the form. Equal or less than .fieldCount.
+                 * @type {number}
+                 */
                 this.validFieldCount = undefined;
             },
 
@@ -117,12 +125,16 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 ].join('');
             },
 
-            /** @returns {boolean} */
+            /**
+             * Determines whether the form is valid. The form is valid when and only when all of its fields are valid.
+             * @returns {boolean}
+             */
             isValid: function () {
                 return this.validFieldCount === this.fieldCount;
             },
 
             /**
+             * Adds a field to the form.
              * @param {candystore.FormField} formField
              * @returns {candystore.Form}
              */
@@ -146,6 +158,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             },
 
             /**
+             * Fetches the field with the specified name from the form.
              * TODO: make sure returned value is either FormField instance or undefined
              * @param {string} fieldName
              * @returns {candystore.FormField}
@@ -154,13 +167,18 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 return this.getChild(fieldName);
             },
 
-            /** @returns {shoeshine.WidgetCollection} */
+            /**
+             * Fetches all form field widgets as a WidgetCollection.
+             * @returns {shoeshine.WidgetCollection}
+             */
             getFormFields: function () {
                 return this.children.filterByType(candystore.FormField);
             },
 
             /**
-             * Attempts to submit form.
+             * Attempts to submit form. It is up to the parent widget to handle the submit event
+             * and actually submit the form. (It may not be necessary to submit anything to a server,
+             * but rather take some other action.)
              * @returns {candystore.Form}
              */
             trySubmittingForm: function () {
