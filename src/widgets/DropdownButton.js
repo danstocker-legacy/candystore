@@ -20,7 +20,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
         .addPrivateMethods(/** @lends candystore.DropdownButton# */{
             /** @private */
             _updateCssClasses: function () {
-                if (this.dropdownList.isOpen) {
+                if (this.dropdown.isOpen) {
                     this
                         .removeCssClass('dropdown-closed')
                         .addCssClass('dropdown-open');
@@ -45,7 +45,8 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                     .addToParent(this);
 
                 /** @type {candystore.Dropdown} */
-                this.dropdownList = this.createDropdownListWidget();
+                this.dropdown = this.createDropdownWidget()
+                    .setChildName('dropdown-popup');
             },
 
             /** @ignore */
@@ -79,7 +80,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              * Override to specify custom dropdown list.
              * @returns {candystore.Dropdown}
              */
-            createDropdownListWidget: function () {
+            createDropdownWidget: function () {
                 return candystore.Dropdown.create();
             },
 
@@ -88,7 +89,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              * @ignore
              */
             onDropdownOpen: function (event) {
-                if (event.senderWidget === this.dropdownList) {
+                if (event.senderWidget === this.dropdown) {
                     this._updateCssClasses();
                 }
             },
@@ -98,19 +99,32 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              * @ignore
              */
             onDropdownClose: function (event) {
-                if (event.senderWidget === this.dropdownList) {
+                if (event.senderWidget === this.dropdown) {
                     this._updateCssClasses();
                 }
             },
 
-            /** @ignore */
+            /**
+             * @param {jQuery.Event} event
+             * @ignore
+             */
             onClick: function (event) {
-                this.dropdownList
-                    .setChildName('dropdown-list')
-                    .addToParent(this)
-                    .openPopup();
+                var dropdown = this.dropdown;
 
-                event.stopPropagation();
+                this.setNextOriginalEvent(event);
+
+                if (dropdown.isOpen) {
+                    dropdown
+                        .closePopup();
+                } else {
+                    dropdown
+                        .addToParent(this)
+                        .openPopup();
+
+                    event.stopPropagation();
+                }
+
+                this.clearNextOriginalEvent();
             }
         });
 
