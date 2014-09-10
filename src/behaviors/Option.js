@@ -6,8 +6,8 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
         self = base.extend(className);
 
     /**
-     * Dropdown list item (option) trait.
-     * Add this trait to classes aimed to be used as options in a dropdown list.
+     * The Option trait allows widgets to behave like option items in a dropdown or select list.
+     * Add this trait to classes aimed to be used as options in a dropdown.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -55,13 +55,16 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
                     .elevateMethod('_onOptionClick')
                     .elevateMethod('_onOptionHover');
 
-                /** @type {*} */
+                /**
+                 * Value carried by option.
+                 * This is not what's displayed in the option, but the logical value associated with it.
+                 * This is the value that will be passed back along the event when the option is selected.
+                 * @type {*}
+                 */
                 this.optionValue = optionValue;
             },
 
-            /**
-             * Call from host's afterRender.
-             */
+            /** Call from host's afterRender. */
             afterRender: function () {
                 $(this.getElement())
                     .on('click', this._onOptionClick)
@@ -69,6 +72,7 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Sets option value.
              * @param {*} optionValue
              * @returns {candystore.Option}
              */

@@ -6,8 +6,12 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
         self = base.extend();
 
     /**
-     * Popup trait.
-     * Expects to be added to Widget host classes.
+     * The Popup trait allows widgets to be opened and closed like popups.
+     * Popups maintain parent-children relationship with the widget that created them,
+     * but they are rendered right under the body element. It is vital therefore that whatever happens inside
+     * the popup must trigger widget events since they are the only way to notify the parent widget of changes.
+     * Popups may be closed by clicking outside of the widget's DOM.
+     * Expects to be added to Widget classes.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -133,7 +137,10 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                     .on('click', this._onBodyClick);
             },
 
-            /** @returns {candystore.Popup} */
+            /**
+             * Opens popup. Popup must be added to a parent before calling this method.
+             * @returns {candystore.Popup}
+             */
             openPopup: function () {
                 dessert.assert(this.parent, "Popup has no parent");
 
@@ -148,7 +155,10 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                 return this;
             },
 
-            /** @returns {candystore.Popup} */
+            /**
+             * Closes popup, and removes it from the widget hierarchy.
+             * @returns {candystore.Popup}
+             */
             closePopup: function () {
                 if (this.isOpen) {
                     this.triggerSync(this.EVENT_POPUP_CLOSE);
@@ -161,6 +171,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Treats DOM elements matching the specified global jQuery selector as inside of the popup.
+             * Clicking on such elements would not trigger an 'outside-click' event even when they're outside of the
+             * popup's DOM.
              * @param {string} globalSelector
              * @returns {candystore.Popup}
              */
@@ -173,6 +186,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Treats DOM elements matching the specified global jQuery selector as outside of the popup.
+             * Clicking on such elements would trigger an 'outside-click' event even when they're inside the popup's DOM.
              * @param {string} selector
              * @returns {candystore.Popup}
              */
@@ -187,6 +202,7 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
             /**
              * Default outside click handler
              * @param {jQuery.Event} event
+             * @ignore
              */
             onOutsideClick: function (event) {
                 this

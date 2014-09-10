@@ -6,7 +6,7 @@ troop.postpone(candystore, 'OptionList', function () {
         self = base.extend();
 
     /**
-     * Trait for modifying Lists to be used in Dropdowns.
+     * The OptionList trait modifies List classes so that they can be used in dropdowns.
      * Should only accept widgets as list items that implement the Option trait.
      * @class
      * @extends troop.Base
@@ -157,9 +157,7 @@ troop.postpone(candystore, 'OptionList', function () {
             }
         })
         .addMethods(/** @lends candystore.OptionList# */{
-            /**
-             * Call from host's init.
-             */
+            /** Call from host's init. */
             init: function () {
                 this
                     .elevateMethod('_onHotKeyPress')
@@ -168,7 +166,7 @@ troop.postpone(candystore, 'OptionList', function () {
 
                 /**
                  * Identifier of option in focus.
-                 * Name of corresponding child widget.
+                 * Name of corresponding child (item) widget.
                  * @type {string}
                  */
                 this.focusedOptionName = undefined;
@@ -181,9 +179,7 @@ troop.postpone(candystore, 'OptionList', function () {
                 this.activeOptionName = undefined;
             },
 
-            /**
-             * Call from host's afterAdd.
-             */
+            /** Call from host's afterAdd. */
             afterAdd: function () {
                 var focusedOptionName = this._getChildNameAtIndex(0);
                 if (focusedOptionName) {

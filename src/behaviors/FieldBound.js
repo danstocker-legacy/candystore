@@ -15,7 +15,9 @@ troop.postpone(candystore, 'FieldBound', function () {
      */
 
     /**
-     * Expects to be added to Input widgets that also have the EntityBound and EntityWidget traits.
+     * The FieldBound trait adds a callback method to the host class that is invoked each time the value at
+     * the field key associated with the host class changes.
+     * Expects to be added to widgets that also have the EntityBound and EntityWidget traits.
      * @class
      * @extends troop.Base
      * @extends bookworm.EntityBound
@@ -42,9 +44,7 @@ troop.postpone(candystore, 'FieldBound', function () {
             }
         })
         .addMethods(/** @lends candystore.FieldBound# */{
-            /**
-             * Call from host's afterAdd.
-             */
+            /** Call from host's afterAdd. */
             afterAdd: function () {
                 this._updateInputValue();
                 this
@@ -52,9 +52,7 @@ troop.postpone(candystore, 'FieldBound', function () {
                     .bindToEntityNodeChange(this.entityKey, '_onFieldChange');
             },
 
-            /**
-             * Call from host's afterRemove.
-             */
+            /** Call from host's afterRemove. */
             afterRemove: function () {
                 this
                     .unbindFromEntityChange(this.entityKey.documentKey)

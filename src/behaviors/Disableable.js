@@ -6,7 +6,7 @@ troop.postpone(candystore, 'Disableable', function () {
         self = base.extend();
 
     /**
-     * Trait that endows Renderable classes with an enabled - disabled state.
+     * The Disableable trait endows Renderable classes with an enabled - disabled state.
      * A Disableable may be disabled by multiple sources. All such sources have to
      * re-enable the host to be fully enabled again.
      * Expects to be added to a host that also has the Renderable trait.

@@ -46,6 +46,11 @@ troop.postpone(candystore, 'EntityWidget', function () {
 troop.postpone(candystore, 'revealKeys', function () {
     "use strict";
 
+    /**
+     * Reveals entity keys on all widgets that have the EntityWidget trait.
+     * Entity key strings will be added to widget elements as 'data-entity-key' attribute.
+     * @type {function}
+     */
     candystore.revealKeys = function () {
         shoeshine.Widget.rootWidget.getAllDescendants()
             .callOnEachItem('revealKey');
@@ -55,6 +60,10 @@ troop.postpone(candystore, 'revealKeys', function () {
 troop.postpone(candystore, 'hideKeys', function () {
     "use strict";
 
+    /**
+     * Removes 'data-entity-key' attribute from the DOM of all widgets that have the EntityWidget trait.
+     * @type {function}
+     */
     candystore.hideKeys = function () {
         shoeshine.Widget.rootWidget.getAllDescendants()
             .callOnEachItem('hideKey');
