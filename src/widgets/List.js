@@ -20,6 +20,10 @@ troop.postpone(candystore, 'List', function (ns, className) {
      * @extends shoeshine.Widget
      */
     candystore.List = self
+        .addConstants(/** @lends candystore.List */{
+            /** @constant */
+            EVENT_LIST_ITEMS_CHANGE: 'list-items-change'
+        })
         .addMethods(/** @lends candystore.List# */{
             /** @ignore */
             init: function () {

@@ -92,6 +92,19 @@ troop.postpone(candystore, 'OptionList', function () {
             },
 
             /**
+             * @param {shoeshine.WidgetEvent} event
+             * @private
+             */
+            _onItemsChange: function (event) {
+                var focusedOptionName = this._getChildNameAtIndex(0);
+                if (focusedOptionName) {
+                    this.setNextOriginalEvent(event);
+                    this._updateFocusedOptionName(focusedOptionName);
+                    this.clearNextOriginalEvent();
+                }
+            },
+
+            /**
              * TODO: break up into smaller methods
              * @param {shoeshine.WidgetEvent} event
              * @private
@@ -160,6 +173,7 @@ troop.postpone(candystore, 'OptionList', function () {
             /** Call from host's init. */
             init: function () {
                 this
+                    .elevateMethod('_onItemsChange')
                     .elevateMethod('_onHotKeyPress')
                     .elevateMethod('_onOptionHover')
                     .elevateMethod('_onOptionClick');
@@ -187,6 +201,7 @@ troop.postpone(candystore, 'OptionList', function () {
                 }
 
                 this
+                    .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this._onItemsChange)
                     .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
                     .subscribeTo(candystore.Option.EVENT_OPTION_HOVER, this._onOptionHover)
                     .subscribeTo(candystore.Option.EVENT_OPTION_CLICK, this._onOptionClick);

@@ -96,6 +96,11 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 itemsToAdd.toWidgetCollection()
                     .passEachItemTo(this.addItemWidget, this);
 
+                this.triggerSync(this.EVENT_LIST_ITEMS_CHANGE, {
+                    itemsRemoved: itemsToRemove,
+                    itemsAdded  : itemsToAdd
+                });
+
                 return this;
             }
         });
