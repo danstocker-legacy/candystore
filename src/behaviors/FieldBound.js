@@ -27,7 +27,7 @@ troop.postpone(candystore, 'FieldBound', function () {
     candystore.FieldBound = self
         .addPrivateMethods(/** @lends candystore.FieldBound# */{
             /** @private */
-            _updateInputValue: function () {
+            _updateFieldValue: function () {
                 var fieldValue = this.entityKey.toField().getValue();
                 this.setFieldValue(fieldValue);
             },
@@ -38,7 +38,7 @@ troop.postpone(candystore, 'FieldBound', function () {
              */
             _onDocumentReplace: function (event) {
                 this.setNextOriginalEvent(event);
-                this._updateInputValue();
+                this._updateFieldValue();
                 this.clearNextOriginalEvent();
             },
 
@@ -48,14 +48,14 @@ troop.postpone(candystore, 'FieldBound', function () {
              */
             _onFieldChange: function (event) {
                 this.setNextOriginalEvent(event);
-                this._updateInputValue();
+                this._updateFieldValue();
                 this.clearNextOriginalEvent();
             }
         })
         .addMethods(/** @lends candystore.FieldBound# */{
             /** Call from host's afterAdd. */
             afterAdd: function () {
-                this._updateInputValue();
+                this._updateFieldValue();
                 this
                     .bindToEntityNodeChange(this.entityKey.documentKey, '_onDocumentReplace')
                     .bindToEntityNodeChange(this.entityKey, '_onFieldChange');
