@@ -119,7 +119,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 return [
                     //@formatter:off
                     '<ul class="inputs-container">',
-                        this.children,
+                    this.children,
                     '</ul>'
                     //@formatter:on
                 ].join('');
@@ -262,7 +262,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
 
         isFormOptional: function (expr) {
             return expr === undefined ||
-                   candystore.Form.isBaseOf(expr);
+                candystore.Form.isBaseOf(expr);
         }
     });
 }());

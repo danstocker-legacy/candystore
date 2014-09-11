@@ -121,6 +121,14 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             },
 
             /**
+             * Fetches current input value on input widget.
+             * @returns {*}
+             */
+            getInputValue: function () {
+                return this.getInputWidget().inputValue;
+            },
+
+            /**
              * Allows TAB to take effect on the input.
              * @returns {candystore.FormField}
              */
