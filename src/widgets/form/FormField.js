@@ -48,20 +48,35 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                     .elevateMethod('onInputTab')
                     .elevateMethod('onInputValid');
 
-                /** @type {boolean} */
+                /**
+                 * Whether the field allows to move to the next tab index.
+                 * @type {boolean}
+                 */
                 this.allowsTabForwards = true;
 
-                /** @type {boolean} */
+                /**
+                 * Whether the field allows to move to the previous tab index.
+                 * @type {boolean}
+                 */
                 this.allowsTabBackwards = true;
 
-                /** @type {string} */
+                /**
+                 * Type attribute of the input field.
+                 * @type {string}
+                 */
                 this.inputType = inputType || 'text';
 
-                /** @type {candystore.Label} */
+                /**
+                 * Widget that optionally displays a comment associated with the input field.
+                 * @type {candystore.Label}
+                 */
                 this.commentLabel = candystore.Label.create()
                     .setChildName('field-comment');
 
-                /** @type {candystore.Label} */
+                /**
+                 * Widget that displays a warning message whenever input validation fails.
+                 * @type {candystore.Label}
+                 */
                 this.warningLabel = candystore.Label.create()
                     .setChildName('field-warning');
 
@@ -223,9 +238,14 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 }
             },
 
-            /** @ignore */
-            onInputValid: function () {
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onInputValid: function (event) {
+                this.setNextOriginalEvent(event);
                 this._updateStyle();
+                this.clearNextOriginalEvent();
             }
         });
 });
