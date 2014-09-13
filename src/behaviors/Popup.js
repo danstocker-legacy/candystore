@@ -161,11 +161,16 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             closePopup: function () {
                 if (this.isOpen) {
+                    // must set flag before triggering event
+                    // otherwise event handlers would see mixed state
+                    // (event says it's closed, but widget state says it's open)
+                    this.isOpen = false;
+
+                    // must trigger before removing widget from hierarchy
+                    // otherwise event won't bubble
                     this.triggerSync(this.EVENT_POPUP_CLOSE);
 
                     this.removeFromParent();
-
-                    this.isOpen = false;
                 }
                 return this;
             },
