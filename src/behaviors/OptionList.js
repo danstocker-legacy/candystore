@@ -15,12 +15,6 @@ troop.postpone(candystore, 'OptionList', function () {
     candystore.OptionList = self
         .addConstants(/** @lends candystore.OptionList */{
             /** @constant */
-            EVENT_OPTION_FOCUS: 'option-focus',
-
-            /** @constant */
-            EVENT_OPTION_BLUR: 'option-blur',
-
-            /** @constant */
             EVENT_OPTION_SELECT: 'option-select',
 
             /** @constant */
@@ -37,26 +31,6 @@ troop.postpone(candystore, 'OptionList', function () {
             },
 
             /**
-             * @param {*} optionName
-             * @private
-             */
-            _triggerFocusEvent: function (optionName) {
-                this.triggerSync(this.EVENT_OPTION_FOCUS, {
-                    optionName: optionName
-                });
-            },
-
-            /**
-             * @param {*} optionName
-             * @private
-             */
-            _triggerBlurEvent: function (optionName) {
-                this.triggerSync(this.EVENT_OPTION_BLUR, {
-                    optionName: optionName
-                });
-            },
-
-            /**
              * @param {string} optionName
              * @param {*} optionValue
              * @private
@@ -69,25 +43,30 @@ troop.postpone(candystore, 'OptionList', function () {
             },
 
             /**
-             * TODO: perhaps use Highlightable trait for children when ready
              * @param {string} newFocusedOptionName
              * @private
              */
             _updateFocusedOptionName: function (newFocusedOptionName) {
-                var oldFocusedOptionName = this.focusedOptionName,
-                    oldFocusedOption = this.getChild(oldFocusedOptionName);
-
+                var oldFocusedOptionName = this.focusedOptionName;
                 if (oldFocusedOptionName !== newFocusedOptionName) {
-                    if (oldFocusedOption) {
-                        oldFocusedOption.removeCssClass('focused-option');
+                    if (oldFocusedOptionName) {
+                        this.getChild(oldFocusedOptionName).markAsBlurred();
                     }
-
-                    this.getChild(newFocusedOptionName).addCssClass('focused-option');
-
                     this.focusedOptionName = newFocusedOptionName;
+                }
+            },
 
-                    this._triggerBlurEvent(oldFocusedOptionName);
-                    this._triggerFocusEvent(newFocusedOptionName);
+            /**
+             * @param {string} newActiveOptionName
+             * @private
+             */
+            _updateActiveOptionName: function (newActiveOptionName) {
+                var oldActiveOptionName = this.activeOptionName;
+                if (oldActiveOptionName !== newActiveOptionName) {
+                    if (oldActiveOptionName) {
+                        this.getChild(oldActiveOptionName).markAsInactive();
+                    }
+                    this.activeOptionName = newActiveOptionName;
                 }
             },
 
@@ -123,13 +102,13 @@ troop.postpone(candystore, 'OptionList', function () {
                 case 38: // up
                     currentChildIndex = Math.max(currentChildIndex - 1, 0);
                     newFocusedOptionName = sortedChildNames[currentChildIndex];
-                    this._updateFocusedOptionName(newFocusedOptionName);
+                    this.getChild(newFocusedOptionName).markAsFocused();
                     break;
 
                 case 40: // down
                     currentChildIndex = Math.min(currentChildIndex + 1, sortedChildNames.length - 1);
                     newFocusedOptionName = sortedChildNames[currentChildIndex];
-                    this._updateFocusedOptionName(newFocusedOptionName);
+                    this.getChild(newFocusedOptionName).markAsFocused();
                     break;
 
                 case 27: // esc
@@ -149,7 +128,7 @@ troop.postpone(candystore, 'OptionList', function () {
              * @param {shoeshine.WidgetEvent} event
              * @private
              */
-            _onOptionHover: function (event) {
+            _onOptionFocus: function (event) {
                 var newFocusedOptionName = event.senderWidget.childName;
 
                 this.setNextOriginalEvent(event);
@@ -161,12 +140,21 @@ troop.postpone(candystore, 'OptionList', function () {
              * @param {shoeshine.WidgetEvent} event
              * @ignore
              */
-            _onOptionClick: function (event) {
+            _onOptionActive: function (event) {
                 var optionWidget = event.senderWidget;
 
                 this.setNextOriginalEvent(event);
                 this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
                 this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @private
+             */
+            _onOptionSelect: function (event) {
+                var optionName = event.payload.optionName;
+                this._updateActiveOptionName(optionName);
             }
         })
         .addMethods(/** @lends candystore.OptionList# */{
@@ -175,8 +163,9 @@ troop.postpone(candystore, 'OptionList', function () {
                 this
                     .elevateMethod('_onItemsChange')
                     .elevateMethod('_onHotKeyPress')
-                    .elevateMethod('_onOptionHover')
-                    .elevateMethod('_onOptionClick');
+                    .elevateMethod('_onOptionFocus')
+                    .elevateMethod('_onOptionActive')
+                    .elevateMethod('_onOptionSelect');
 
                 /**
                  * Identifier of option in focus.
@@ -195,6 +184,7 @@ troop.postpone(candystore, 'OptionList', function () {
 
             /** Call from host's afterAdd. */
             afterAdd: function () {
+                // re-setting focused item to first
                 var focusedOptionName = this._getChildNameAtIndex(0);
                 if (focusedOptionName) {
                     this._updateFocusedOptionName(focusedOptionName);
@@ -203,8 +193,35 @@ troop.postpone(candystore, 'OptionList', function () {
                 this
                     .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this._onItemsChange)
                     .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
-                    .subscribeTo(candystore.Option.EVENT_OPTION_HOVER, this._onOptionHover)
-                    .subscribeTo(candystore.Option.EVENT_OPTION_CLICK, this._onOptionClick);
+                    .subscribeTo(candystore.Option.EVENT_OPTION_FOCUS, this._onOptionFocus)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this._onOptionActive)
+                    .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this._onOptionSelect);
+            },
+
+            /**
+             * Fetches option widget based on its option value.
+             * TODO: maintain an lookup of option values -> option widgets.
+             * @param {*} optionValue
+             * @returns {candystore.Option}
+             */
+            getOptionByValue: function (optionValue) {
+                return this.children
+                    .filterBySelector(function (option) {
+                        return option.optionValue === optionValue;
+                    })
+                    .getFirstValue();
+            },
+
+            /**
+             * Selects an option on the list.
+             * @param {string} optionName
+             * @returns {candystore.OptionList}
+             */
+            selectOption: function (optionName) {
+                var option = this.getChild(optionName);
+                dessert.assert(!!option, "Invalid option name");
+                option.markAsActive();
+                return this;
             }
         });
 });

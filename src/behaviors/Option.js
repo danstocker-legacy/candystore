@@ -8,17 +8,31 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
     /**
      * The Option trait allows widgets to behave like option items in a dropdown or select list.
      * Add this trait to classes aimed to be used as options in a dropdown.
+     * Expects host to have the Highlightable trait.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
+     * @extends candystore.Highlightable
      */
     candystore.Option = self
-        .addConstants(/** @lends candystore.Option# */{
+        .addConstants(/** @lends candystore.Option */{
             /** @constant */
-            EVENT_OPTION_CLICK: 'option-click',
+            EVENT_OPTION_FOCUS: 'option-focus',
 
             /** @constant */
-            EVENT_OPTION_HOVER: 'option-hover'
+            EVENT_OPTION_BLUR: 'option-blur',
+
+            /** @constant */
+            EVENT_OPTION_ACTIVE: 'option-active',
+
+            /** @constant */
+            EVENT_OPTION_INACTIVE: 'option-inactive',
+
+            /** @constant */
+            HIGHLIGHTED_FOCUS: 'highlighted-focus',
+
+            /** @constant */
+            HIGHLIGHTED_ACTIVE: 'highlighted-active'
         })
         .addPrivateMethods(/** @lends candystore.Option# */{
             /**
@@ -29,7 +43,7 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
             _onOptionClick: function (event) {
                 this
                     .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_OPTION_CLICK)
+                    .markAsActive()
                     .clearNextOriginalEvent();
             },
 
@@ -41,7 +55,7 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
             _onOptionHover: function (event) {
                 this
                     .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_OPTION_HOVER)
+                    .markAsFocused()
                     .clearNextOriginalEvent();
             }
         })
@@ -79,6 +93,78 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
             setOptionValue: function (optionValue) {
                 this.optionValue = optionValue;
                 return this;
+            },
+
+            /**
+             * Marks current option as focused.
+             * @returns {candystore.Option}
+             */
+            markAsFocused: function () {
+                this
+                    .highlightOn(this.HIGHLIGHTED_FOCUS)
+                    .triggerSync(this.EVENT_OPTION_FOCUS, {
+                        optionName : this.childName,
+                        optionValue: this.optionValue
+                    });
+                return this;
+            },
+
+            /**
+             * Marks current option as no longer focused.
+             * @returns {candystore.Option}
+             */
+            markAsBlurred: function () {
+                this
+                    .highlightOff(this.HIGHLIGHTED_FOCUS)
+                    .triggerSync(this.EVENT_OPTION_BLUR, {
+                        optionName : this.childName,
+                        optionValue: this.optionValue
+                    });
+                return this;
+            },
+
+            /**
+             * Tells whether the current option is focused.
+             * @returns {boolean}
+             */
+            isFocused: function () {
+                return this.isHighlighted(this.HIGHLIGHTED_FOCUS);
+            },
+
+            /**
+             * Marks current option as active.
+             * @returns {candystore.Option}
+             */
+            markAsActive: function () {
+                this
+                    .highlightOn(this.HIGHLIGHTED_ACTIVE)
+                    .triggerSync(this.EVENT_OPTION_ACTIVE, {
+                        optionName : this.childName,
+                        optionValue: this.optionValue
+                    });
+                return this;
+            },
+
+            /**
+             * Marks current option as inactive.
+             * @returns {candystore.Option}
+             */
+            markAsInactive: function () {
+                this
+                    .highlightOff(this.HIGHLIGHTED_ACTIVE)
+                    .triggerSync(this.EVENT_OPTION_INACTIVE, {
+                        optionName : this.childName,
+                        optionValue: this.optionValue
+                    });
+                return this;
+            },
+
+            /**
+             * Tells whether the current option is active.
+             * @returns {boolean}
+             */
+            isActive: function () {
+                return this.isHighlighted(this.HIGHLIGHTED_ACTIVE);
             }
         });
 }, jQuery);

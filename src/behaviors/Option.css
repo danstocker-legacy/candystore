@@ -1,3 +1,11 @@
 .Option {
     cursor: pointer;
 }
+
+.Option.highlighted-focus {
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+.Option.highlighted-active {
+    background-color: rgba(128, 128, 128, 0.4);
+}
