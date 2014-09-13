@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$, jQuery, candystore */
+/*global dessert, troop, sntls, evan, s$, jQuery, candystore */
 troop.postpone(candystore, 'HotKeyWatcher', function () {
     "use strict";
 

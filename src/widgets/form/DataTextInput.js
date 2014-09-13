@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$, app */
+/*global dessert, troop, sntls, evan, s$, candystore */
 troop.postpone(candystore, 'DataTextInput', function (ns, className) {
     "use strict";
 

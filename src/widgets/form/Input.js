@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -306,7 +306,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
         isInputTypeOptional: function (expr) {
             return expr === undefined ||
-                candystore.Input.inputTypes[expr] === expr;
+                   candystore.Input.inputTypes[expr] === expr;
         }
     });
 }());

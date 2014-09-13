@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, shoeshine, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, candystore */
 troop.postpone(candystore, 'PasswordInput', function (ns, className) {
     "use strict";
 

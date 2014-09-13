@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'Form', function (ns, className) {
     "use strict";
 
@@ -262,7 +262,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
 
         isFormOptional: function (expr) {
             return expr === undefined ||
-                candystore.Form.isBaseOf(expr);
+                   candystore.Form.isBaseOf(expr);
         }
     });
 }());

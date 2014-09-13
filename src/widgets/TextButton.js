@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'TextButton', function (ns, className) {
     "use strict";
 
