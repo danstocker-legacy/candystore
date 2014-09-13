@@ -47,10 +47,13 @@ troop.postpone(candystore, 'OptionList', function () {
              * @private
              */
             _updateFocusedOptionName: function (newFocusedOptionName) {
-                var oldFocusedOptionName = this.focusedOptionName;
+                var oldFocusedOptionName = this.focusedOptionName,
+                    oldFocusedOption;
                 if (oldFocusedOptionName !== newFocusedOptionName) {
-                    if (oldFocusedOptionName) {
-                        this.getChild(oldFocusedOptionName).markAsBlurred();
+                    oldFocusedOption = this.getChild(oldFocusedOptionName);
+                    if (oldFocusedOption) {
+                        // old focused option might not be a child anymore
+                        oldFocusedOption.markAsBlurred();
                     }
                     this.focusedOptionName = newFocusedOptionName;
                 }
@@ -61,10 +64,13 @@ troop.postpone(candystore, 'OptionList', function () {
              * @private
              */
             _updateActiveOptionName: function (newActiveOptionName) {
-                var oldActiveOptionName = this.activeOptionName;
+                var oldActiveOptionName = this.activeOptionName,
+                    oldActiveOption;
                 if (oldActiveOptionName !== newActiveOptionName) {
-                    if (oldActiveOptionName) {
-                        this.getChild(oldActiveOptionName).markAsInactive();
+                    oldActiveOption = this.getChild(oldActiveOptionName);
+                    if (oldActiveOption) {
+                        // old active option might not be a child anymore
+                        oldActiveOption.markAsInactive();
                     }
                     this.activeOptionName = newActiveOptionName;
                 }
