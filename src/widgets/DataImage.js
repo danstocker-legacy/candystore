@@ -31,7 +31,7 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
              * @ignore
              */
             init: function (urlFieldKey) {
-                dessert.isFieldKey(fieldKey, "Invalid field key");
+                dessert.isFieldKey(urlFieldKey, "Invalid field key");
 
                 base.init.call(this);
                 bookworm.EntityBound.init.call(this);
