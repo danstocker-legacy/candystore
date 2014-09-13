@@ -2,9 +2,8 @@
 troop.postpone(candystore, 'DropdownButton', function (ns, className) {
     "use strict";
 
-    var base = shoeshine.Widget,
-        self = base.extend(className)
-            .addTrait(shoeshine.JqueryWidget);
+    var base = candystore.TextButton,
+        self = base.extend(className);
 
     /**
      * Creates a DropdownButton instance.
@@ -17,15 +16,15 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
      * The DropdownButton, when activated, pops up a dropdown, from which the user may select an option,
      * and the selected option will be set as the dropdown button's current caption.
      * The DropdownButton changes its state as the dropdown opens and closes.
-     * TODO: to be based on TextButton
      * @class
-     * @extends shoeshine.Widget
+     * @extends candystore.TextButton
      */
     candystore.DropdownButton = self
         .addPrivateMethods(/** @lends candystore.DropdownButton# */{
             /** @private */
-            _updateCssClasses: function () {
-                if (this.dropdown.isOpen) {
+            _updateOpenStyle: function () {
+                var dropdown = this.dropdown;
+                if (dropdown && dropdown.isOpen) {
                     this
                         .removeCssClass('dropdown-closed')
                         .addCssClass('dropdown-open');
@@ -45,10 +44,6 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                     .elevateMethod('onDropdownOpen')
                     .elevateMethod('onDropdownClose');
 
-                this.createLabelWidget()
-                    .setChildName('dropdown-label')
-                    .addToParent(this);
-
                 /**
                  * Dropdown widget for showing the options.
                  * Must have instance-level reference to it since this widget will be removed and re-added
@@ -63,28 +58,11 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
             afterAdd: function () {
                 base.afterAdd.call(this);
 
-                this._updateCssClasses();
+                this._updateOpenStyle();
 
                 this
                     .subscribeTo(candystore.Popup.EVENT_POPUP_OPEN, this.onDropdownOpen)
                     .subscribeTo(candystore.Popup.EVENT_POPUP_CLOSE, this.onDropdownClose);
-            },
-
-            /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return this.getChild('dropdown-label').toString();
-            },
-
-            /**
-             * Creates button label widget.
-             * Override to specify custom label.
-             * @returns {candystore.Label}
-             */
-            createLabelWidget: function () {
-                return candystore.Label.create();
             },
 
             /**
@@ -102,7 +80,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              */
             onDropdownOpen: function (event) {
                 if (event.senderWidget === this.dropdown) {
-                    this._updateCssClasses();
+                    this._updateOpenStyle();
                 }
             },
 
@@ -112,7 +90,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              */
             onDropdownClose: function (event) {
                 if (event.senderWidget === this.dropdown) {
-                    this._updateCssClasses();
+                    this._updateOpenStyle();
                 }
             },
 
@@ -121,6 +99,8 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              * @ignore
              */
             onClick: function (event) {
+                base.onClick.call(this);
+
                 var dropdown = this.dropdown;
 
                 this.setNextOriginalEvent(event);
@@ -139,6 +119,4 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                 this.clearNextOriginalEvent();
             }
         });
-
-    self.on('click', '', 'onClick');
 });

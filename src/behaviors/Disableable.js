@@ -17,7 +17,7 @@ troop.postpone(candystore, 'Disableable', function () {
     candystore.Disableable = self
         .addPrivateMethods(/** @lends candystore.Disableable# */{
             /** @private */
-            _updateCssClasses: function () {
+            _updateEnabledStyle: function () {
                 if (this.isDisabled()) {
                     this.removeCssClass('widget-enabled')
                         .addCssClass('widget-disabled');
@@ -41,7 +41,7 @@ troop.postpone(candystore, 'Disableable', function () {
              */
             forceEnable: function () {
                 this.disablingSources.clear();
-                this._updateCssClasses();
+                this._updateEnabledStyle();
                 return this;
             },
 
@@ -52,7 +52,7 @@ troop.postpone(candystore, 'Disableable', function () {
              */
             enableBy: function (disablingSource) {
                 this.disablingSources.deleteItem(disablingSource);
-                this._updateCssClasses();
+                this._updateEnabledStyle();
                 return this;
             },
 
@@ -63,7 +63,7 @@ troop.postpone(candystore, 'Disableable', function () {
              */
             disableBy: function (disablingSource) {
                 this.disablingSources.setItem(disablingSource, disablingSource);
-                this._updateCssClasses();
+                this._updateEnabledStyle();
                 return this;
             },
 
