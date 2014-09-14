@@ -1,3 +1,8 @@
 .Button.widget-enabled {
     cursor: pointer;
 }
+
+.Button.widget-disabled {
+    opacity: 0.5;
+    cursor: default;
+}
