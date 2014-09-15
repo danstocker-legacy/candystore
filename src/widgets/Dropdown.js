@@ -83,6 +83,14 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Retrieves the internal List instance.
+             * @returns {candystore.List}
+             */
+            getListWidget: function () {
+                return this.getChild('options-list');
+            },
+
+            /**
              * @param {shoeshine.WidgetEvent} event
              * @ignore
              */
