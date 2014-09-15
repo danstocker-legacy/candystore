@@ -64,7 +64,7 @@ troop.postpone(candystore, 'Highlightable', function (ns, className) {
             isHighlighted: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
                 return highlightId ?
-                    !!this.getItem(highlightId) :
+                    !!this.highlightIds.getItem(highlightId) :
                     !!this.highlightIds.getKeyCount();
             }
         });
