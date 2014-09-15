@@ -36,6 +36,8 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Label}
              */
             setLabelText: function (labelText) {
+                dessert.isString(labelText, "Invalid label text");
+
                 $(this.getElement())
                     .html(labelText.toHtml());
 

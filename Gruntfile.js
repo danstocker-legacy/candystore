@@ -22,6 +22,8 @@ module.exports = function (grunt) {
                 'src/widgets/Label.js',
                 'src/widgets/HtmlLabel.js',
                 'src/widgets/DataLabel.js',
+                'src/widgets/Link.js',
+                'src/widgets/DataLink.js',
                 'src/widgets/Image.js',
                 'src/widgets/DataImage.js',
                 'src/widgets/Button.js',
@@ -62,7 +64,7 @@ module.exports = function (grunt) {
                 troop  : true,
                 sntls  : true,
                 evan   : true
-            },
+            }
         },
 
         outPath              : 'out',

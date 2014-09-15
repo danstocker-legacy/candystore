@@ -24,7 +24,7 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
                 base.init.call(this);
 
                 this.createLabelWidget()
-                    .setChildName('button-caption')
+                    .setChildName('button-label')
                     .addToParent(this);
             },
 
@@ -39,11 +39,18 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
             /**
              * Creates Label widget to be used inside the button.
              * Override to specify custom widget.
-             * TODO: rename to .createCaptionWidget (not necessarily a label)
              * @returns {candystore.Label}
              */
             createLabelWidget: function () {
                 return candystore.Label.create();
+            },
+
+            /**
+             * Retrieves the label widget contained within the button.
+             * @returns {candystore.Label}
+             */
+            getLabelWidget: function () {
+                return this.getChild('button-label');
             },
 
             /**
@@ -56,7 +63,7 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
             setCaption: function (caption) {
                 dessert.isString(caption, "Invalid label text");
 
-                this.getChild('button-caption')
+                this.getChild('button-label')
                     .setLabelText(caption);
 
                 return this;
