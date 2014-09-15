@@ -47,7 +47,7 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
                 candystore.AlignedPopup.afterAdd.call(this);
 
                 this
-                    .subscribeTo(candystore.OptionList.EVENT_OPTION_FOCUS, this.onOptionFocus)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_FOCUS, this.onOptionFocus)
                     .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect)
                     .subscribeTo(candystore.OptionList.EVENT_OPTIONS_ESCAPE, this.onOptionsEscape);
             },
