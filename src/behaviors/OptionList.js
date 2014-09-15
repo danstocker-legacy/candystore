@@ -42,6 +42,16 @@ troop.postpone(candystore, 'OptionList', function () {
                 });
             },
 
+            /** @private */
+            _tryFocusingOnFirstOption: function () {
+                var focusedOptionName = this._getChildNameAtIndex(0),
+                    focusedOption = this.getChild(focusedOptionName);
+
+                if (focusedOption) {
+                    focusedOption.markAsFocused();
+                }
+            },
+
             /**
              * @param {string} newFocusedOptionName
              * @private
@@ -81,12 +91,9 @@ troop.postpone(candystore, 'OptionList', function () {
              * @private
              */
             _onItemsChange: function (event) {
-                var focusedOptionName = this._getChildNameAtIndex(0);
-                if (focusedOptionName) {
-                    this.setNextOriginalEvent(event);
-                    this._updateFocusedOptionName(focusedOptionName);
-                    this.clearNextOriginalEvent();
-                }
+                this.setNextOriginalEvent(event);
+                this._tryFocusingOnFirstOption();
+                this.clearNextOriginalEvent();
             },
 
             /**
@@ -190,11 +197,7 @@ troop.postpone(candystore, 'OptionList', function () {
 
             /** Call from host's afterAdd. */
             afterAdd: function () {
-                // re-setting focused item to first
-                var focusedOptionName = this._getChildNameAtIndex(0);
-                if (focusedOptionName) {
-                    this._updateFocusedOptionName(focusedOptionName);
-                }
+                this._tryFocusingOnFirstOption();
 
                 this
                     .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this._onItemsChange)

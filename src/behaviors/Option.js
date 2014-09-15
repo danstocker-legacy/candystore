@@ -100,12 +100,14 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Option}
              */
             markAsFocused: function () {
-                this
-                    .highlightOn(this.HIGHLIGHTED_FOCUS)
-                    .triggerSync(this.EVENT_OPTION_FOCUS, {
-                        optionName : this.childName,
-                        optionValue: this.optionValue
-                    });
+                if (!this.isFocused()) {
+                    this
+                        .highlightOn(this.HIGHLIGHTED_FOCUS)
+                        .triggerSync(this.EVENT_OPTION_FOCUS, {
+                            optionName : this.childName,
+                            optionValue: this.optionValue
+                        });
+                }
                 return this;
             },
 
@@ -114,12 +116,14 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Option}
              */
             markAsBlurred: function () {
-                this
-                    .highlightOff(this.HIGHLIGHTED_FOCUS)
-                    .triggerSync(this.EVENT_OPTION_BLUR, {
-                        optionName : this.childName,
-                        optionValue: this.optionValue
-                    });
+                if (this.isFocused()) {
+                    this
+                        .highlightOff(this.HIGHLIGHTED_FOCUS)
+                        .triggerSync(this.EVENT_OPTION_BLUR, {
+                            optionName : this.childName,
+                            optionValue: this.optionValue
+                        });
+                }
                 return this;
             },
 
@@ -136,12 +140,14 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Option}
              */
             markAsActive: function () {
-                this
-                    .highlightOn(this.HIGHLIGHTED_ACTIVE)
-                    .triggerSync(this.EVENT_OPTION_ACTIVE, {
-                        optionName : this.childName,
-                        optionValue: this.optionValue
-                    });
+                if (!this.isActive()) {
+                    this
+                        .highlightOn(this.HIGHLIGHTED_ACTIVE)
+                        .triggerSync(this.EVENT_OPTION_ACTIVE, {
+                            optionName : this.childName,
+                            optionValue: this.optionValue
+                        });
+                }
                 return this;
             },
 
@@ -150,12 +156,14 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Option}
              */
             markAsInactive: function () {
-                this
-                    .highlightOff(this.HIGHLIGHTED_ACTIVE)
-                    .triggerSync(this.EVENT_OPTION_INACTIVE, {
-                        optionName : this.childName,
-                        optionValue: this.optionValue
-                    });
+                if (this.isActive()) {
+                    this
+                        .highlightOff(this.HIGHLIGHTED_ACTIVE)
+                        .triggerSync(this.EVENT_OPTION_INACTIVE, {
+                            optionName : this.childName,
+                            optionValue: this.optionValue
+                        });
+                }
                 return this;
             },
 
