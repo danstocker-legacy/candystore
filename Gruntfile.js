@@ -31,6 +31,7 @@ module.exports = function (grunt) {
                 'src/widgets/Dropdown.js',
                 'src/widgets/DataDropdown.js',
                 'src/widgets/DropdownButton.js',
+                'src/widgets/DataDropdownButton.js',
                 'src/widgets/List.js',
                 'src/widgets/DataList.js',
                 'src/widgets/Flow.js',
@@ -85,8 +86,8 @@ module.exports = function (grunt) {
             options: {
                 separator: '',
                 banner   : '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                           '<%= grunt.template.today("yyyy-mm-dd") %> - ' +
-                           '<%= pkg.author %> - <%= pkg.copyright %>*/\n'
+                    '<%= grunt.template.today("yyyy-mm-dd") %> - ' +
+                    '<%= pkg.author %> - <%= pkg.copyright %>*/\n'
             },
 
             js: {
