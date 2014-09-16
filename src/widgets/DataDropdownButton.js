@@ -18,17 +18,18 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
      * TODO: Add documentation
      * @class
      * @extends candystore.DropdownButton
+     * @extends candystore.EntityWidget
      */
     candystore.DataDropdownButton = self
         .addMethods(/** @lends candystore.DataDropdownButton# */{
             /**
-             * @param {bookworm.FieldKey} labelKey
+             * @param {bookworm.FieldKey} selectedKey
              * @param {bookworm.FieldKey} optionsKey
              * @ignore
              */
-            init: function (labelKey, optionsKey) {
+            init: function (selectedKey, optionsKey) {
                 dessert
-                    .isFieldKey(labelKey, "Invalid label field key")
+                    .isFieldKey(selectedKey, "Invalid 'selected' field key")
                     .isFieldKey(optionsKey, "Invalid options field key");
 
                 /**
@@ -37,8 +38,16 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
                  */
                 this.optionsKey = optionsKey;
 
-                candystore.EntityWidget.init.call(this, labelKey);
+                candystore.EntityWidget.init.call(this, selectedKey);
                 base.init.call(this);
+
+                this.elevateMethod('onOptionSelect');
+            },
+
+            /** @ignore */
+            afterAdd: function () {
+                base.afterAdd.call(this);
+                this.subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect);
             },
 
             /** @returns {candystore.DataLabel} */
@@ -49,6 +58,18 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             /** @returns {candystore.DataDropdown} */
             createDropdownWidget: function () {
                 return candystore.DataDropdown.create(this.optionsKey);
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onOptionSelect: function (event) {
+                var optionValue = event.payload.optionValue;
+
+                b$.documents.setNextOriginalEvent(event);
+                this.entityKey.toField().setValue(optionValue);
+                b$.documents.clearNextOriginalEvent();
             }
         });
 });
