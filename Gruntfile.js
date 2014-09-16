@@ -8,6 +8,7 @@ module.exports = function (grunt) {
         params: {
             jsFiles: [
                 'src/namespace.js',
+                'src/utils/StringUtils.js',
                 'src/utils/Debouncer.js',
                 'src/behaviors/Disableable.js',
                 'src/behaviors/Highlightable.js',
