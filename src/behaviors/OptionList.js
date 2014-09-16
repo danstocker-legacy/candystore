@@ -197,14 +197,14 @@ troop.postpone(candystore, 'OptionList', function () {
 
             /** Call from host's afterAdd. */
             afterAdd: function () {
-                this._tryFocusingOnFirstOption();
-
                 this
                     .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this._onItemsChange)
                     .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
                     .subscribeTo(candystore.Option.EVENT_OPTION_FOCUS, this._onOptionFocus)
                     .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this._onOptionActive)
                     .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this._onOptionSelect);
+
+                this._tryFocusingOnFirstOption();
             },
 
             /**
