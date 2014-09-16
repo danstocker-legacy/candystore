@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, s$, jQuery, candystore */
+/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -41,7 +41,7 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
              * @private
              */
             _onWindowResize: function (event) {
-                var rootWidget = s$.Widget.rootWidget;
+                var rootWidget = shoeshine.Widget.rootWidget;
                 rootWidget.setNextOriginalEvent(event);
                 this.updateDimensions();
                 rootWidget.clearNextOriginalEvent();
@@ -79,7 +79,7 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
                 var currentWidth = $window.width(),
                     currentHeight = $window.height(),
                     wasWindowResized = false,
-                    rootWidget = s$.Widget.rootWidget;
+                    rootWidget = shoeshine.Widget.rootWidget;
 
                 if (currentWidth !== this.currentWidth || currentHeight !== this.currentHeight) {
                     wasWindowResized = true;

@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, s$, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'HotKeyWatcher', function () {
     "use strict";
 
@@ -23,7 +23,7 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
              * @ignore
              */
             onKeyDown: function (event) {
-                s$.Widget.rootWidget
+                shoeshine.Widget.rootWidget
                     .setNextOriginalEvent(event)
                     .broadcastSync(this.EVENT_HOT_KEY_DOWN, {
                         charCode: event.which
