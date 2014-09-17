@@ -35,12 +35,23 @@ troop.postpone(candystore, 'Button', function (ns, className) {
             },
 
             /**
+             * Clicks the button.
+             * @returns {candystore.Button}
+             */
+            clickButton: function () {
+                if (!this.isDisabled()) {
+                    this.triggerSync(this.EVENT_BUTTON_CLICK);
+                }
+                return this;
+            },
+
+            /**
              * @param {jQuery.Event} event
              * @ignore */
             onClick: function (event) {
                 this
                     .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_BUTTON_CLICK)
+                    .clickButton()
                     .clearNextOriginalEvent();
             }
         });
