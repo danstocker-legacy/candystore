@@ -69,6 +69,9 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
                  * @type {candystore.Debouncer}
                  */
                 this.windowResizeDebouncer = candystore.Debouncer.create(this._onWindowResize);
+
+                // setting initial dimensions
+                this.updateDimensions();
             },
 
             /**
