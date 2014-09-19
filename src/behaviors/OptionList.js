@@ -223,13 +223,17 @@ troop.postpone(candystore, 'OptionList', function () {
 
             /**
              * Selects an option on the list.
+             * Call only when the current OptionList is added to the hierarchy.
              * @param {string} optionName
              * @returns {candystore.OptionList}
              */
             selectOption: function (optionName) {
+                dessert.assert(this.isOnRoot(), "Not attached to root");
+
                 var option = this.getChild(optionName);
                 dessert.assert(!!option, "Invalid option name");
                 option.markAsActive();
+
                 return this;
             }
         });
