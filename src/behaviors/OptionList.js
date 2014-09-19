@@ -129,8 +129,7 @@ troop.postpone(candystore, 'OptionList', function () {
                     break;
 
                 case 13: // enter
-                    newFocusedOption = this.getChild(this.focusedOptionName);
-                    this._triggerSelectEvent(newFocusedOption.childName, newFocusedOption.optionValue);
+                    this.getChild(this.focusedOptionName).markAsActive();
                     break;
                 }
 
