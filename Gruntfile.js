@@ -27,6 +27,8 @@ module.exports = function (grunt) {
                 'src/widgets/DataLink.js',
                 'src/widgets/Image.js',
                 'src/widgets/DataImage.js',
+                'src/widgets/DynamicImage.js',
+                'src/widgets/DataDynamicImage.js',
                 'src/widgets/Button.js',
                 'src/widgets/TextButton.js',
                 'src/widgets/Dropdown.js',
@@ -87,8 +89,8 @@ module.exports = function (grunt) {
             options: {
                 separator: '',
                 banner   : '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                    '<%= grunt.template.today("yyyy-mm-dd") %> - ' +
-                    '<%= pkg.author %> - <%= pkg.copyright %>*/\n'
+                           '<%= grunt.template.today("yyyy-mm-dd") %> - ' +
+                           '<%= pkg.author %> - <%= pkg.copyright %>*/\n'
             },
 
             js: {
