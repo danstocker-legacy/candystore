@@ -29,8 +29,10 @@ troop.postpone(candystore, 'Image', function (ns, className) {
             },
 
             /**
-             * Sets Image URL or path relative to the image root specified by .setImageRoot()
-             * @param {poodle.ImageUrl} imageUrl
+             * Sets absolute image URL.
+             * @param {poodle.ImageUrl} imageUrl ImageUrl instance.
+             * @example
+             * image.setImageUrl('http://httpcats.herokuapp.com/418'.toImageUrl())
              * @returns {candystore.Image}
              */
             setImageUrl: function (imageUrl) {

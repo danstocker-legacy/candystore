@@ -17,6 +17,9 @@ troop.postpone(candystore, 'DataDynamicImage', function (ns, className) {
      */
 
     /**
+     * The DataDynamicImage is the data bound version of the DynamicImage.
+     * Displays an image image based on the URL stored in a field in the cache.
+     * Keeps the image in sync with the changes of the corresponding field.
      * @class
      * @extends candystore.DynamicImage
      */

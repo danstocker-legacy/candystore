@@ -6,12 +6,17 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
         self = base.extend(className);
 
     /**
+     * Creates a DynamicImage instance.
      * @name candystore.DynamicImage.create
      * @function
      * @returns {candystore.DynamicImage}
      */
 
     /**
+     * The DynamicImage is an Image that loads images dynamically, and triggers appropriate events
+     * at relevant stages of the loading process. No longer is an <em>img</em> tag in itself, but wraps
+     * an image tag that may or may not be present, depending on loading success. The image will not load sooner than
+     * the widget is rendered.
      * @class
      * @extends candystore.Image
      */
@@ -55,6 +60,7 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
             }
         })
         .addMethods(/** @lends candystore.DynamicImage# */{
+            /** @ignore */
             init: function () {
                 base.init.call(this);
 
@@ -64,10 +70,16 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
                     .elevateMethod('onImageLoadSuccess')
                     .elevateMethod('onImageLoadFailure');
 
-                /** @type {HTMLImageElement} */
+                /**
+                 * HTML image element associated with Image widget.
+                 * @type {HTMLImageElement}
+                 */
                 this.imageElement = undefined;
 
-                /** @type {poodle.Image} */
+                /**
+                 * Transport-level Image instance associated with Image widget.
+                 * @type {poodle.Image}
+                 */
                 this.image = undefined;
             },
 
@@ -78,7 +90,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
             },
 
             /**
-             * @param {poodle.ImageUrl} imageUrl
+             * Sets image URL. Initiates loading of image when necessary, and subscribes widget
+             * to image loading events on the specified URL.
+             * @param {poodle.ImageUrl} imageUrl ImageUrl instance.
              * @returns {candystore.DynamicImage}
              */
             setImageUrl: function (imageUrl) {
