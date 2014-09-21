@@ -22,34 +22,21 @@ troop.postpone(candystore, 'Image', function (ns, className) {
             /** @ignore */
             init: function () {
                 base.init.call(this);
-
                 this.setTagName('img');
 
-                /**
-                 * Root path or URL associated with Image instance.
-                 * @type {string}
-                 */
-                this.imageRoot = undefined;
-            },
-
-            /**
-             * Sets root path (URL) for the image.
-             * @param {string} imageRoot
-             * @returns {candystore.Image}
-             */
-            setImageRoot: function (imageRoot) {
-                this.imageRoot = imageRoot;
-                return this;
+                /** @type {poodle.ImageUrl} */
+                this.imageUrl = undefined;
             },
 
             /**
              * Sets Image URL or path relative to the image root specified by .setImageRoot()
-             * @param {string} imageUrl
+             * @param {poodle.ImageUrl} imageUrl
              * @returns {candystore.Image}
-             * @see candystore.Image#setImageRoot
              */
             setImageUrl: function (imageUrl) {
-                this.addAttribute('src', [this.imageRoot, imageUrl].join('/'));
+                dessert.isLocation(imageUrl, "Invalid image URL");
+                this.addAttribute('src', imageUrl.toString());
+                this.imageUrl = imageUrl;
                 return this;
             }
         });

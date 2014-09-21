@@ -56,7 +56,7 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
              * @ignore
              */
             setFieldValue: function (fieldValue) {
-                this.setImageUrl(fieldValue);
+                this.setImageUrl(fieldValue.toImageUrl());
                 return this;
             }
         });

@@ -1,7 +1,7 @@
 {
     "name"           : "candystore",
-    "version"    : "0.1.5",
-    "description": "Common widgets",
+    "version"        : "0.2.0",
+    "description"    : "Common widgets",
     "keywords"       : [
         "widgets", "button", "label", "form", "dropdown", "popup"
     ],
@@ -15,7 +15,8 @@
         "evan"     : "~0.4.1",
         "jquery"   : "~2.1.0",
         "bookworm" : "~0.1.1",
-        "shoeshine": "~0.1.5"
+        "shoeshine": "~0.1.5",
+        "poodle"   : "~0.1.3"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
