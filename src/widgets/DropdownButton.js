@@ -75,6 +75,14 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
             },
 
             /**
+             * Retrieves Dropdown instance associated with DropdownButton.
+             * @returns {candystore.Dropdown}
+             */
+            getDropdownWidget: function () {
+                return this.getChild('dropdown-popup');
+            },
+
+            /**
              * @param {shoeshine.WidgetEvent} event
              * @ignore
              */
