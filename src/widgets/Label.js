@@ -19,18 +19,6 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
      */
     candystore.Label = self
         .addPrivateMethods(/** @lends candystore.Label# */{
-            /** @private */
-            _updateContentStyle: function () {
-                if (this.labelText) {
-                    this
-                        .removeCssClass('no-text')
-                        .addCssClass('has-text');
-                } else {
-                    this
-                        .removeCssClass('has-text')
-                        .addCssClass('no-text');
-                }
-            }
         })
         .addMethods(/** @lends candystore.Label# */{
             /** @ignore */
@@ -42,7 +30,30 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
 
                 this.setTagName('span');
 
-                this._updateContentStyle();
+                this.updateContentStyle();
+            },
+
+            /** @ignore */
+            contentMarkup: function () {
+                var labelText = this.labelText;
+                return labelText ? labelText.toHtml() : '';
+            },
+
+            /**
+             * Updates Label's CSS classes based on its content.
+             * @returns {candystore.Label}
+             */
+            updateContentStyle: function () {
+                if (this.labelText) {
+                    this
+                        .removeCssClass('no-text')
+                        .addCssClass('has-text');
+                } else {
+                    this
+                        .removeCssClass('has-text')
+                        .addCssClass('no-text');
+                }
+                return this;
             },
 
             /**
@@ -59,15 +70,9 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
 
                 this.labelText = labelText;
 
-                this._updateContentStyle();
+                this.updateContentStyle();
 
                 return this;
-            },
-
-            /** @ignore */
-            contentMarkup: function () {
-                var labelText = this.labelText;
-                return labelText ? labelText.toHtml() : '';
             }
         });
 }, jQuery);

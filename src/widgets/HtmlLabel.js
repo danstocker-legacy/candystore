@@ -19,6 +19,12 @@ troop.postpone(candystore, 'HtmlLabel', function (ns, className, /**jQuery*/$) {
      */
     candystore.HtmlLabel = self
         .addMethods(/** @lends candystore.HtmlLabel# */{
+            /** @ignore */
+            contentMarkup: function () {
+                var labelText = this.labelText;
+                return labelText ? labelText : '';
+            },
+
             /**
              * Sets HTML label text. Overrides Label's implementation.
              * <em>Use with care: malicious code in labelText can affect your application!</em>
@@ -26,17 +32,16 @@ troop.postpone(candystore, 'HtmlLabel', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Label}
              */
             setLabelText: function (labelText) {
+                dessert.isStringOptional(labelText, "Invalid label text");
+
                 $(this.getElement())
                     .html(labelText);
 
                 this.labelText = labelText;
 
-                return this;
-            },
+                this.updateContentStyle();
 
-            /** @ignore */
-            contentMarkup: function () {
-                return this.labelText;
+                return this;
             }
         });
 }, jQuery);
