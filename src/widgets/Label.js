@@ -18,6 +18,20 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
      * @extends shoeshine.Widget
      */
     candystore.Label = self
+        .addPrivateMethods(/** @lends candystore.Label# */{
+            /** @private */
+            _updateContentStyle: function () {
+                if (this.labelText) {
+                    this
+                        .removeCssClass('no-text')
+                        .addCssClass('has-text');
+                } else {
+                    this
+                        .removeCssClass('has-text')
+                        .addCssClass('no-text');
+                }
+            }
+        })
         .addMethods(/** @lends candystore.Label# */{
             /** @ignore */
             init: function () {
@@ -27,6 +41,8 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
                 this.labelText = undefined;
 
                 this.setTagName('span');
+
+                this._updateContentStyle();
             },
 
             /**
@@ -36,19 +52,22 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Label}
              */
             setLabelText: function (labelText) {
-                dessert.isString(labelText, "Invalid label text");
+                dessert.isStringOptional(labelText, "Invalid label text");
 
                 $(this.getElement())
-                    .html(labelText.toHtml());
+                    .html(labelText ? labelText.toHtml() : '');
 
                 this.labelText = labelText;
+
+                this._updateContentStyle();
 
                 return this;
             },
 
             /** @ignore */
             contentMarkup: function () {
-                return this.labelText.toHtml();
+                var labelText = this.labelText;
+                return labelText ? labelText.toHtml() : '';
             }
         });
 }, jQuery);
