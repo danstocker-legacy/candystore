@@ -8,6 +8,8 @@ troop.postpone(candystore, 'OptionList', function () {
     /**
      * The OptionList trait modifies List classes so that they can be used in dropdowns.
      * Should only accept widgets as list items that implement the Option trait.
+     * Whatever uses the OptionList should take care of initializing the focused and selected states in afterAdd.
+     * The OptionList returns to its neutral state after being removed from the hierarchy.
      * @class
      * @extends troop.Base
      * @extends candystore.List
@@ -201,6 +203,15 @@ troop.postpone(candystore, 'OptionList', function () {
 
                 this._updateFocusedOptionName();
                 this._updateActiveOptionName();
+            },
+
+            /** @ignore */
+            afterRemove: function () {
+                // destructing widget state
+                this.getSelectedOption().markAsInactive();
+                this.getFocusedOption().markAsBlurred();
+                this.focusedOptionName = undefined;
+                this.activeOptionName = undefined;
             },
 
             /**
