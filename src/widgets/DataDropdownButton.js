@@ -26,10 +26,11 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             /** @private */
             _updateSelectedOption: function () {
                 var optionValue = this.entityKey.toField().getValue(),
-                    optionWidget = this.dropdown.getListWidget().getOptionByValue(optionValue);
+                    optionWidget = this.dropdown.getListWidget().getOptionByValue(optionValue),
+                    dropdownWidget = this.getDropdownWidget();
 
-                if (optionWidget) {
-                    this.getDropdownWidget().getListWidget()
+                if (optionWidget && dropdownWidget) {
+                    dropdownWidget.getListWidget()
                         .selectOption(optionWidget.childName);
                 }
             }
