@@ -22,15 +22,6 @@ troop.postpone(candystore, 'OptionList', function () {
         })
         .addPrivateMethods(/** @lends candystore.OptionList# */{
             /**
-             * @param {number} index
-             * @returns {string}
-             * @private
-             */
-            _getChildNameAtIndex: function (index) {
-                return this.children.getKeys().sort()[index];
-            },
-
-            /**
              * @param {string} optionName
              * @param {*} optionValue
              * @private
@@ -42,21 +33,11 @@ troop.postpone(candystore, 'OptionList', function () {
                 });
             },
 
-            /** @private */
-            _tryFocusingOnFirstOption: function () {
-                var focusedOptionName = this._getChildNameAtIndex(0),
-                    focusedOption = this.getChild(focusedOptionName);
-
-                if (focusedOption) {
-                    focusedOption.markAsFocused();
-                }
-            },
-
             /**
              * @param {string} newFocusedOptionName
              * @private
              */
-            _updateFocusedOptionName: function (newFocusedOptionName) {
+            _setFocusedOptionName: function (newFocusedOptionName) {
                 var oldFocusedOptionName = this.focusedOptionName,
                     oldFocusedOption;
                 if (oldFocusedOptionName !== newFocusedOptionName) {
@@ -73,7 +54,7 @@ troop.postpone(candystore, 'OptionList', function () {
              * @param {string} newActiveOptionName
              * @private
              */
-            _updateActiveOptionName: function (newActiveOptionName) {
+            _setActiveOptionName: function (newActiveOptionName) {
                 var oldActiveOptionName = this.activeOptionName,
                     oldActiveOption;
                 if (oldActiveOptionName !== newActiveOptionName) {
@@ -87,12 +68,28 @@ troop.postpone(candystore, 'OptionList', function () {
             },
 
             /**
+             * Looks into current options and sets active option name.
+             * @private
+             */
+            _updateFocusedOptionName: function () {
+                this.focusedOptionName = this.getFocusedOption().childName;
+            },
+
+            /**
+             * Looks into current options and sets active option name.
+             * @private
+             */
+            _updateActiveOptionName: function () {
+                this.activeOptionName = this.getSelectedOption().childName;
+            },
+
+            /**
              * @param {shoeshine.WidgetEvent} event
              * @private
              */
             _onItemsChange: function (event) {
                 this.setNextOriginalEvent(event);
-                this._tryFocusingOnFirstOption();
+                this._updateFocusedOptionName();
                 this.clearNextOriginalEvent();
             },
 
@@ -106,8 +103,7 @@ troop.postpone(candystore, 'OptionList', function () {
                     children = this.children,
                     sortedChildNames = children.getKeys().sort(),
                     currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
-                    newFocusedOptionName,
-                    newFocusedOption;
+                    newFocusedOptionName;
 
                 this.setNextOriginalEvent(event);
 
@@ -144,7 +140,7 @@ troop.postpone(candystore, 'OptionList', function () {
                 var newFocusedOptionName = event.senderWidget.childName;
 
                 this.setNextOriginalEvent(event);
-                this._updateFocusedOptionName(newFocusedOptionName);
+                this._setFocusedOptionName(newFocusedOptionName);
                 this.clearNextOriginalEvent();
             },
 
@@ -166,7 +162,7 @@ troop.postpone(candystore, 'OptionList', function () {
              */
             _onOptionSelect: function (event) {
                 var optionName = event.payload.optionName;
-                this._updateActiveOptionName(optionName);
+                this._setActiveOptionName(optionName);
             }
         })
         .addMethods(/** @lends candystore.OptionList# */{
@@ -203,7 +199,8 @@ troop.postpone(candystore, 'OptionList', function () {
                     .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this._onOptionActive)
                     .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this._onOptionSelect);
 
-                this._tryFocusingOnFirstOption();
+                this._updateFocusedOptionName();
+                this._updateActiveOptionName();
             },
 
             /**
@@ -216,6 +213,33 @@ troop.postpone(candystore, 'OptionList', function () {
                 return this.children
                     .filterBySelector(function (option) {
                         return option.optionValue === optionValue;
+                    })
+                    .getFirstValue();
+            },
+
+            /**
+             * Fetches currently focused option, or an arbitrary option if none focused.
+             * @returns {candystore.Option}
+             */
+            getFocusedOption: function () {
+                var focusedOption = this.children.filterBySelector(
+                        function (option) {
+                            return option.isFocused();
+                        })
+                        .getFirstValue(),
+                    firstOption = this.children.getFirstValue();
+
+                return focusedOption || firstOption;
+            },
+
+            /**
+             * Fetches option that is currently selected, or undefined.
+             * @returns {candystore.Option}
+             */
+            getSelectedOption: function () {
+                return this.children.filterBySelector(
+                    function (option) {
+                        return option.isActive();
                     })
                     .getFirstValue();
             },
