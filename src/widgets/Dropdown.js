@@ -123,10 +123,14 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionSelect: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .closePopup()
-                    .clearNextOriginalEvent();
+                var originalEvent = event.getOriginalEventByType(jQuery.Event);
+                if (originalEvent && originalEvent.type === 'click') {
+                    // only when select was initiated by user interaction (click on Option)
+                    this
+                        .setNextOriginalEvent(event)
+                        .closePopup()
+                        .clearNextOriginalEvent();
+                }
             },
 
             /**
