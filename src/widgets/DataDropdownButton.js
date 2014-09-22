@@ -4,6 +4,7 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
 
     var base = candystore.DropdownButton,
         self = base.extend(className)
+            .addTrait(bookworm.EntityBound)
             .addTrait(candystore.EntityWidget);
 
     /**
@@ -21,6 +22,18 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
      * @extends candystore.EntityWidget
      */
     candystore.DataDropdownButton = self
+        .addPrivateMethods(/** @lends candystore.DataDropdownButton# */{
+            /** @private */
+            _updateSelectedOption: function () {
+                var optionValue = this.entityKey.toField().getValue(),
+                    optionWidget = this.dropdown.getListWidget().getOptionByValue(optionValue);
+
+                if (optionWidget) {
+                    this.getDropdownWidget().getListWidget()
+                        .selectOption(optionWidget.childName);
+                }
+            }
+        })
         .addMethods(/** @lends candystore.DataDropdownButton# */{
             /**
              * @param {bookworm.FieldKey} selectedKey
@@ -40,14 +53,29 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
 
                 candystore.EntityWidget.init.call(this, selectedKey);
                 base.init.call(this);
+                bookworm.EntityBound.init.call(this);
 
-                this.elevateMethod('onOptionSelect');
+                this
+                    .elevateMethod('onOptionSelect')
+                    .elevateMethod('onListItemsChange');
             },
 
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
-                this.subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect);
+
+                this._updateSelectedOption();
+
+                this
+                    .bindToEntityNodeChange(this.entityKey, 'onSelectedChange')
+                    .subscribeTo(candystore.DataList.EVENT_LIST_ITEMS_CHANGE, this.onListItemsChange)
+                    .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect);
+            },
+
+            /** @ignore */
+            afterRemove: function () {
+                base.afterRemove.call(this);
+                this.unbindAll();
             },
 
             /** @returns {candystore.DataLabel} */
@@ -58,6 +86,26 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             /** @returns {candystore.DataDropdown} */
             createDropdownWidget: function () {
                 return candystore.DataDropdown.create(this.optionsKey);
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onSelectedChange: function (event) {
+                this.setNextOriginalEvent(event);
+                this._updateSelectedOption();
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onListItemsChange: function (event) {
+                this.setNextOriginalEvent(event);
+                this._updateSelectedOption();
+                this.clearNextOriginalEvent();
             },
 
             /**
