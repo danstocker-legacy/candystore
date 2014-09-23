@@ -74,7 +74,10 @@ troop.postpone(candystore, 'OptionList', function () {
              * @private
              */
             _updateFocusedOptionName: function () {
-                this.focusedOptionName = this.getFocusedOption().childName;
+                var focusedOption = this.getFocusedOption();
+                if (focusedOption) {
+                    this.focusedOptionName = focusedOption.childName;
+                }
             },
 
             /**
@@ -82,7 +85,10 @@ troop.postpone(candystore, 'OptionList', function () {
              * @private
              */
             _updateActiveOptionName: function () {
-                this.activeOptionName = this.getSelectedOption().childName;
+                var selectedOption = this.getSelectedOption();
+                if (selectedOption) {
+                    this.activeOptionName = selectedOption.childName;
+                }
             },
 
             /**
@@ -208,8 +214,16 @@ troop.postpone(candystore, 'OptionList', function () {
             /** @ignore */
             afterRemove: function () {
                 // destructing widget state
-                this.getSelectedOption().markAsInactive();
-                this.getFocusedOption().markAsBlurred();
+                var focusedOption = this.getFocusedOption(),
+                    selectedOption = this.getSelectedOption();
+
+                if (focusedOption) {
+                    focusedOption.markAsBlurred();
+                }
+                if (selectedOption) {
+                    selectedOption.markAsInactive();
+                }
+
                 this.focusedOptionName = undefined;
                 this.activeOptionName = undefined;
             },
