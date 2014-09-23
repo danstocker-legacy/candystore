@@ -92,11 +92,27 @@ troop.postpone(candystore, 'OptionList', function () {
             },
 
             /**
+             * Focuses on the first available option.
+             * @private
+             */
+            _focusOnOption: function () {
+                var focusedOption = this.getFocusedOption() ||
+                                    this.getSelectedOption() ||
+                                    this.children.getFirstValue();
+
+                if (focusedOption) {
+                    // there is a suitable option to focus on
+                    focusedOption.markAsFocused();
+                }
+            },
+
+            /**
              * @param {shoeshine.WidgetEvent} event
              * @private
              */
             _onItemsChange: function (event) {
                 this.setNextOriginalEvent(event);
+                this._focusOnOption();
                 this._updateFocusedOptionName();
                 this.clearNextOriginalEvent();
             },
@@ -207,6 +223,7 @@ troop.postpone(candystore, 'OptionList', function () {
                     .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this._onOptionActive)
                     .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this._onOptionSelect);
 
+                this._focusOnOption();
                 this._updateFocusedOptionName();
                 this._updateActiveOptionName();
             },
@@ -247,14 +264,11 @@ troop.postpone(candystore, 'OptionList', function () {
              * @returns {candystore.Option}
              */
             getFocusedOption: function () {
-                var focusedOption = this.children.filterBySelector(
-                        function (option) {
-                            return option.isFocused();
-                        })
-                        .getFirstValue(),
-                    firstOption = this.children.getFirstValue();
-
-                return focusedOption || firstOption;
+                return this.children.filterBySelector(
+                    function (option) {
+                        return option.isFocused();
+                    })
+                    .getFirstValue();
             },
 
             /**
