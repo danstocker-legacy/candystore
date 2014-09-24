@@ -119,12 +119,16 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * TODO: Use evan events as soon as .getOriginalEventByName is available in evan.
              * @param {shoeshine.WidgetEvent} event
              * @ignore
              */
             onOptionSelect: function (event) {
                 var originalEvent = event.getOriginalEventByType(jQuery.Event);
-                if (originalEvent && originalEvent.type === 'click') {
+                if (originalEvent && (
+                    originalEvent.type === 'click' ||
+                    originalEvent.type === 'keydown' && originalEvent.which === 13
+                    )) {
                     // only when select was initiated by user interaction (click on Option)
                     this
                         .setNextOriginalEvent(event)
