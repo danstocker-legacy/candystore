@@ -94,36 +94,6 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * Updates the validity of the current input value, and triggers validity events accordingly.
-             * @param {boolean} wasValid Validity before the last value change.
-             * @returns {boolean}
-             * @private
-             */
-            _updateInputValidity: function (wasValid) {
-                // validating current value
-                var validatorFunction = this.validatorFunction,
-                    validationError = validatorFunction && validatorFunction(this.inputValue),
-                    isValid = validationError === undefined;
-
-                // storing last validation error on instance
-                this.lastValidationError = validationError;
-
-                // triggering validation event
-                if (wasValid && !isValid) {
-                    // input just became invalid
-                    // TODO: revise as soon as evan supports collection payload
-                    // clobbers previously set payload
-                    this
-                        .setNextPayload(validationError)
-                        .triggerSync(this.EVENT_INPUT_INVALID)
-                        .clearNextPayload();
-                } else if (!wasValid && isValid) {
-                    // input just became valid
-                    this.triggerSync(this.EVENT_INPUT_VALID);
-                }
-            },
-
-            /**
              * Triggers change event depending on the current and previous input value.
              * @param {string} oldInputValue Input value before the last change
              * @private
@@ -176,7 +146,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                  * Return value of validatorFunction following the latest input value change.
                  * @type {*}
                  */
-                this.lastValidationError = undefined;
+                this.lastValidationError = true;
 
                 // setting html properties & attributes
                 this
@@ -187,7 +157,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
-                this._updateInputValidity(false);
+                this.validateInputValue();
                 this.subscribeTo(this.EVENT_INPUT_VALUE_CHANGE, this.onValueChange);
             },
 
@@ -244,6 +214,39 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Updates the validity of the current input value, and triggers validity events accordingly.
+             * TODO: Manage validity separately from validationError. Validity should start out as undefined
+             * and could take values true or false.
+             * @returns {candystore.Input}
+             */
+            validateInputValue: function () {
+                // validating current value
+                var validatorFunction = this.validatorFunction,
+                    validationError = validatorFunction && validatorFunction(this.inputValue),
+                    wasValid = this.isValid(),
+                    isValid = validationError === undefined;
+
+                // storing last validation error on instance
+                this.lastValidationError = validationError;
+
+                // triggering validation event
+                if (wasValid && !isValid) {
+                    // input just became invalid
+                    // TODO: revise as soon as evan supports collection payload
+                    // clobbers previously set payload
+                    this
+                        .setNextPayload(validationError)
+                        .triggerSync(this.EVENT_INPUT_INVALID)
+                        .clearNextPayload();
+                } else if (!wasValid && isValid) {
+                    // input just became valid
+                    this.triggerSync(this.EVENT_INPUT_VALID);
+                }
+
+                return this;
+            },
+
+            /**
              * Focuses on the current input.
              * @returns {candystore.Input}
              */
@@ -276,14 +279,13 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             onValueChange: function (event) {
                 var payload = event.payload,
                     oldInputValue = payload.oldInputValue,
-                    newInputValue = payload.newInputValue,
-                    wasValid = this.isValid();
+                    newInputValue = payload.newInputValue;
 
                 this._setInputValue(newInputValue);
 
-                this.setNextOriginalEvent(event);
-
-                this._updateInputValidity(wasValid);
+                this
+                    .setNextOriginalEvent(event)
+                    .validateInputValue();
 
                 if (newInputValue && !oldInputValue) {
                     this.triggerSync(this.EVENT_INPUT_GOT_VALUE);
