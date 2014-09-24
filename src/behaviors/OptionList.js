@@ -129,31 +129,39 @@ troop.postpone(candystore, 'OptionList', function () {
                     currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
                     newFocusedOptionName;
 
-                this.setNextOriginalEvent(event);
-
                 switch (charCode) {
                 case 38: // up
                     currentChildIndex = Math.max(currentChildIndex - 1, 0);
                     newFocusedOptionName = sortedChildNames[currentChildIndex];
-                    this.getChild(newFocusedOptionName).markAsFocused();
+                    this.getChild(newFocusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsFocused()
+                        .clearNextOriginalEvent();
                     break;
 
                 case 40: // down
                     currentChildIndex = Math.min(currentChildIndex + 1, sortedChildNames.length - 1);
                     newFocusedOptionName = sortedChildNames[currentChildIndex];
-                    this.getChild(newFocusedOptionName).markAsFocused();
+                    this.getChild(newFocusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsFocused()
+                        .clearNextOriginalEvent();
                     break;
 
                 case 27: // esc
-                    this.triggerSync(this.EVENT_OPTIONS_ESCAPE);
+                    this
+                        .setNextOriginalEvent(event)
+                        .triggerSync(this.EVENT_OPTIONS_ESCAPE)
+                        .clearNextOriginalEvent();
                     break;
 
                 case 13: // enter
-                    this.getChild(this.focusedOptionName).markAsActive();
+                    this.getChild(this.focusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsActive()
+                        .clearNextOriginalEvent();
                     break;
                 }
-
-                this.clearNextOriginalEvent();
             },
 
             /**
