@@ -56,6 +56,7 @@ module.exports = function (grunt) {
                 'src/widgets/List.css',
                 'src/widgets/Dropdown.css',
                 'src/widgets/DropdownButton.css',
+                'src/widgets/DynamicImage.css',
                 'src/widgets/form/Input.css',
                 'src/widgets/form/Form.css'
             ],
