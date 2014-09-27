@@ -12,6 +12,7 @@ module.exports = function (grunt) {
                 'src/utils/Debouncer.js',
                 'src/behaviors/Disableable.js',
                 'src/behaviors/Highlightable.js',
+                'src/behaviors/Expandable.js',
                 'src/behaviors/EntityWidget.js',
                 'src/behaviors/Popup.js',
                 'src/behaviors/AlignedPopup.js',
