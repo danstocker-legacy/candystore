@@ -25,6 +25,9 @@ troop.postpone(candystore, 'DataLink', function (ns, className) {
      * it might be a better idea to subclass Link directly than using DataLink.
      * @class
      * @extends candystore.Link
+     * @extends bookworm.EntityBound
+     * @extends candystore.EntityWidget
+     * @extends candystore.FieldBound
      */
     candystore.DataLink = self
         .addMethods(/** @lends candystore.DataLink# */{
