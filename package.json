@@ -1,6 +1,6 @@
 {
     "name"           : "candystore",
-    "version": "0.2.5",
+    "version"   : "0.2.5",
     "description"    : "Common widgets",
     "keywords"       : [
         "widgets", "button", "label", "form", "dropdown", "popup"
@@ -8,6 +8,10 @@
     "author"         : "Dan Stocker <dan@kwaia.com>",
     "copyright"      : "Copyright (c) 2014 Dan Stocker",
     "license"        : "MIT",
+    "repository": {
+        "type": "git",
+        "url" : "git://github.com/danstocker/candystore.git"
+    },
     "dependencies"   : {
         "dessert"  : "~0.3.2",
         "troop"    : "~0.7.2",
