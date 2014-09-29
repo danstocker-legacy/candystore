@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behaviors/AlignedPopup.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behaviors/AlignedPopup.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, jQuery, candystore */
+troop.postpone(candystore, 'AlignedPopup', function (ns, className, /**jQuery*/$) {
+    "use strict";
+
+    var base = candystore.Popup,
+        self = base.extend();
+
+    /**
+     * The AlignedPopup trait extends the Popup trait with aligning the widget's DOM to the DOM of its parent.
+     * Relies on jQuery UI's positioning.
+     * @class
+     * @extends candystore.Popup
+     * @link http://api.jqueryui.com/position
+     */
+    candystore.AlignedPopup = self
+        .addPrivateMethods(/** @lends candystore.AlignedPopup# */{
+            /** @private */
+            _alignPopup: function () {
+                $(this.getElement()).position(this.positionOptions.items);
+            },
+
+            /** @private */
+            _updateOfPositionOption: function () {
+                this.setPositionOption('of', $(this.parent.getElement()));
+                return this;
+            }
+        })
+        .addMethods(/** @lends candystore.AlignedPopup# */{
+            /** Call from host class' init. */
+            init: function () {
+                base.init.call(this);
+
+                this.elevateMethod('onResize');
+
+                /**
+                 * Options for positioning the select list popup around its parent.
+                 * @type {sntls.Collection}
+                 */
+                this.positionOptions = sntls.Collection.create({
+                    my: 'left top',
+                    at: 'left bottom'
+                });
+            },
+
+            /** Call from host class' afterAdd. */
+            afterAdd: function () {
+                base.afterAdd.call(this);
+                this.subscribeTo(candystore.ResizeWatcher.EVENT_WINDOW_RESIZE_DEBOUNCED, this.onResize);
+            },
+
+            /** Call from host class' afterRender. */
+            afterRender: function () {
+                base.afterRender.call(this);
+                this._updateOfPositionOption();
+            },
+
+            /**
+             * Sets jQuery UI position option. Accepts any options combination that jQuery UI's .position() does.
+             * @param {string} optionName
+             * @param {*} [optionValue]
+             * @returns {candystore.AlignedPopup}
+             * @link http://api.jqueryui.com/position/
+             */
+            setPositionOption: function (optionName, optionValue) {
+                if (typeof optionValue === 'undefined') {
+                    this.positionOptions.deleteItem(optionName);
+                } else {
+                    this.positionOptions.setItem(optionName, optionValue);
+                }
+                this._alignPopup();
+                return this;
+            },
+
+            /** @ignore */
+            onResize: function () {
+                this._alignPopup();
+            }
+        });
+}, jQuery);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Sep 29 2014 08:08:33 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

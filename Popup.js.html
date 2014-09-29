@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behaviors/Popup.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behaviors/Popup.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, jQuery, candystore */
+troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * The Popup trait allows widgets to be opened and closed like popups.
+     * Popups maintain parent-children relationship with the widget that created them,
+     * but they are rendered right under the body element. It is vital therefore that whatever happens inside
+     * the popup must trigger widget events since they are the only way to notify the parent widget of changes.
+     * Popups may be closed by clicking outside of the widget's DOM.
+     * Expects to be added to Widget classes.
+     * @class
+     * @extends troop.Base
+     * @extends shoeshine.Widget
+     */
+    candystore.Popup = self
+        .addConstants(/** @lends candystore.Popup */{
+            /** @constant */
+            EVENT_POPUP_OUTSIDE_CLICK: 'popup-outside-click',
+
+            /** @constant */
+            EVENT_POPUP_OPEN: 'popup-open',
+
+            /** @constant */
+            EVENT_POPUP_CLOSE: 'popup-close'
+        })
+        .addPrivateMethods(/** @lends candystore.Popup# */{
+            /**
+             * @param {boolean} a
+             * @param {boolean} b
+             * @returns {boolean}
+             * @memberOf candystore.Popup
+             * @private
+             */
+            _or: function (a, b) {
+                return a || b;
+            },
+
+            /**
+             * @param {jQuery} $element
+             * @param {string} selector
+             * @returns {boolean}
+             * @memberOf candystore.Popup
+             * @private
+             */
+            _hasClosest: function ($element, selector) {
+                return $element.closest(selector).length > 0;
+            },
+
+            /** @private */
+            _removeFromDom: function () {
+                var $element = $(this.getElement());
+                if ($element.length) {
+                    $element.remove();
+                }
+            },
+
+            /**
+             * @param {jQuery} $element
+             * @returns {boolean}
+             * @private
+             */
+            _isOutside: function ($element) {
+                if (this.outsideSelectors
+                    .mapValues(this._hasClosest.bind(this, $element))
+                    .getValues()
+                    .reduce(this._or, false)
+                    ) {
+                    return true;
+                } else if (this.insideSelectors
+                    .mapValues(this._hasClosest.bind(this, $element))
+                    .getValues()
+                    .reduce(this._or, false)
+                    ) {
+                    return false;
+                } else {
+                    return !$element.closest(this.getElement()).length;
+                }
+            },
+
+            /**
+             * @param {UIEvent} event
+             * @private
+             */
+            _onBodyClick: function (event) {
+                if (this._isOutside($(event.target))) {
+                    this
+                        .setNextOriginalEvent(event)
+                        .triggerSync(this.EVENT_POPUP_OUTSIDE_CLICK)
+                        .clearNextOriginalEvent();
+                }
+            }
+        })
+        .addMethods(/** @lends candystore.Popup# */{
+            /**
+             * Call from host's init.
+             */
+            init: function () {
+                this
+                    .elevateMethod('_onBodyClick')
+                    .elevateMethod('onOutsideClick');
+
+                /** @type {boolean} */
+                this.isOpen = false;
+
+                /** @type {sntls.Collection} */
+                this.outsideSelectors = sntls.Collection.create();
+
+                /** @type {sntls.Collection} */
+                this.insideSelectors = sntls.Collection.create();
+            },
+
+            /**
+             * Call from host class' afterAdd.
+             */
+            afterAdd: function () {
+                this.subscribeTo(this.EVENT_POPUP_OUTSIDE_CLICK, this.onOutsideClick);
+            },
+
+            /**
+             * Call from host class' afterRemove.
+             */
+            afterRemove: function () {
+                this.unsubscribeFrom(this.EVENT_POPUP_OUTSIDE_CLICK);
+                this._removeFromDom();
+            },
+
+            /**
+             * Call from host class' afterRender.
+             */
+            afterRender: function () {
+                $(document)
+                    .off('click', this._onBodyClick)
+                    .on('click', this._onBodyClick);
+            },
+
+            /**
+             * Opens popup. Popup must be added to a parent before calling this method.
+             * @returns {candystore.Popup}
+             */
+            openPopup: function () {
+                dessert.assert(this.parent, "Popup has no parent");
+
+                if (!this.isOpen) {
+                    this.renderInto(document.body);
+
+                    this.isOpen = true;
+
+                    this.triggerSync(this.EVENT_POPUP_OPEN);
+                }
+
+                return this;
+            },
+
+            /**
+             * Closes popup, and removes it from the widget hierarchy.
+             * @returns {candystore.Popup}
+             */
+            closePopup: function () {
+                if (this.isOpen) {
+                    // must set flag before triggering event
+                    // otherwise event handlers would see mixed state
+                    // (event says it's closed, but widget state says it's open)
+                    this.isOpen = false;
+
+                    // must trigger before removing widget from hierarchy
+                    // otherwise event won't bubble
+                    this.triggerSync(this.EVENT_POPUP_CLOSE);
+
+                    this.removeFromParent();
+                }
+                return this;
+            },
+
+            /**
+             * Treats DOM elements matching the specified global jQuery selector as inside of the popup.
+             * Clicking on such elements would not trigger an 'outside-click' event even when they're outside of the
+             * popup's DOM.
+             * @param {string} globalSelector
+             * @returns {candystore.Popup}
+             */
+            treatAsInside: function (globalSelector) {
+                if (this.outsideSelectors.getItem(globalSelector)) {
+                    this.outsideSelectors.deleteItem(globalSelector);
+                }
+                this.insideSelectors.setItem(globalSelector, globalSelector);
+                return this;
+            },
+
+            /**
+             * Treats DOM elements matching the specified global jQuery selector as outside of the popup.
+             * Clicking on such elements would trigger an 'outside-click' event even when they're inside the popup's DOM.
+             * @param {string} selector
+             * @returns {candystore.Popup}
+             */
+            treatAsOutside: function (selector) {
+                if (this.insideSelectors.getItem(selector)) {
+                    this.insideSelectors.deleteItem(selector);
+                }
+                this.outsideSelectors.setItem(selector, selector);
+                return this;
+            },
+
+            /**
+             * Default outside click handler
+             * @param {jQuery.Event} event
+             * @ignore
+             */
+            onOutsideClick: function (event) {
+                this
+                    .setNextOriginalEvent(event)
+                    .closePopup()
+                    .clearNextOriginalEvent();
+            }
+        });
+}, jQuery);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Sep 29 2014 08:08:33 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

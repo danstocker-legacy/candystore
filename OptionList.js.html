@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behaviors/OptionList.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behaviors/OptionList.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, evan, shoeshine, candystore */
+troop.postpone(candystore, 'OptionList', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * The OptionList trait modifies List classes so that they can be used in dropdowns.
+     * Should only accept widgets as list items that implement the Option trait.
+     * Whatever uses the OptionList should take care of initializing the focused and selected states in afterAdd.
+     * The OptionList returns to its neutral state after being removed from the hierarchy.
+     * @class
+     * @extends troop.Base
+     * @extends candystore.List
+     */
+    candystore.OptionList = self
+        .addConstants(/** @lends candystore.OptionList */{
+            /** @constant */
+            EVENT_OPTION_SELECT: 'option-select',
+
+            /** @constant */
+            EVENT_OPTIONS_ESCAPE: 'options-escape'
+        })
+        .addPrivateMethods(/** @lends candystore.OptionList# */{
+            /**
+             * @param {string} optionName
+             * @param {*} optionValue
+             * @private
+             */
+            _triggerSelectEvent: function (optionName, optionValue) {
+                this.triggerSync(this.EVENT_OPTION_SELECT, {
+                    optionName: optionName,
+                    optionValue: optionValue
+                });
+            },
+
+            /**
+             * @param {string} newFocusedOptionName
+             * @private
+             */
+            _setFocusedOptionName: function (newFocusedOptionName) {
+                var oldFocusedOptionName = this.focusedOptionName,
+                    oldFocusedOption;
+                if (oldFocusedOptionName !== newFocusedOptionName) {
+                    oldFocusedOption = this.getChild(oldFocusedOptionName);
+                    if (oldFocusedOption) {
+                        // old focused option might not be a child anymore
+                        oldFocusedOption.markAsBlurred();
+                    }
+                    this.focusedOptionName = newFocusedOptionName;
+                }
+            },
+
+            /**
+             * @param {string} newActiveOptionName
+             * @private
+             */
+            _setActiveOptionName: function (newActiveOptionName) {
+                var oldActiveOptionName = this.activeOptionName,
+                    oldActiveOption;
+                if (oldActiveOptionName !== newActiveOptionName) {
+                    oldActiveOption = this.getChild(oldActiveOptionName);
+                    if (oldActiveOption) {
+                        // old active option might not be a child anymore
+                        oldActiveOption.markAsInactive();
+                    }
+                    this.activeOptionName = newActiveOptionName;
+                }
+            },
+
+            /**
+             * Looks into current options and sets active option name.
+             * @private
+             */
+            _updateFocusedOptionName: function () {
+                var focusedOption = this.getFocusedOption();
+                if (focusedOption) {
+                    this.focusedOptionName = focusedOption.childName;
+                }
+            },
+
+            /**
+             * Looks into current options and sets active option name.
+             * @private
+             */
+            _updateActiveOptionName: function () {
+                var selectedOption = this.getSelectedOption();
+                if (selectedOption) {
+                    this.activeOptionName = selectedOption.childName;
+                }
+            },
+
+            /**
+             * Focuses on the first available option.
+             * @private
+             */
+            _focusOnOption: function () {
+                var focusedOption = this.getFocusedOption() ||
+                                    this.getSelectedOption() ||
+                                    this.children.getFirstValue();
+
+                if (focusedOption) {
+                    // there is a suitable option to focus on
+                    focusedOption.markAsFocused();
+                }
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @private
+             */
+            _onItemsChange: function (event) {
+                this.setNextOriginalEvent(event);
+                this._focusOnOption();
+                this._updateFocusedOptionName();
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * TODO: break up into smaller methods
+             * @param {shoeshine.WidgetEvent} event
+             * @private
+             */
+            _onHotKeyPress: function (event) {
+                var charCode = event.payload.charCode,
+                    children = this.children,
+                    sortedChildNames = children.getKeys().sort(),
+                    currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
+                    newFocusedOptionName;
+
+                switch (charCode) {
+                case 38: // up
+                    currentChildIndex = Math.max(currentChildIndex - 1, 0);
+                    newFocusedOptionName = sortedChildNames[currentChildIndex];
+                    this.getChild(newFocusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsFocused()
+                        .clearNextOriginalEvent();
+                    break;
+
+                case 40: // down
+                    currentChildIndex = Math.min(currentChildIndex + 1, sortedChildNames.length - 1);
+                    newFocusedOptionName = sortedChildNames[currentChildIndex];
+                    this.getChild(newFocusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsFocused()
+                        .clearNextOriginalEvent();
+                    break;
+
+                case 27: // esc
+                    this
+                        .setNextOriginalEvent(event)
+                        .triggerSync(this.EVENT_OPTIONS_ESCAPE)
+                        .clearNextOriginalEvent();
+                    break;
+
+                case 13: // enter
+                    this.getChild(this.focusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsActive()
+                        .clearNextOriginalEvent();
+                    break;
+                }
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @private
+             */
+            _onOptionFocus: function (event) {
+                var newFocusedOptionName = event.senderWidget.childName;
+
+                this.setNextOriginalEvent(event);
+                this._setFocusedOptionName(newFocusedOptionName);
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            _onOptionActive: function (event) {
+                var optionWidget = event.senderWidget;
+
+                this.setNextOriginalEvent(event);
+                this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @private
+             */
+            _onOptionSelect: function (event) {
+                var optionName = event.payload.optionName;
+                this._setActiveOptionName(optionName);
+            }
+        })
+        .addMethods(/** @lends candystore.OptionList# */{
+            /** Call from host's init. */
+            init: function () {
+                this
+                    .elevateMethod('_onItemsChange')
+                    .elevateMethod('_onHotKeyPress')
+                    .elevateMethod('_onOptionFocus')
+                    .elevateMethod('_onOptionActive')
+                    .elevateMethod('_onOptionSelect');
+
+                /**
+                 * Identifier of option in focus.
+                 * Name of corresponding child (item) widget.
+                 * @type {string}
+                 */
+                this.focusedOptionName = undefined;
+
+                /**
+                 * Identifier of active option.
+                 * Name of corresponding child widget.
+                 * @type {string}
+                 */
+                this.activeOptionName = undefined;
+            },
+
+            /** Call from host's afterAdd. */
+            afterAdd: function () {
+                this
+                    .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this._onItemsChange)
+                    .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_FOCUS, this._onOptionFocus)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this._onOptionActive)
+                    .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this._onOptionSelect);
+
+                this._focusOnOption();
+                this._updateFocusedOptionName();
+                this._updateActiveOptionName();
+            },
+
+            /** @ignore */
+            afterRemove: function () {
+                // destructing widget state
+                var focusedOption = this.getFocusedOption(),
+                    selectedOption = this.getSelectedOption();
+
+                if (focusedOption) {
+                    focusedOption.markAsBlurred();
+                }
+                if (selectedOption) {
+                    selectedOption.markAsInactive();
+                }
+
+                this.focusedOptionName = undefined;
+                this.activeOptionName = undefined;
+            },
+
+            /**
+             * Fetches option widget based on its option value.
+             * TODO: maintain an lookup of option values -> option widgets.
+             * @param {*} optionValue
+             * @returns {candystore.Option}
+             */
+            getOptionByValue: function (optionValue) {
+                return this.children
+                    .filterBySelector(function (option) {
+                        return option.optionValue === optionValue;
+                    })
+                    .getFirstValue();
+            },
+
+            /**
+             * Fetches currently focused option, or an arbitrary option if none focused.
+             * @returns {candystore.Option}
+             */
+            getFocusedOption: function () {
+                return this.children.filterBySelector(
+                    function (option) {
+                        return option.isFocused();
+                    })
+                    .getFirstValue();
+            },
+
+            /**
+             * Fetches option that is currently selected, or undefined.
+             * @returns {candystore.Option}
+             */
+            getSelectedOption: function () {
+                return this.children.filterBySelector(
+                    function (option) {
+                        return option.isActive();
+                    })
+                    .getFirstValue();
+            },
+
+            /**
+             * Selects an option on the list.
+             * Call only when the current OptionList is added to the hierarchy.
+             * @param {string} optionName
+             * @returns {candystore.OptionList}
+             */
+            selectOption: function (optionName) {
+                dessert.assert(this.isOnRoot(), "Not attached to root");
+
+                var option = this.getChild(optionName);
+                dessert.assert(!!option, "Invalid option name");
+                option.markAsActive();
+
+                return this;
+            }
+        });
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Sep 29 2014 08:08:33 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

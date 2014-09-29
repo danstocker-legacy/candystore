@@ -1,4 +1,0 @@
-Candystore
-==========
-
-*Basic widgets*
