@@ -18,7 +18,7 @@
         "sntls"    : "~0.17.0",
         "evan"     : "~0.4.1",
         "jquery"   : "~2.1.0",
-        "bookworm" : "~0.1.1",
+        "bookworm": "~0.2.0",
         "shoeshine": "~0.1.5",
         "poodle"   : "~0.1.3"
     },
