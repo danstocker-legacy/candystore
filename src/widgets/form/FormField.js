@@ -77,6 +77,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
+
+                this.updateWarningMessage();
+
                 this
                     .subscribeTo(candystore.Input.EVENT_INPUT_BLUR, this.onInputBlur)
                     .subscribeTo(candystore.Input.EVENT_INPUT_TAB, this.onInputTab)
