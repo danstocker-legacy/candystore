@@ -22,17 +22,6 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
      * @extends shoeshine.Widget
      */
     candystore.FormField = self
-        .addPrivateMethods(/** @lends candystore.FormField# */{
-            /** @private */
-            _updateStyle: function () {
-                var inputWidget = this.getInputWidget();
-                if (inputWidget.isValid()) {
-                    this.clearWarningMessage();
-                } else {
-                    this.setWarningMessage(inputWidget.lastValidationError);
-                }
-            }
-        })
         .addMethods(/** @lends candystore.FormField# */{
             /**
              * @param {string} [inputType]
@@ -228,9 +217,31 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 return this;
             },
 
-            /** @ignore */
-            onInputBlur: function () {
-                this._updateStyle();
+            /**
+             * Updates warning message to the last warning if there was one, clears it otherwise.
+             * @returns {candystore.FormField}
+             */
+            updateWarningMessage: function () {
+                var inputWidget = this.getInputWidget();
+
+                if (inputWidget.isValid()) {
+                    this.clearWarningMessage();
+                } else {
+                    this.setWarningMessage(inputWidget.lastValidationError);
+                }
+
+                return this;
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onInputBlur: function (event) {
+                this
+                    .setNextOriginalEvent(event)
+                    .updateWarningMessage()
+                    .clearNextOriginalEvent();
             },
 
             /**
@@ -251,9 +262,10 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onInputValid: function (event) {
-                this.setNextOriginalEvent(event);
-                this._updateStyle();
-                this.clearNextOriginalEvent();
+                this
+                    .setNextOriginalEvent(event)
+                    .updateWarningMessage()
+                    .clearNextOriginalEvent();
             }
         });
 });
