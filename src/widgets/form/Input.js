@@ -46,6 +46,9 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             EVENT_INPUT_INVALID: 'input-invalid',
 
             /** @constant */
+            EVENT_INPUT_ERROR_CHANGE: 'input-error-change',
+
+            /** @constant */
             EVENT_INPUT_SUBMIT: 'input-submit',
 
             /** @constant */
@@ -222,12 +225,13 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             validateInputValue: function () {
                 // validating current value
                 var validatorFunction = this.validatorFunction,
-                    validationError = validatorFunction && validatorFunction(this.inputValue),
+                    oldValidationError = this.lastValidationError,
+                    newValidationError = validatorFunction && validatorFunction(this.inputValue),
                     wasValid = this.isValid(),
-                    isValid = validationError === undefined;
+                    isValid = newValidationError === undefined;
 
                 // storing last validation error on instance
-                this.lastValidationError = validationError;
+                this.lastValidationError = newValidationError;
 
                 // triggering validation event
                 if (wasValid && !isValid) {
@@ -235,12 +239,18 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     // TODO: revise as soon as evan supports collection payload
                     // clobbers previously set payload
                     this
-                        .setNextPayload(validationError)
+                        .setNextPayload(newValidationError)
                         .triggerSync(this.EVENT_INPUT_INVALID)
                         .clearNextPayload();
                 } else if (!wasValid && isValid) {
                     // input just became valid
                     this.triggerSync(this.EVENT_INPUT_VALID);
+                } else if (newValidationError !== oldValidationError) {
+                    // triggering event about error change
+                    this.triggerSync(this.EVENT_INPUT_ERROR_CHANGE, {
+                        oldValidationError: oldValidationError,
+                        newValidationError: newValidationError
+                    });
                 }
 
                 return this;
