@@ -116,9 +116,9 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             onOptionSelect: function (event) {
                 var optionValue = event.payload.optionValue;
 
-                bookworm.documents.setNextOriginalEvent(event);
+                bookworm.entities.setNextOriginalEvent(event);
                 this.entityKey.toField().setValue(optionValue);
-                bookworm.documents.clearNextOriginalEvent();
+                bookworm.entities.clearNextOriginalEvent();
             }
         });
 });

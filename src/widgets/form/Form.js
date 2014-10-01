@@ -256,10 +256,12 @@ troop.postpone(candystore, 'Form', function (ns, className) {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
+        /** @param {candystore.Form} expr */
         isForm: function (expr) {
             return candystore.Form.isBaseOf(expr);
         },
 
+        /** @param {candystore.Form} [expr] */
         isFormOptional: function (expr) {
             return expr === undefined ||
                    candystore.Form.isBaseOf(expr);

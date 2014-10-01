@@ -262,10 +262,12 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
+        /** @param {candystore.FormField} expr */
         isFormField: function (expr) {
             return candystore.FormField.isBaseOf(expr);
         },
 
+        /** @param {candystore.FormField} [expr] */
         isFormFieldOptional: function (expr) {
             return expr === undefined ||
                    candystore.FormField.isBaseOf(expr);

@@ -12,6 +12,7 @@ module.exports = function (grunt) {
                 'src/utils/Debouncer.js',
                 'src/behaviors/Disableable.js',
                 'src/behaviors/Highlightable.js',
+                'src/behaviors/Expandable.js',
                 'src/behaviors/EntityWidget.js',
                 'src/behaviors/Popup.js',
                 'src/behaviors/AlignedPopup.js',
@@ -56,6 +57,7 @@ module.exports = function (grunt) {
                 'src/widgets/List.css',
                 'src/widgets/Dropdown.css',
                 'src/widgets/DropdownButton.css',
+                'src/widgets/DynamicImage.css',
                 'src/widgets/form/Input.css',
                 'src/widgets/form/Form.css'
             ],
@@ -179,7 +181,7 @@ module.exports = function (grunt) {
          */
         "regex-replace": {
             strip: {
-                src    : ['doc/<%= pkg.name%>.*.html'],
+                src    : ['doc/*.html'],
                 actions: [
                     {
                         name   : 'stripNew',

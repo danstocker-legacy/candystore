@@ -7,6 +7,7 @@ troop.postpone(candystore, 'PasswordInput', function (ns, className) {
 
     /**
      * Creates a PasswordInput instance.
+     * PasswordInput instance may also be created by instantiating `candystore.Input` with the type 'password'.
      * @name candystore.PasswordInput.create
      * @function
      * @returns {candystore.PasswordInput}

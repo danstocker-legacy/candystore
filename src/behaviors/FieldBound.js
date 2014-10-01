@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, shoeshine, app */
+/*global dessert, troop, sntls, evan, shoeshine, candystore */
 troop.postpone(candystore, 'FieldBound', function () {
     "use strict";
 

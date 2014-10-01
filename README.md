@@ -11,6 +11,8 @@ The purpose of Candystore is to provide the building blocks of front end applica
 
 Candystore is agnostic about how the widgets will be used and displayed, and thus have no styling (CSS) beyond what is necessary for them to function. (Eg. a button should have a pointer cursor.)
 
+![Inheritance chart](https://dl.dropboxusercontent.com/u/9258903/CodePristine/candystore%200.1.5.png)
+
 ### Basic widgets
 
 - Label, HtmlLabel, DataLabel

@@ -312,10 +312,12 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
+        /** @param {string} expr */
         isInputType: function (expr) {
             return candystore.Input.inputTypes[expr] === expr;
         },
 
+        /** @param {string} expr */
         isInputTypeOptional: function (expr) {
             return expr === undefined ||
                    candystore.Input.inputTypes[expr] === expr;

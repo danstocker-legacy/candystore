@@ -23,6 +23,7 @@ troop.postpone(candystore, 'DataImage', function (ns, className) {
      * @extends candystore.Image
      * @extends bookworm.EntityBound
      * @extends candystore.EntityWidget
+     * @extends candystore.FieldBound
      */
     candystore.DataImage = self
         .addMethods(/** @lends candystore.DataImage# */{

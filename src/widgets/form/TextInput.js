@@ -8,6 +8,7 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
 
     /**
      * Creates a TextInput instance.
+     * PasswordInput instance may also be created by instantiating `candystore.Input` with the type 'text'.
      * @name candystore.TextInput.create
      * @function
      * @param {string} [textInputType]
@@ -143,10 +144,12 @@ troop.amendPostponed(candystore, 'Input', function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
+        /** @param {string} expr */
         isTextInputType: function (expr) {
             return candystore.TextInput.inputTypes[expr] === expr;
         },
 
+        /** @param {string} expr */
         isTextInputTypeOptional: function (expr) {
             return expr === undefined ||
                    candystore.TextInput.inputTypes[expr] === expr;
