@@ -31,7 +31,7 @@ var sntls = sntls || require('sntls');
 var evan = evan || require('evan');
 
 /**
- * @namespace
+ * @function
  * @see http://api.jquery.com
  */
 var jQuery = jQuery || require('jquery');
