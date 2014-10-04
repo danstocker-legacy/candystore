@@ -93,7 +93,7 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @param {jQuery.Event} event
              * @ignore
              */
-            onInput: function (event) {
+            onKeyUp: function (event) {
                 var $element = $(this.getElement()),
                     newInputValue = $element.val();
 
@@ -128,7 +128,8 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
 
     self
         .on('keydown', '', 'onKeyDown')
-        .on('input', '', 'onInput');
+        // onkeyup is safer in older browsers than oninput
+        .on('keyup', '', 'onKeyUp');
 }, jQuery);
 
 troop.amendPostponed(candystore, 'Input', function () {
