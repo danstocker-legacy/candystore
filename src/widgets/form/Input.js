@@ -96,11 +96,11 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
         })
         .addPrivateMethods(/** @lends candystore.Input# */{
             /**
-             * @param {string} inputValue
+             * @param {*} inputValue
              * @private
              */
             _setInputValue: function (inputValue) {
-                this.addAttribute('value', inputValue);
+                this.addAttribute('value', typeof inputValue === 'undefined' ? '' : inputValue);
                 this.inputValue = inputValue;
             },
 
@@ -202,7 +202,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
             /**
              * Sets input value and triggers corresponding events.
-             * @param {string} inputValue
+             * @param {*} inputValue
              * @param {boolean} [updateDom]
              * @returns {candystore.Input}
              */
@@ -295,6 +295,15 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     $(element).blur();
                 }
                 return this;
+            },
+
+            /**
+             * Tells whether current input has the focus.
+             * @returns {boolean}
+             */
+            isFocused: function () {
+                var element = this.getElement();
+                return element && element === document.activeElement;
             },
 
             /**
