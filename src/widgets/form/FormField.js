@@ -35,7 +35,8 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this
                     .elevateMethod('onInputBlur')
                     .elevateMethod('onInputTab')
-                    .elevateMethod('onInputValid');
+                    .elevateMethod('onInputValid')
+                    .elevateMethod('onFormReset');
 
                 /**
                  * Whether the field allows to move to the next tab index.
@@ -80,7 +81,8 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this
                     .subscribeTo(candystore.Input.EVENT_INPUT_BLUR, this.onInputBlur)
                     .subscribeTo(candystore.Input.EVENT_INPUT_TAB, this.onInputTab)
-                    .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid);
+                    .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid)
+                    .subscribeTo(candystore.Form.EVENT_FORM_RESET, this.onFormReset);
             },
 
             /**
@@ -128,7 +130,6 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                     .setInputValue(inputValue, updateDom);
                 return this;
             },
-
 
             /**
              * Clears value on input widget.
@@ -289,6 +290,17 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this
                     .setNextOriginalEvent(event)
                     .updateWarningMessage()
+                    .clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onFormReset: function (event) {
+                this
+                    .setNextOriginalEvent(event)
+                    .clearWarningMessage()
                     .clearNextOriginalEvent();
             }
         });
