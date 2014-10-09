@@ -29,7 +29,10 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             EVENT_FORM_INVALID: 'form-invalid',
 
             /** @constant */
-            EVENT_FORM_SUBMIT: 'form-submit'
+            EVENT_FORM_SUBMIT: 'form-submit',
+
+            /** @constant */
+            EVENT_FORM_RESET: 'form-reset'
         })
         .addPrivateMethods(/** @lends candystore.Form# */{
             /** @private */
@@ -202,7 +205,12 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              */
             resetForm: function (updateDom) {
                 this.getFormFields()
-                    .callOnEachItem('setInputValue', undefined, updateDom);
+                    .callOnEachItem('setInputValue', undefined, updateDom)
+                    .callOnEachItem('getInputWidget')
+                    .callOnEachItem('blurInput');
+
+                this.triggerSync(this.EVENT_FORM_RESET);
+
                 return this;
             },
 
