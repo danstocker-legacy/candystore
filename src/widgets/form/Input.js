@@ -292,7 +292,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             blurInput: function () {
                 var element = this.getElement();
                 if (element) {
-                    $(element).blur();
+                    $(element).focusout();
                 }
                 return this;
             },
