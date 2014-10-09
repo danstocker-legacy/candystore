@@ -178,6 +178,35 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             },
 
             /**
+             * Fetches input widgets from all form fields.
+             * @returns {sntls.Collection}
+             */
+            getInputWidgets: function () {
+                return this.getFormFields()
+                    .callOnEachItem('getInputWidget');
+            },
+
+            /**
+             * Fetches input values from all form fields indexed by form field names.
+             * @returns {sntls.Collection}
+             */
+            getInputValues: function () {
+                return this.getFormFields()
+                    .callOnEachItem('getInputValue');
+            },
+
+            /**
+             * Clears input value in all fields.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.Form}
+             */
+            resetForm: function (updateDom) {
+                this.getFormFields()
+                    .callOnEachItem('setInputValue', undefined, updateDom);
+                return this;
+            },
+
+            /**
              * Attempts to submit form. It is up to the parent widget to handle the submit event
              * and actually submit the form. (It may not be necessary to submit anything to a server,
              * but rather take some other action.)
