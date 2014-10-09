@@ -204,12 +204,12 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              * @returns {candystore.Form}
              */
             resetForm: function (updateDom) {
+                // clearing input values
                 this.getFormFields()
-                    .callOnEachItem('setInputValue', undefined, updateDom)
-                    .callOnEachItem('getInputWidget')
-                    .callOnEachItem('blurInput');
+                    .callOnEachItem('clearInputValue', updateDom);
 
-                this.triggerSync(this.EVENT_FORM_RESET);
+                // broadcasting form reset event so fields can clean up if they want to
+                this.broadcastSync(this.EVENT_FORM_RESET);
 
                 return this;
             },
