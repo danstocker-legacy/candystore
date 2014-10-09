@@ -3,8 +3,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = shoeshine.Widget,
-        self = base.extend(className),
-        validators = dessert.validators;
+        self = base.extend(className);
 
     /**
      * Creates an Input instance.
