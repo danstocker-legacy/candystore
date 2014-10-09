@@ -201,7 +201,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * Sets input value and triggers corresponding events.
+             * Sets input value and triggers events.
              * @param {*} inputValue
              * @param {boolean} [updateDom]
              * @returns {candystore.Input}
@@ -217,6 +217,16 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
                 this._triggerChangeEvent(oldInputValue);
 
+                return this;
+            },
+
+            /**
+             * Clears input value and triggers events.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.Input}
+             */
+            clearInputValue: function (updateDom) {
+                this.setInputValue(undefined, updateDom);
                 return this;
             },
 

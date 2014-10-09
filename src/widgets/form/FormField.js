@@ -129,6 +129,18 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 return this;
             },
 
+
+            /**
+             * Clears value on input widget.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.FormField}
+             */
+            clearInputValue: function (updateDom) {
+                this.getInputWidget()
+                    .clearInputValue(updateDom);
+                return this;
+            },
+
             /**
              * Allows TAB to take effect on the input.
              * @returns {candystore.FormField}
