@@ -44,7 +44,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
 
                 this.fieldCount = formFields.getKeyCount();
                 this.validFieldCount = validFieldNames ?
-                    validFieldNames.length :
+                    validFieldNames instanceof Array ?
+                        validFieldNames.length :
+                        1:
                     0;
             },
 
