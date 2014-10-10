@@ -56,7 +56,7 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             init: function (textInputType) {
-                dessert.isTextInputType(textInputType, "Invalid text input type");
+                dessert.isTextInputTypeOptional(textInputType, "Invalid text input type");
 
                 base.init.call(this, textInputType || 'text');
 
