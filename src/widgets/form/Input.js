@@ -51,43 +51,56 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             /** @constant */
             EVENT_INPUT_SUBMIT: 'input-submit',
 
-            /** @constant */
+            /**
+             * @type {object}
+             * @constant
+             */
+            inputTagNames: {
+                'input'   : 'input',
+                'textarea': 'textarea',
+                'select'  : 'select'
+            },
+
+            /**
+             * @type {object}
+             * @constant
+             */
             inputTypes: {
                 // basic input types
-                button          : 'button',
-                checkbox        : 'checkbox',
-                file            : 'file',
-                hidden          : 'hidden',
-                image           : 'image',
-                password        : 'password',
-                radio           : 'radio',
-                reset           : 'reset',
-                submit          : 'submit',
-                text            : 'text',
+                'button'        : 'button',
+                'checkbox'      : 'checkbox',
+                'file'          : 'file',
+                'hidden'        : 'hidden',
+                'image'         : 'image',
+                'password'      : 'password',
+                'radio'         : 'radio',
+                'reset'         : 'reset',
+                'submit'        : 'submit',
+                'text'          : 'text',
 
                 // HTML 5 types
-                color           : 'color',
-                date            : 'date',
-                datetime        : 'datetime',
+                'color'         : 'color',
+                'date'          : 'date',
+                'datetime'      : 'datetime',
                 'datetime-local': 'datetime-local',
-                email           : 'email',
-                month           : 'month',
-                number          : 'number',
-                range           : 'range',
-                search          : 'search',
-                tel             : 'tel',
-                time            : 'time',
-                url             : 'url',
-                week            : 'week'
+                'email'         : 'email',
+                'month'         : 'month',
+                'number'        : 'number',
+                'range'         : 'range',
+                'search'        : 'search',
+                'tel'           : 'tel',
+                'time'          : 'time',
+                'url'           : 'url',
+                'week'          : 'week'
             }
         })
         .addPrivateMethods(/** @lends candystore.Input# */{
             /**
-             * @param {string} inputValue
+             * @param {*} inputValue
              * @private
              */
             _setInputValue: function (inputValue) {
-                this.addAttribute('value', inputValue);
+                this.addAttribute('value', typeof inputValue === 'undefined' ? '' : inputValue);
                 this.inputValue = inputValue;
             },
 
@@ -151,10 +164,14 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                  */
                 this.lastValidationError = true;
 
-                // setting html properties & attributes
-                this
-                    .setTagName('input')
-                    .addAttribute('type', inputType);
+                if (this.inputTagNames[inputType] === inputType) {
+                    // setting tag name for input
+                    this.setTagName(inputType);
+                } else if (this.inputTypes[inputType] === inputType) {
+                    // setting input attribute
+                    this.setTagName('input')
+                        .addAttribute('type', inputType);
+                }
             },
 
             /** @ignore */
@@ -184,8 +201,8 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * Sets input value and triggers corresponding events.
-             * @param {string} inputValue
+             * Sets input value and triggers events.
+             * @param {*} inputValue
              * @param {boolean} [updateDom]
              * @returns {candystore.Input}
              */
@@ -200,6 +217,16 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
                 this._triggerChangeEvent(oldInputValue);
 
+                return this;
+            },
+
+            /**
+             * Clears input value and triggers events.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.Input}
+             */
+            clearInputValue: function (updateDom) {
+                this.setInputValue(undefined, updateDom);
                 return this;
             },
 
@@ -275,9 +302,18 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             blurInput: function () {
                 var element = this.getElement();
                 if (element) {
-                    $(element).blur();
+                    $(element).focusout();
                 }
                 return this;
+            },
+
+            /**
+             * Tells whether current input has the focus.
+             * @returns {boolean}
+             */
+            isFocused: function () {
+                var element = this.getElement();
+                return element && element === document.activeElement;
             },
 
             /**
@@ -314,12 +350,14 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
     dessert.addTypes(/** @lends dessert */{
         /** @param {string} expr */
         isInputType: function (expr) {
-            return candystore.Input.inputTypes[expr] === expr;
+            return expr &&
+                   (candystore.Input.inputTagNames[expr] === expr ||
+                    candystore.Input.inputTypes[expr] === expr);
         },
 
         /** @param {string} expr */
         isInputTypeOptional: function (expr) {
-            return expr === undefined ||
+            return candystore.Input.inputTagNames[expr] === expr ||
                    candystore.Input.inputTypes[expr] === expr;
         }
     });

@@ -29,7 +29,10 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             EVENT_FORM_INVALID: 'form-invalid',
 
             /** @constant */
-            EVENT_FORM_SUBMIT: 'form-submit'
+            EVENT_FORM_SUBMIT: 'form-submit',
+
+            /** @constant */
+            EVENT_FORM_RESET: 'form-reset'
         })
         .addPrivateMethods(/** @lends candystore.Form# */{
             /** @private */
@@ -44,7 +47,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
 
                 this.fieldCount = formFields.getKeyCount();
                 this.validFieldCount = validFieldNames ?
-                    validFieldNames.length :
+                    validFieldNames instanceof Array ?
+                        validFieldNames.length :
+                        1:
                     0;
             },
 
@@ -173,6 +178,40 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              */
             getFormFields: function () {
                 return this.children.filterByType(candystore.FormField);
+            },
+
+            /**
+             * Fetches input widgets from all form fields.
+             * @returns {sntls.Collection}
+             */
+            getInputWidgets: function () {
+                return this.getFormFields()
+                    .callOnEachItem('getInputWidget');
+            },
+
+            /**
+             * Fetches input values from all form fields indexed by form field names.
+             * @returns {sntls.Collection}
+             */
+            getInputValues: function () {
+                return this.getFormFields()
+                    .callOnEachItem('getInputValue');
+            },
+
+            /**
+             * Clears input value in all fields.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.Form}
+             */
+            resetForm: function (updateDom) {
+                // clearing input values
+                this.getFormFields()
+                    .callOnEachItem('clearInputValue', updateDom);
+
+                // broadcasting form reset event so fields can clean up if they want to
+                this.broadcastSync(this.EVENT_FORM_RESET);
+
+                return this;
             },
 
             /**

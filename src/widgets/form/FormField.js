@@ -35,7 +35,8 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this
                     .elevateMethod('onInputBlur')
                     .elevateMethod('onInputTab')
-                    .elevateMethod('onInputValid');
+                    .elevateMethod('onInputValid')
+                    .elevateMethod('onFormReset');
 
                 /**
                  * Whether the field allows to move to the next tab index.
@@ -80,7 +81,8 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this
                     .subscribeTo(candystore.Input.EVENT_INPUT_BLUR, this.onInputBlur)
                     .subscribeTo(candystore.Input.EVENT_INPUT_TAB, this.onInputTab)
-                    .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid);
+                    .subscribeTo(candystore.Input.EVENT_INPUT_VALID, this.onInputValid)
+                    .subscribeTo(candystore.Form.EVENT_FORM_RESET, this.onFormReset);
             },
 
             /**
@@ -115,6 +117,29 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              */
             getInputValue: function () {
                 return this.getInputWidget().inputValue;
+            },
+
+            /**
+             * Sets value on input widget.
+             * @param {*} inputValue
+             * @param {boolean} [updateDom]
+             * @returns {candystore.FormField}
+             */
+            setInputValue: function (inputValue, updateDom) {
+                this.getInputWidget()
+                    .setInputValue(inputValue, updateDom);
+                return this;
+            },
+
+            /**
+             * Clears value on input widget.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.FormField}
+             */
+            clearInputValue: function (updateDom) {
+                this.getInputWidget()
+                    .clearInputValue(updateDom);
+                return this;
             },
 
             /**
@@ -265,6 +290,17 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this
                     .setNextOriginalEvent(event)
                     .updateWarningMessage()
+                    .clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onFormReset: function (event) {
+                this
+                    .setNextOriginalEvent(event)
+                    .clearWarningMessage()
                     .clearNextOriginalEvent();
             }
         });

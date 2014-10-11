@@ -25,7 +25,19 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
      */
     candystore.TextInput = self
         .addConstants(/** @lends candystore.Input */{
-            /** @constant */
+            /**
+             * @type {object}
+             * @constant
+             */
+            inputTagNames: {
+                'input'   : 'input',
+                'textarea': 'textarea'
+            },
+
+            /**
+             * @type {object}
+             * @constant
+             */
             inputTypes: {
                 // basic input types
                 password: 'password',
@@ -137,7 +149,9 @@ troop.amendPostponed(candystore, 'Input', function () {
 
     candystore.Input
         .addSurrogate(candystore, 'TextInput', function (inputType) {
-            return inputType === 'text';
+            var TextInput = candystore.TextInput;
+            return TextInput.inputTagNames[inputType] === inputType ||
+                   TextInput.inputTypes[inputType] === inputType;
         });
 });
 
@@ -147,13 +161,17 @@ troop.amendPostponed(candystore, 'Input', function () {
     dessert.addTypes(/** @lends dessert */{
         /** @param {string} expr */
         isTextInputType: function (expr) {
-            return candystore.TextInput.inputTypes[expr] === expr;
+            var TextInput = candystore.TextInput;
+            return expr &&
+                   (TextInput.inputTagNames[expr] === expr ||
+                    TextInput.inputTypes[expr] === expr);
         },
 
         /** @param {string} expr */
         isTextInputTypeOptional: function (expr) {
-            return expr === undefined ||
-                   candystore.TextInput.inputTypes[expr] === expr;
+            var TextInput = candystore.TextInput;
+            return TextInput.inputTypes[expr] === expr ||
+                   TextInput.inputTagNames[expr] === expr;
         }
     });
 }());
