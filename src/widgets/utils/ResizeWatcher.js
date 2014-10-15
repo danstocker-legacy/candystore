@@ -42,9 +42,11 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
              */
             _onWindowResize: function (event) {
                 var rootWidget = shoeshine.Widget.rootWidget;
-                rootWidget.setNextOriginalEvent(event);
-                this.updateDimensions();
-                rootWidget.clearNextOriginalEvent();
+                if (rootWidget) {
+                    rootWidget.setNextOriginalEvent(event);
+                    this.updateDimensions();
+                    rootWidget.clearNextOriginalEvent();
+                }
             }
         })
         .addMethods(/** @lends candystore.ResizeWatcher# */{
