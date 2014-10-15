@@ -102,10 +102,12 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Triggered on onkeyup, oninput, and onchange.
+             * However, does not trigger Input event unless the value actually changed.
              * @param {jQuery.Event} event
              * @ignore
              */
-            onKeyUp: function (event) {
+            onChange: function (event) {
                 var $element = $(this.getElement()),
                     newInputValue = $element.val();
 
@@ -140,8 +142,7 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
 
     self
         .on('keydown', '', 'onKeyDown')
-        // onkeyup is safer in older browsers than oninput
-        .on('keyup', '', 'onKeyUp');
+        .on('keyup input change', '', 'onChange');
 }, jQuery);
 
 troop.amendPostponed(candystore, 'Input', function () {
