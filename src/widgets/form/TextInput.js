@@ -84,6 +84,11 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 switch (event.which) {
                 case 13:
                     if (this.canSubmit) {
+                        // Stopping event from propagation so that other listeners such as hotkeys
+                        // won't intercept them. In case the application needs the event to bubble after all,
+                        // you may modify the original event when capturing EVENT_INPUT_SUBMIT.
+                        event.stopPropagation();
+
                         // signaling that the input is attempting to submit the form
                         this
                             .setNextOriginalEvent(event)
