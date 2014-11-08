@@ -12,7 +12,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      * Creates a DataList instance.
      * @name candystore.DataList.create
      * @function
-     * @param {shoeshine.FieldKey} fieldKey Key to an ordered reference collection.
+     * @param {bookworm.FieldKey} fieldKey Key to an ordered reference collection.
      * @returns {candystore.DataList}
      */
 
@@ -31,7 +31,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
     candystore.DataList = self
         .addMethods(/** @lends candystore.DataList# */{
             /**
-             * @param {shoeshine.FieldKey} fieldKey
+             * @param {bookworm.FieldKey} fieldKey
              * @ignore
              */
             init: function (fieldKey) {
