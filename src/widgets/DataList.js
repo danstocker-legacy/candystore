@@ -67,6 +67,30 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                     this.itemKeysByChildName.deleteItem(childName);
                     this.getChild(childName).removeFromParent();
                 }
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             * @private
+             */
+            _onItemChange: function (event) {
+                var fieldPath = this.entityKey.getEntityPath().asArray,
+                    itemQuery = fieldPath.concat('|'.toKVP()).toQuery(),
+                    itemKey;
+
+                if (itemQuery.matchesPath(event.originalPath)) {
+                    // TODO: Revisit after entity path to entity key conversion is resolved.
+                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
+
+                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
+                        // item was removed
+                        this._removeItem(itemKey);
+                    } else if (event.afterValue !== undefined) {
+                        // item was added
+                        this._addItem(itemKey);
+                    }
+                }
             }
         })
         .addMethods(/** @lends candystore.DataList# */{
@@ -98,7 +122,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             afterAdd: function () {
                 base.afterAdd.call(this);
                 candystore.FieldBound.afterAdd.call(this);
-                this.bindToEntityChange(this.entityKey, 'onItemChange');
+                this.bindToEntityChange(this.entityKey, '_onItemChange');
             },
 
             /** @ignore */
@@ -174,29 +198,6 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 });
 
                 return this;
-            },
-
-            /**
-             * @param {flock.ChangeEvent} event
-             * @ignore
-             */
-            onItemChange: function (event) {
-                var fieldPath = this.entityKey.getEntityPath().asArray,
-                    itemQuery = fieldPath.concat('|'.toKVP()).toQuery(),
-                    itemKey;
-
-                if (itemQuery.matchesPath(event.originalPath)) {
-                    // TODO: Revisit after entity path to entity key conversion is resolved.
-                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
-
-                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
-                        // item was removed
-                        this._removeItem(itemKey);
-                    } else if (event.afterValue !== undefined) {
-                        // item was added
-                        this._addItem(itemKey);
-                    }
-                }
             }
         });
 });
