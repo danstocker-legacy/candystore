@@ -44,9 +44,13 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                     this.getChild(oldChildName).setChildName(newChildName);
 
                     // cleaning up lookups
-                    oldItemKey = this.itemKeysByChildName.getItem(newChildName);
                     this.itemKeysByChildName.deleteItem(oldChildName);
-                    this.childNamesByItemKey.deleteItem(oldItemKey.toString());
+
+                    oldItemKey = this.itemKeysByChildName.getItem(newChildName);
+                    if (oldItemKey) {
+                        // cleaning up item key previously associated new child name
+                        this.childNamesByItemKey.deleteItem(oldItemKey.toString());
+                    }
                 } else {
                     // adding new item widget
                     this.addItemWidget(this.createItemWidget(itemKey).setChildName(newChildName));
