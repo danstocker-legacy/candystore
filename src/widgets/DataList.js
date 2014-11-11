@@ -21,7 +21,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      * Keeps list in sync with the changes of the corresponding collection.
      * Expects to be bound to an *ordered* collection.
      * Expects to have items that are also EntityWidgets.
-     * TODO: handle single item changes, perhaps with a modified FieldBound
+     * TODO: Add unit tests.
      * @class
      * @extends candystore.List
      * @extends bookworm.EntityBound
@@ -29,6 +29,46 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      * @extends candystore.FieldBound
      */
     candystore.DataList = self
+        .addPrivateMethods(/** @lends candystore.DataList# */{
+            /**
+             * @param {bookworm.ItemKey} itemKey
+             * @private
+             */
+            _addItem: function (itemKey) {
+                var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString()),
+                    newChildName = this.getChildNameByKey(itemKey),
+                    oldItemKey;
+
+                if (oldChildName) {
+                    // renaming existing item widget
+                    this.getChild(oldChildName).setChildName(newChildName);
+
+                    // cleaning up lookups
+                    oldItemKey = this.itemKeysByChildName.getItem(newChildName);
+                    this.itemKeysByChildName.deleteItem(oldChildName);
+                    this.childNamesByItemKey.deleteItem(oldItemKey.toString());
+                } else {
+                    // adding new item widget
+                    this.addItemWidget(this.createItemWidget(itemKey).setChildName(newChildName));
+                }
+
+                this.itemKeysByChildName.setItem(newChildName, itemKey);
+                this.childNamesByItemKey.setItem(itemKey.toString(), newChildName);
+            },
+
+            /**
+             * @param {bookworm.ItemKey} itemKey
+             * @private
+             */
+            _removeItem: function (itemKey) {
+                var childName = this.childNamesByItemKey.getItem(itemKey.toString());
+                if (childName) {
+                    this.childNamesByItemKey.deleteItem(itemKey.toString());
+                    this.itemKeysByChildName.deleteItem(childName);
+                    this.getChild(childName).removeFromParent();
+                }
+            }
+        })
         .addMethods(/** @lends candystore.DataList# */{
             /**
              * @param {bookworm.FieldKey} fieldKey
@@ -40,12 +80,25 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 base.init.call(this);
                 bookworm.EntityBound.init.call(this);
                 candystore.EntityWidget.init.call(this, fieldKey);
+
+                /**
+                 * Lookup associating item keys with widget (child) names.
+                 * @type {sntls.Collection}
+                 */
+                this.childNamesByItemKey = sntls.Collection.create();
+
+                /**
+                 * Lookup associating widget (child) names with item keys.
+                 * @type {sntls.Collection}
+                 */
+                this.itemKeysByChildName = sntls.Collection.create();
             },
 
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
                 candystore.FieldBound.afterAdd.call(this);
+                this.bindToEntityChange(this.entityKey, 'onItemChange');
             },
 
             /** @ignore */
@@ -64,7 +117,27 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              */
             createItemWidget: function (itemKey) {
                 return candystore.DataLabel.create(itemKey)
-                    .setChildName(itemKey.itemId);
+                    .setChildName(this.getChildNameByKey(itemKey));
+            },
+
+            /**
+             * Retrieves the item childName associated with the specified itemKey. (Child name determines order.)
+             * To specify custom child name for item widgets, override this method.
+             * @param {bookworm.ItemKey} itemKey
+             * @returns {string}
+             */
+            getChildNameByKey: function (itemKey) {
+                return itemKey.itemId;
+            },
+
+            /**
+             * Fetches item widget by item key.
+             * @param {bookworm.ItemKey} itemKey
+             * @returns {shoeshine.Widget}
+             */
+            getItemWidgetByKey: function (itemKey) {
+                var childName = this.childNamesByItemKey.getItem(itemKey.toString());
+                return this.getChild(childName);
             },
 
             /**
@@ -75,26 +148,25 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             setFieldValue: function (fieldValue) {
                 var that = this,
                     fieldKey = this.entityKey,
-                    itemsBefore = this.children.toSet(),
+                    itemsBefore = this.itemKeysByChildName.toSet(),
                     itemsAfter = sntls.Collection.create(fieldValue)
-                        .mapValues(function (itemOrder, itemId) {
-                            return that.createItemWidget(fieldKey.getItemKey(itemId))
-                                .setTagName('li');
+                        .mapValues(function (itemValue, itemId) {
+                            return fieldKey.getItemKey(itemId);
                         })
-                        .mapKeys(function (/**shoeshine.Widget*/itemWidget) {
-                            return itemWidget.childName;
+                        .mapKeys(function (itemKey) {
+                            return that.getChildNameByKey(itemKey);
                         })
                         .toSet(),
                     itemsToRemove = itemsBefore.subtract(itemsAfter),
                     itemsToAdd = itemsAfter.subtract(itemsBefore);
 
                 // removing tiles that are no longer on the page
-                itemsToRemove.toWidgetCollection()
-                    .removeFromParent();
+                itemsToRemove.toCollection()
+                    .passEachItemTo(this._removeItem, this);
 
                 // revealing new tiles
-                itemsToAdd.toWidgetCollection()
-                    .passEachItemTo(this.addItemWidget, this);
+                itemsToAdd.toCollection()
+                    .passEachItemTo(this._addItem, this);
 
                 this.triggerSync(this.EVENT_LIST_ITEMS_CHANGE, {
                     itemsRemoved: itemsToRemove,
@@ -102,6 +174,29 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 });
 
                 return this;
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onItemChange: function (event) {
+                var fieldPath = this.entityKey.getEntityPath().asArray,
+                    itemQuery = fieldPath.concat('|'.toKVP()).toQuery(),
+                    itemKey;
+
+                if (itemQuery.matchesPath(event.originalPath)) {
+                    // TODO: Revisit after entity path to entity key conversion is resolved.
+                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
+
+                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
+                        // item was removed
+                        this._removeItem(itemKey);
+                    } else if (event.afterValue !== undefined) {
+                        // item was added
+                        this._addItem(itemKey);
+                    }
+                }
             }
         });
 });
