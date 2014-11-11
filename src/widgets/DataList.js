@@ -36,7 +36,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              */
             _addItem: function (itemKey) {
                 var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString()),
-                    newChildName = this.getChildNameByKey(itemKey),
+                    newChildName = this.createChildNameByKey(itemKey),
                     oldItemKey;
 
                 if (oldChildName) {
@@ -145,7 +145,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              */
             createItemWidget: function (itemKey) {
                 return candystore.DataLabel.create(itemKey)
-                    .setChildName(this.getChildNameByKey(itemKey));
+                    .setChildName(this.createChildNameByKey(itemKey));
             },
 
             /**
@@ -154,7 +154,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * @param {bookworm.ItemKey} itemKey
              * @returns {string}
              */
-            getChildNameByKey: function (itemKey) {
+            createChildNameByKey: function (itemKey) {
                 return itemKey.itemId;
             },
 
@@ -182,7 +182,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                             return fieldKey.getItemKey(itemId);
                         })
                         .mapKeys(function (itemKey) {
-                            return that.getChildNameByKey(itemKey);
+                            return that.createChildNameByKey(itemKey);
                         })
                         .toSet(),
                     itemsToRemove = itemsBefore.subtract(itemsAfter),
