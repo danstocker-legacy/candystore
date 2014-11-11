@@ -76,7 +76,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              */
             _onItemChange: function (event) {
                 var fieldPath = this.entityKey.getEntityPath().asArray,
-                    itemQuery = fieldPath.concat('|'.toKVP()).toQuery(),
+                    itemQuery = fieldPath.concat(['|'.toKVP(), '\\'.toKVP()]).toQuery(),
                     itemKey;
 
                 if (itemQuery.matchesPath(event.originalPath)) {
