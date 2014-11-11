@@ -23,7 +23,7 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
             init: function () {
                 base.init.call(this);
 
-                this.createLabelWidget()
+                this.spawnLabelWidget()
                     .setChildName('button-label')
                     .addToParent(this);
             },
@@ -41,7 +41,7 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
              * Override to specify custom widget.
              * @returns {candystore.Label}
              */
-            createLabelWidget: function () {
+            spawnLabelWidget: function () {
                 return candystore.Label.create();
             },
 

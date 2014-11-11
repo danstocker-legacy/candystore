@@ -40,9 +40,9 @@ troop.postpone(candystore, 'DataDropdown', function (ns, className) {
              *     return myCondition === true;
              * })
              * @returns {candystore.DataList}
-             * @see candystore.Dropdown#createListWidget
+             * @see candystore.Dropdown#spawnListWidget
              */
-            createListWidget: function () {
+            spawnListWidget: function () {
                 return candystore.DataList.create(this.entityKey);
             }
         });

@@ -24,7 +24,7 @@ troop.postpone(candystore, 'Link', function (ns, className, /**jQuery*/$) {
                 base.init.call(this);
                 this.setTagName('a');
 
-                this.createLabelWidget()
+                this.spawnLabelWidget()
                     .setChildName('link-label')
                     .addToParent(this);
             },
@@ -42,7 +42,7 @@ troop.postpone(candystore, 'Link', function (ns, className, /**jQuery*/$) {
              * Override to specify custom widget.
              * @returns {candystore.Label}
              */
-            createLabelWidget: function () {
+            spawnLabelWidget: function () {
                 return candystore.Label.create();
             },
 

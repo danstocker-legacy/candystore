@@ -36,7 +36,7 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
                     .elevateMethod('onOptionSelect')
                     .elevateMethod('onOptionsEscape');
 
-                this.createListWidget()
+                this.spawnListWidget()
                     .setChildName('options-list')
                     .addToParent(this);
             },
@@ -78,7 +78,7 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
              * Ones that have the OptionList trait, and its items have the Option trait, are the best.
              * @returns {candystore.List}
              */
-            createListWidget: function () {
+            spawnListWidget: function () {
                 return candystore.List.create();
             },
 

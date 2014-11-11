@@ -80,12 +80,12 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             },
 
             /** @returns {candystore.DataLabel} */
-            createLabelWidget: function () {
+            spawnLabelWidget: function () {
                 return candystore.DataLabel.create(this.entityKey);
             },
 
             /** @returns {candystore.DataDropdown} */
-            createDropdownWidget: function () {
+            spawnDropdownWidget: function () {
                 return candystore.DataDropdown.create(this.optionsKey);
             },
 

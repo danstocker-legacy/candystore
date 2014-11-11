@@ -36,7 +36,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              */
             _addItem: function (itemKey) {
                 var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString()),
-                    newChildName = this.createChildNameByKey(itemKey),
+                    newChildName = this.spawnItemName(itemKey),
                     oldItemKey;
 
                 if (oldChildName) {
@@ -53,7 +53,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                     }
                 } else {
                     // adding new item widget
-                    this.addItemWidget(this.createItemWidget(itemKey).setChildName(newChildName));
+                    this.addItemWidget(this.spawnItemWidget(itemKey).setChildName(newChildName));
                 }
 
                 this.itemKeysByChildName.setItem(newChildName, itemKey);
@@ -139,13 +139,12 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * Creates item widget for the specified item key.
              * To specify a custom widget class, either override this method in a subclass, or provide
              * a surrogate definition on DataLabel, in case the custom item widget is also DataLabel-based.
-             * Expected to set child name on the returned widget (and thus determining its position within the list).
              * @param {bookworm.ItemKey} itemKey
              * @returns {shoeshine.Widget}
              */
-            createItemWidget: function (itemKey) {
+            spawnItemWidget: function (itemKey) {
                 return candystore.DataLabel.create(itemKey)
-                    .setChildName(this.createChildNameByKey(itemKey));
+                    .setChildName(this.spawnItemName(itemKey));
             },
 
             /**
@@ -154,7 +153,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * @param {bookworm.ItemKey} itemKey
              * @returns {string}
              */
-            createChildNameByKey: function (itemKey) {
+            spawnItemName: function (itemKey) {
                 return itemKey.itemId;
             },
 
@@ -182,7 +181,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                             return fieldKey.getItemKey(itemId);
                         })
                         .mapKeys(function (itemKey) {
-                            return that.createChildNameByKey(itemKey);
+                            return that.spawnItemName(itemKey);
                         })
                         .toSet(),
                     itemsToRemove = itemsBefore.subtract(itemsAfter),

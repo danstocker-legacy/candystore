@@ -50,7 +50,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                  * to the widget hierarchy.
                  * @type {candystore.Dropdown}
                  */
-                this.dropdown = this.createDropdownWidget()
+                this.dropdown = this.spawnDropdownWidget()
                     .setChildName('dropdown-popup');
             },
 
@@ -70,7 +70,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
              * Override to specify custom dropdown.
              * @returns {candystore.Dropdown}
              */
-            createDropdownWidget: function () {
+            spawnDropdownWidget: function () {
                 return candystore.Dropdown.create();
             },
 

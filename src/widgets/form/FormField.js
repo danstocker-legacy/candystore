@@ -70,7 +70,7 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
                 this.warningLabel = candystore.Label.create()
                     .setChildName('field-warning');
 
-                this.createInputWidget()
+                this.spawnInputWidget()
                     .setChildName('field-input')
                     .addToParent(this);
             },
@@ -99,7 +99,7 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * With the input type-based surrogates in place, overriding this method is rarely needed.
              * @returns {candystore.Input}
              */
-            createInputWidget: function () {
+            spawnInputWidget: function () {
                 return candystore.Input.create(this.inputType);
             },
 

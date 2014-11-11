@@ -69,7 +69,7 @@ troop.postpone(candystore, 'DataLink', function (ns, className) {
              * Override to specify custom widget.
              * @returns {candystore.DataLabel}
              */
-            createLabelWidget: function () {
+            spawnLabelWidget: function () {
                 return candystore.DataLabel.create(this.textKey);
             },
 
