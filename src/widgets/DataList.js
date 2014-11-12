@@ -37,27 +37,19 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             _addItem: function (itemKey) {
                 var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString()),
                     newChildName = this.spawnItemName(itemKey),
-                    oldItemKey;
+                    itemWidget;
 
                 if (oldChildName) {
                     // renaming existing item widget
-                    this.getChild(oldChildName).setChildName(newChildName);
-
-                    // cleaning up lookups
-                    this.itemKeysByChildName.deleteItem(oldChildName);
-
-                    oldItemKey = this.itemKeysByChildName.getItem(newChildName);
-                    if (oldItemKey) {
-                        // cleaning up item key previously associated new child name
-                        this.childNamesByItemKey.deleteItem(oldItemKey.toString());
-                    }
+                    this.getChild(oldChildName)
+                        .setChildName(newChildName);
                 } else {
                     // adding new item widget
-                    this.addItemWidget(this.spawnItemWidget(itemKey).setChildName(newChildName));
+                    itemWidget = this.spawnItemWidget(itemKey)
+                        .setItemKey(itemKey)
+                        .setChildName(newChildName);
+                    this.addItemWidget(itemWidget);
                 }
-
-                this.itemKeysByChildName.setItem(newChildName, itemKey);
-                this.childNamesByItemKey.setItem(itemKey.toString(), newChildName);
             },
 
             /**
@@ -67,33 +59,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             _removeItem: function (itemKey) {
                 var childName = this.childNamesByItemKey.getItem(itemKey.toString());
                 if (childName) {
-                    this.childNamesByItemKey.deleteItem(itemKey.toString());
-                    this.itemKeysByChildName.deleteItem(childName);
                     this.getChild(childName).removeFromParent();
-                }
-            },
-
-            /**
-             * @param {flock.ChangeEvent} event
-             * @ignore
-             * @private
-             */
-            _onItemChange: function (event) {
-                var fieldPath = this.entityKey.getEntityPath().asArray,
-                    itemQuery = fieldPath.concat(['|'.toKVP(), '\\'.toKVP()]).toQuery(),
-                    itemKey;
-
-                if (itemQuery.matchesPath(event.originalPath)) {
-                    // TODO: Revisit after entity path to entity key conversion is resolved.
-                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
-
-                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
-                        // item was removed
-                        this._removeItem(itemKey);
-                    } else if (event.afterValue !== undefined) {
-                        // item was added
-                        this._addItem(itemKey);
-                    }
                 }
             }
         })
@@ -109,24 +75,25 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 bookworm.EntityBound.init.call(this);
                 candystore.EntityWidget.init.call(this, fieldKey);
 
+                this
+                    .elevateMethod('onChildAdd')
+                    .elevateMethod('onChildRemove');
+
                 /**
                  * Lookup associating item keys with widget (child) names.
                  * @type {sntls.Collection}
                  */
                 this.childNamesByItemKey = sntls.Collection.create();
-
-                /**
-                 * Lookup associating widget (child) names with item keys.
-                 * @type {sntls.Collection}
-                 */
-                this.itemKeysByChildName = sntls.Collection.create();
             },
 
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
                 candystore.FieldBound.afterAdd.call(this);
-                this.bindToEntityChange(this.entityKey, '_onItemChange');
+                this
+                    .subscribeTo(this.EVENT_CHILD_ADD, this.onChildAdd)
+                    .subscribeTo(this.EVENT_CHILD_REMOVE, this.onChildRemove)
+                    .bindToEntityChange(this.entityKey, 'onItemChange');
             },
 
             /** @ignore */
@@ -143,7 +110,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * @returns {shoeshine.Widget}
              */
             spawnItemWidget: function (itemKey) {
-                return candystore.DataLabel.create(itemKey)
+                return candystore.ItemDataLabel.create(itemKey, itemKey)
                     .setChildName(this.spawnItemName(itemKey));
             },
 
@@ -175,7 +142,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             setFieldValue: function (fieldValue) {
                 var that = this,
                     fieldKey = this.entityKey,
-                    itemsBefore = this.itemKeysByChildName.toSet(),
+                    itemsBefore = this.children.collectProperty('itemKey').toSet(),
                     itemsAfter = sntls.Collection.create(fieldValue)
                         .mapValues(function (itemValue, itemId) {
                             return fieldKey.getItemKey(itemId);
@@ -201,6 +168,61 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 });
 
                 return this;
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onChildAdd: function (event) {
+                var childWidget;
+
+                if (event.senderWidget === this) {
+                    childWidget = event.payload.childWidget;
+
+                    // when child is already associated with an item key
+                    this.childNamesByItemKey
+                        .setItem(childWidget.itemKey.toString(), childWidget.childName);
+                }
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onChildRemove: function (event) {
+                var childWidget;
+
+                if (event.senderWidget === this) {
+                    childWidget = event.payload.childWidget;
+
+                    // updating lookup buffers
+                    this.childNamesByItemKey
+                        .deleteItem(childWidget.itemKey.toString());
+                }
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onItemChange: function (event) {
+                var fieldPath = this.entityKey.getEntityPath().asArray,
+                    itemQuery = fieldPath.concat(['|'.toKVP(), '\\'.toKVP()]).toQuery(),
+                    itemKey;
+
+                if (itemQuery.matchesPath(event.originalPath)) {
+                    // TODO: Revisit after entity path to entity key conversion is resolved.
+                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
+
+                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
+                        // item was removed
+                        this._removeItem(itemKey);
+                    } else if (event.afterValue !== undefined) {
+                        // item was added
+                        this._addItem(itemKey);
+                    }
+                }
             }
         });
 });
