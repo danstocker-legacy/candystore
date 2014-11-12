@@ -3,7 +3,7 @@ troop.postpone(candystore, 'Highlightable', function (ns, className) {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend(className);
+        self = base.extend();
 
     /**
      * The Highlightable trait adds

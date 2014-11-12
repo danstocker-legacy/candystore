@@ -3,7 +3,7 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend(className);
+        self = base.extend();
 
     /**
      * The Option trait allows widgets to behave like option items in a dropdown or select list.
