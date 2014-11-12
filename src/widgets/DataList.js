@@ -31,24 +31,40 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
     candystore.DataList = self
         .addPrivateMethods(/** @lends candystore.DataList# */{
             /**
+             * @param {string} childName
+             * @param {bookworm.ItemKey} itemKey
+             * @private
+             * @memberOf candystore.DataList
+             */
+            _getSetKey: function (childName, itemKey) {
+                return childName + '|' + itemKey.toString();
+            },
+
+            /**
+             * @param {bookworm.ItemKey} itemKey
+             * @returns {shoeshine.Widget}
+             * @private
+             */
+            _spawnPreparedItemWidget: function (itemKey) {
+                return this.spawnItemWidget(itemKey)
+                    .setItemKey(itemKey)
+                    .setChildName(this.spawnItemName(itemKey));
+            },
+
+            /**
              * @param {bookworm.ItemKey} itemKey
              * @private
              */
             _addItem: function (itemKey) {
-                var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString()),
-                    newChildName = this.spawnItemName(itemKey),
-                    itemWidget;
+                var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString());
 
                 if (oldChildName) {
                     // renaming existing item widget
                     this.getChild(oldChildName)
-                        .setChildName(newChildName);
+                        .setChildName(this.spawnItemName(itemKey));
                 } else {
                     // adding new item widget
-                    itemWidget = this.spawnItemWidget(itemKey)
-                        .setItemKey(itemKey)
-                        .setChildName(newChildName);
-                    this.addItemWidget(itemWidget);
+                    this.addItemWidget(this._spawnPreparedItemWidget(itemKey));
                 }
             },
 
@@ -142,29 +158,39 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             setFieldValue: function (fieldValue) {
                 var that = this,
                     fieldKey = this.entityKey,
-                    itemsBefore = this.children.collectProperty('itemKey').toSet(),
-                    itemsAfter = sntls.Collection.create(fieldValue)
+                    itemsWidgetsBefore = this.children
+                        .mapKeys(function (itemWidget, childName) {
+                            return that._getSetKey(childName, itemWidget.itemKey);
+                        })
+                        .toSet(),
+                    itemsKeysAfter = sntls.Collection.create(fieldValue)
                         .mapValues(function (itemValue, itemId) {
                             return fieldKey.getItemKey(itemId);
                         })
                         .mapKeys(function (itemKey) {
-                            return that.spawnItemName(itemKey);
+                            return that._getSetKey(that.spawnItemName(itemKey), itemKey);
                         })
                         .toSet(),
-                    itemsToRemove = itemsBefore.subtract(itemsAfter),
-                    itemsToAdd = itemsAfter.subtract(itemsBefore);
+                    itemWidgetsToRemove = itemsWidgetsBefore.subtract(itemsKeysAfter)
+                        .toWidgetCollection(),
+                    itemKeysToAdd = itemsKeysAfter.subtract(itemsWidgetsBefore),
+                    itemWidgetsToAdd = itemKeysToAdd
+                        .toCollection()
+                        .mapValues(function (itemKey) {
+                            return that._spawnPreparedItemWidget(itemKey);
+                        });
 
                 // removing tiles that are no longer on the page
-                itemsToRemove.toCollection()
-                    .passEachItemTo(this._removeItem, this);
+                itemWidgetsToRemove
+                    .removeFromParent();
 
                 // revealing new tiles
-                itemsToAdd.toCollection()
-                    .passEachItemTo(this._addItem, this);
+                itemWidgetsToAdd
+                    .passEachItemTo(this.addItemWidget, this);
 
                 this.triggerSync(this.EVENT_LIST_ITEMS_CHANGE, {
-                    itemsRemoved: itemsToRemove,
-                    itemsAdded  : itemsToAdd
+                    itemsRemoved: itemWidgetsToRemove,
+                    itemsAdded  : itemWidgetsToAdd
                 });
 
                 return this;
