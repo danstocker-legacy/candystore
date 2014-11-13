@@ -39,7 +39,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      * Creates a DataList instance.
      * @name candystore.DataList.create
      * @function
-     * @param {shoeshine.FieldKey} fieldKey Key to an ordered reference collection.
+     * @param {bookworm.FieldKey} fieldKey Key to an ordered reference collection.
      * @returns {candystore.DataList}
      */
 
@@ -48,7 +48,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      * Keeps list in sync with the changes of the corresponding collection.
      * Expects to be bound to an *ordered* collection.
      * Expects to have items that are also EntityWidgets.
-     * TODO: handle single item changes, perhaps with a modified FieldBound
+     * TODO: Add unit tests.
      * @class
      * @extends candystore.List
      * @extends bookworm.EntityBound
@@ -56,9 +56,59 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
      * @extends candystore.FieldBound
      */
     candystore.DataList = self
+        .addPrivateMethods(/** @lends candystore.DataList# */{
+            /**
+             * @param {string} childName
+             * @param {bookworm.ItemKey} itemKey
+             * @private
+             * @memberOf candystore.DataList
+             */
+            _getSetKey: function (childName, itemKey) {
+                return childName + '|' + itemKey.toString();
+            },
+
+            /**
+             * @param {bookworm.ItemKey} itemKey
+             * @returns {shoeshine.Widget}
+             * @private
+             */
+            _spawnPreparedItemWidget: function (itemKey) {
+                return this.spawnItemWidget(itemKey)
+                    .setItemKey(itemKey)
+                    .setChildName(this.spawnItemName(itemKey));
+            },
+
+            /**
+             * @param {bookworm.ItemKey} itemKey
+             * @private
+             */
+            _addItem: function (itemKey) {
+                var oldChildName = this.childNamesByItemKey.getItem(itemKey.toString());
+
+                if (oldChildName) {
+                    // renaming existing item widget
+                    this.getChild(oldChildName)
+                        .setChildName(this.spawnItemName(itemKey));
+                } else {
+                    // adding new item widget
+                    this.addItemWidget(this._spawnPreparedItemWidget(itemKey));
+                }
+            },
+
+            /**
+             * @param {bookworm.ItemKey} itemKey
+             * @private
+             */
+            _removeItem: function (itemKey) {
+                var childName = this.childNamesByItemKey.getItem(itemKey.toString());
+                if (childName) {
+                    this.getChild(childName).removeFromParent();
+                }
+            }
+        })
         .addMethods(/** @lends candystore.DataList# */{
             /**
-             * @param {shoeshine.FieldKey} fieldKey
+             * @param {bookworm.FieldKey} fieldKey
              * @ignore
              */
             init: function (fieldKey) {
@@ -67,12 +117,26 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 base.init.call(this);
                 bookworm.EntityBound.init.call(this);
                 candystore.EntityWidget.init.call(this, fieldKey);
+
+                this
+                    .elevateMethod('onChildAdd')
+                    .elevateMethod('onChildRemove');
+
+                /**
+                 * Lookup associating item keys with widget (child) names.
+                 * @type {sntls.Collection}
+                 */
+                this.childNamesByItemKey = sntls.Collection.create();
             },
 
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
                 candystore.FieldBound.afterAdd.call(this);
+                this
+                    .subscribeTo(this.EVENT_CHILD_ADD, this.onChildAdd)
+                    .subscribeTo(this.EVENT_CHILD_REMOVE, this.onChildRemove)
+                    .bindToEntityChange(this.entityKey, 'onItemChange');
             },
 
             /** @ignore */
@@ -85,13 +149,32 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * Creates item widget for the specified item key.
              * To specify a custom widget class, either override this method in a subclass, or provide
              * a surrogate definition on DataLabel, in case the custom item widget is also DataLabel-based.
-             * Expected to set child name on the returned widget (and thus determining its position within the list).
              * @param {bookworm.ItemKey} itemKey
              * @returns {shoeshine.Widget}
              */
-            createItemWidget: function (itemKey) {
-                return candystore.DataLabel.create(itemKey)
-                    .setChildName(itemKey.itemId);
+            spawnItemWidget: function (itemKey) {
+                return candystore.ItemDataLabel.create(itemKey, itemKey)
+                    .setChildName(this.spawnItemName(itemKey));
+            },
+
+            /**
+             * Retrieves the item childName associated with the specified itemKey. (Child name determines order.)
+             * To specify custom child name for item widgets, override this method.
+             * @param {bookworm.ItemKey} itemKey
+             * @returns {string}
+             */
+            spawnItemName: function (itemKey) {
+                return itemKey.itemId;
+            },
+
+            /**
+             * Fetches item widget by item key.
+             * @param {bookworm.ItemKey} itemKey
+             * @returns {shoeshine.Widget}
+             */
+            getItemWidgetByKey: function (itemKey) {
+                var childName = this.childNamesByItemKey.getItem(itemKey.toString());
+                return this.getChild(childName);
             },
 
             /**
@@ -102,33 +185,97 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             setFieldValue: function (fieldValue) {
                 var that = this,
                     fieldKey = this.entityKey,
-                    itemsBefore = this.children.toSet(),
-                    itemsAfter = sntls.Collection.create(fieldValue)
-                        .mapValues(function (itemOrder, itemId) {
-                            return that.createItemWidget(fieldKey.getItemKey(itemId))
-                                .setTagName('li');
-                        })
-                        .mapKeys(function (/**shoeshine.Widget*/itemWidget) {
-                            return itemWidget.childName;
+                    itemsWidgetsBefore = this.children
+                        .mapKeys(function (itemWidget, childName) {
+                            return that._getSetKey(childName, itemWidget.itemKey);
                         })
                         .toSet(),
-                    itemsToRemove = itemsBefore.subtract(itemsAfter),
-                    itemsToAdd = itemsAfter.subtract(itemsBefore);
+                    itemsKeysAfter = sntls.Collection.create(fieldValue)
+                        .mapValues(function (itemValue, itemId) {
+                            return fieldKey.getItemKey(itemId);
+                        })
+                        .mapKeys(function (itemKey) {
+                            return that._getSetKey(that.spawnItemName(itemKey), itemKey);
+                        })
+                        .toSet(),
+                    itemWidgetsToRemove = itemsWidgetsBefore.subtract(itemsKeysAfter)
+                        .toWidgetCollection(),
+                    itemKeysToAdd = itemsKeysAfter.subtract(itemsWidgetsBefore),
+                    itemWidgetsToAdd = itemKeysToAdd
+                        .toCollection()
+                        .mapValues(function (itemKey) {
+                            return that._spawnPreparedItemWidget(itemKey);
+                        });
 
                 // removing tiles that are no longer on the page
-                itemsToRemove.toWidgetCollection()
+                itemWidgetsToRemove
                     .removeFromParent();
 
                 // revealing new tiles
-                itemsToAdd.toWidgetCollection()
+                itemWidgetsToAdd
                     .passEachItemTo(this.addItemWidget, this);
 
                 this.triggerSync(this.EVENT_LIST_ITEMS_CHANGE, {
-                    itemsRemoved: itemsToRemove,
-                    itemsAdded  : itemsToAdd
+                    itemsRemoved: itemWidgetsToRemove,
+                    itemsAdded  : itemWidgetsToAdd
                 });
 
                 return this;
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onChildAdd: function (event) {
+                var childWidget;
+
+                if (event.senderWidget === this) {
+                    childWidget = event.payload.childWidget;
+
+                    // when child is already associated with an item key
+                    this.childNamesByItemKey
+                        .setItem(childWidget.itemKey.toString(), childWidget.childName);
+                }
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onChildRemove: function (event) {
+                var childWidget;
+
+                if (event.senderWidget === this) {
+                    childWidget = event.payload.childWidget;
+
+                    // updating lookup buffers
+                    this.childNamesByItemKey
+                        .deleteItem(childWidget.itemKey.toString());
+                }
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onItemChange: function (event) {
+                var fieldPath = this.entityKey.getEntityPath().asArray,
+                    itemQuery = fieldPath.concat(['|'.toKVP(), '\\'.toKVP()]).toQuery(),
+                    itemKey;
+
+                if (itemQuery.matchesPath(event.originalPath)) {
+                    // TODO: Revisit after entity path to entity key conversion is resolved.
+                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
+
+                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
+                        // item was removed
+                        this._removeItem(itemKey);
+                    } else if (event.afterValue !== undefined) {
+                        // item was added
+                        this._addItem(itemKey);
+                    }
+                }
             }
         });
 });
@@ -142,13 +289,13 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataListItem.html">DataListItem</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.ItemDataLabel.html">ItemDataLabel</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Sep 29 2014 08:08:33 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 13 2014 09:32:21 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

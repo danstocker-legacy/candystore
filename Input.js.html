@@ -73,45 +73,61 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             EVENT_INPUT_INVALID: 'input-invalid',
 
             /** @constant */
-            EVENT_INPUT_SUBMIT: 'input-submit',
+            EVENT_INPUT_ERROR_CHANGE: 'input-error-change',
 
             /** @constant */
+            EVENT_INPUT_SUBMIT: 'input-submit',
+
+            /**
+             * @type {object}
+             * @constant
+             */
+            inputTagNames: {
+                'input'   : 'input',
+                'textarea': 'textarea',
+                'select'  : 'select'
+            },
+
+            /**
+             * @type {object}
+             * @constant
+             */
             inputTypes: {
                 // basic input types
-                button          : 'button',
-                checkbox        : 'checkbox',
-                file            : 'file',
-                hidden          : 'hidden',
-                image           : 'image',
-                password        : 'password',
-                radio           : 'radio',
-                reset           : 'reset',
-                submit          : 'submit',
-                text            : 'text',
+                'button'        : 'button',
+                'checkbox'      : 'checkbox',
+                'file'          : 'file',
+                'hidden'        : 'hidden',
+                'image'         : 'image',
+                'password'      : 'password',
+                'radio'         : 'radio',
+                'reset'         : 'reset',
+                'submit'        : 'submit',
+                'text'          : 'text',
 
                 // HTML 5 types
-                color           : 'color',
-                date            : 'date',
-                datetime        : 'datetime',
+                'color'         : 'color',
+                'date'          : 'date',
+                'datetime'      : 'datetime',
                 'datetime-local': 'datetime-local',
-                email           : 'email',
-                month           : 'month',
-                number          : 'number',
-                range           : 'range',
-                search          : 'search',
-                tel             : 'tel',
-                time            : 'time',
-                url             : 'url',
-                week            : 'week'
+                'email'         : 'email',
+                'month'         : 'month',
+                'number'        : 'number',
+                'range'         : 'range',
+                'search'        : 'search',
+                'tel'           : 'tel',
+                'time'          : 'time',
+                'url'           : 'url',
+                'week'          : 'week'
             }
         })
         .addPrivateMethods(/** @lends candystore.Input# */{
             /**
-             * @param {string} inputValue
+             * @param {*} inputValue
              * @private
              */
             _setInputValue: function (inputValue) {
-                this.addAttribute('value', inputValue);
+                this.addAttribute('value', typeof inputValue === 'undefined' ? '' : inputValue);
                 this.inputValue = inputValue;
             },
 
@@ -175,10 +191,14 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                  */
                 this.lastValidationError = true;
 
-                // setting html properties & attributes
-                this
-                    .setTagName('input')
-                    .addAttribute('type', inputType);
+                if (this.inputTagNames[inputType] === inputType) {
+                    // setting tag name for input
+                    this.setTagName(inputType);
+                } else if (this.inputTypes[inputType] === inputType) {
+                    // setting input attribute
+                    this.setTagName('input')
+                        .addAttribute('type', inputType);
+                }
             },
 
             /** @ignore */
@@ -208,8 +228,8 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * Sets input value and triggers corresponding events.
-             * @param {string} inputValue
+             * Sets input value and triggers events.
+             * @param {*} inputValue
              * @param {boolean} [updateDom]
              * @returns {candystore.Input}
              */
@@ -224,6 +244,16 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
                 this._triggerChangeEvent(oldInputValue);
 
+                return this;
+            },
+
+            /**
+             * Clears input value and triggers events.
+             * @param {boolean} [updateDom]
+             * @returns {candystore.Input}
+             */
+            clearInputValue: function (updateDom) {
+                this.setInputValue(undefined, updateDom);
                 return this;
             },
 
@@ -249,12 +279,13 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             validateInputValue: function () {
                 // validating current value
                 var validatorFunction = this.validatorFunction,
-                    validationError = validatorFunction && validatorFunction(this.inputValue),
+                    oldValidationError = this.lastValidationError,
+                    newValidationError = validatorFunction && validatorFunction(this.inputValue),
                     wasValid = this.isValid(),
-                    isValid = validationError === undefined;
+                    isValid = newValidationError === undefined;
 
                 // storing last validation error on instance
-                this.lastValidationError = validationError;
+                this.lastValidationError = newValidationError;
 
                 // triggering validation event
                 if (wasValid && !isValid) {
@@ -262,12 +293,18 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     // TODO: revise as soon as evan supports collection payload
                     // clobbers previously set payload
                     this
-                        .setNextPayload(validationError)
+                        .setNextPayload(newValidationError)
                         .triggerSync(this.EVENT_INPUT_INVALID)
                         .clearNextPayload();
                 } else if (!wasValid && isValid) {
                     // input just became valid
                     this.triggerSync(this.EVENT_INPUT_VALID);
+                } else if (newValidationError !== oldValidationError) {
+                    // triggering event about error change
+                    this.triggerSync(this.EVENT_INPUT_ERROR_CHANGE, {
+                        oldValidationError: oldValidationError,
+                        newValidationError: newValidationError
+                    });
                 }
 
                 return this;
@@ -292,9 +329,18 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             blurInput: function () {
                 var element = this.getElement();
                 if (element) {
-                    $(element).blur();
+                    $(element).focusout();
                 }
                 return this;
+            },
+
+            /**
+             * Tells whether current input has the focus.
+             * @returns {boolean}
+             */
+            isFocused: function () {
+                var element = this.getElement();
+                return element && element === document.activeElement;
             },
 
             /**
@@ -331,12 +377,14 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
     dessert.addTypes(/** @lends dessert */{
         /** @param {string} expr */
         isInputType: function (expr) {
-            return candystore.Input.inputTypes[expr] === expr;
+            return expr &&
+                   (candystore.Input.inputTagNames[expr] === expr ||
+                    candystore.Input.inputTypes[expr] === expr);
         },
 
         /** @param {string} expr */
         isInputTypeOptional: function (expr) {
-            return expr === undefined ||
+            return candystore.Input.inputTagNames[expr] === expr ||
                    candystore.Input.inputTypes[expr] === expr;
         }
     });
@@ -351,13 +399,13 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataListItem.html">DataListItem</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.ItemDataLabel.html">ItemDataLabel</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Sep 29 2014 08:08:33 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 13 2014 09:32:21 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

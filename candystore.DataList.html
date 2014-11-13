@@ -44,7 +44,7 @@
 Keeps list in sync with the changes of the corresponding collection.
 Expects to be bound to an *ordered* collection.
 Expects to have items that are also EntityWidgets.
-TODO: handle single item changes, perhaps with a modified FieldBound
+TODO: Add unit tests.
     </div>
     
 
@@ -129,6 +129,58 @@ TODO: handle single item changes, perhaps with a modified FieldBound
         <dl>
             
 <dt>
+    <h4 class="name" id="childNamesByItemKey"><span class="type-signature"></span>childNamesByItemKey<span class="type-signature"> :sntls.Collection</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Lookup associating item keys with widget (child) names.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 102
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="entityKey"><span class="type-signature"></span>entityKey<span class="type-signature"> :bookworm.EntityKey</span></h4>
     
     
@@ -188,6 +240,138 @@ TODO: handle single item changes, perhaps with a modified FieldBound
         <dl>
             
 <dt>
+    <h4 class="name" id="_getSetKey"><span class="type-signature">&lt;private, static> </span>_getSetKey<span class="signature">(childName, itemKey)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>childName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>itemKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">bookworm.ItemKey</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 39
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(fieldKey)</span><span class="type-signature"> &rarr; {<a href="candystore.DataList.html">candystore.DataList</a>}</span></h4>
     
     
@@ -236,7 +420,7 @@ TODO: handle single item changes, perhaps with a modified FieldBound
             <td class="type">
             
                 
-<span class="param-type">shoeshine.FieldKey</span>
+<span class="param-type">bookworm.FieldKey</span>
 
 
             
@@ -312,6 +496,115 @@ TODO: handle single item changes, perhaps with a modified FieldBound
 </dl>
 
         
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_addItem"><span class="type-signature">&lt;private> </span>_addItem<span class="signature">(itemKey)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>itemKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">bookworm.ItemKey</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 58
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
     
     
 </dd>
@@ -547,6 +840,242 @@ TODO: handle single item changes, perhaps with a modified FieldBound
         
             
 <dt>
+    <h4 class="name" id="_removeItem"><span class="type-signature">&lt;private> </span>_removeItem<span class="signature">(itemKey)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>itemKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">bookworm.ItemKey</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 75
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_spawnPreparedItemWidget"><span class="type-signature">&lt;private> </span>_spawnPreparedItemWidget<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {shoeshine.Widget}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>itemKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">bookworm.ItemKey</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 48
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">shoeshine.Widget</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="_updateFieldValue"><span class="type-signature">&lt;private> </span>_updateFieldValue<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
@@ -745,7 +1274,7 @@ Changes the specified widget's tag name to 'li'.
         
             
 <dt>
-    <h4 class="name" id="createItemWidget"><span class="type-signature"></span>createItemWidget<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {shoeshine.Widget}</span></h4>
+    <h4 class="name" id="getItemWidgetByKey"><span class="type-signature"></span>getItemWidgetByKey<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {shoeshine.Widget}</span></h4>
     
     
 </dt>
@@ -753,10 +1282,7 @@ Changes the specified widget's tag name to 'li'.
     
     
     <div class="description">
-        Creates item widget for the specified item key.
-To specify a custom widget class, either override this method in a subclass, or provide
-a surrogate definition on DataLabel, in case the custom item widget is also DataLabel-based.
-Expected to set child name on the returned widget (and thus determining its position within the list).
+        Fetches item widget by item key.
     </div>
     
 
@@ -837,7 +1363,7 @@ Expected to set child name on the returned widget (and thus determining its posi
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DataList.js.html">widgets/DataList.js</a>, line 65
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 148
     </li></ul></dd>
     
     
@@ -1044,6 +1570,271 @@ Expected to set child name on the returned widget (and thus determining its posi
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="spawnItemName"><span class="type-signature"></span>spawnItemName<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves the item childName associated with the specified itemKey. (Child name determines order.)
+To specify custom child name for item widgets, override this method.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>itemKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">bookworm.ItemKey</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 139
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="spawnItemWidget"><span class="type-signature"></span>spawnItemWidget<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {shoeshine.Widget}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates item widget for the specified item key.
+To specify a custom widget class, either override this method in a subclass, or provide
+a surrogate definition on DataLabel, in case the custom item widget is also DataLabel-based.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>itemKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">bookworm.ItemKey</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DataList.js.html">widgets/DataList.js</a>, line 128
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">shoeshine.Widget</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
         </dl>
     
     
@@ -1060,13 +1851,13 @@ Expected to set child name on the returned widget (and thus determining its posi
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataListItem.html">DataListItem</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.ItemDataLabel.html">ItemDataLabel</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Sep 29 2014 08:08:34 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 13 2014 09:32:23 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
