@@ -18,7 +18,7 @@ troop.postpone(candystore, 'Disableable', function () {
     candystore.Disableable = self
         .addConstants(/** @lends candystore.Disableable */{
             /** @constant */
-            LAYER_NAME_DISABLEBABLE: 'disableable'
+            STATE_NAME_DISABLEBABLE: 'disableable'
         })
         .addPrivateMethods(/** @lends candystore.Disableable# */{
             /** @private */
@@ -41,15 +41,19 @@ troop.postpone(candystore, 'Disableable', function () {
             /**
              * Call from host's .afterStateOn
              */
-            afterStateOn: function () {
-                this._updateEnabledStyle();
+            afterStateOn: function (stateName) {
+                if (stateName === this.STATE_NAME_DISABLEBABLE) {
+                    this._updateEnabledStyle();
+                }
             },
 
             /**
              * Call from host's .afterStateOff
              */
-            afterStateOff: function () {
-                this._updateEnabledStyle();
+            afterStateOff: function (stateName) {
+                if (stateName === this.STATE_NAME_DISABLEBABLE) {
+                    this._updateEnabledStyle();
+                }
             },
 
             /**
@@ -57,7 +61,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             forceEnable: function () {
-                this.removeStateSource(this.LAYER_NAME_DISABLEBABLE);
+                this.removeStateSource(this.STATE_NAME_DISABLEBABLE);
                 return this;
             },
 
@@ -67,7 +71,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             enableBy: function (disablingSource) {
-                this.removeStateSource(this.LAYER_NAME_DISABLEBABLE, disablingSource);
+                this.removeStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -77,7 +81,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             disableBy: function (disablingSource) {
-                this.addStateSource(this.LAYER_NAME_DISABLEBABLE, disablingSource);
+                this.addStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -86,7 +90,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {boolean}
              */
             isDisabled: function () {
-                return this.getState(this.LAYER_NAME_DISABLEBABLE);
+                return this.getState(this.STATE_NAME_DISABLEBABLE);
             }
         });
 });

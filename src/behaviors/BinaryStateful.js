@@ -38,7 +38,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
                 if (sourceCountBefore === 0 && sourceCountAfter > 0) {
                     // source count increased to non-zero
-                    // state just became enabled
+                    // state just got turned on
                     this.afterStateOn(stateName);
                 }
             },
@@ -64,7 +64,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
                 if (sourceCountBefore > 0 && sourceCountAfter === 0) {
                     // source count decreased to zero
-                    // state just became disabled
+                    // state just got turned off
                     this.afterStateOff(stateName);
                 }
             }
@@ -115,7 +115,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             afterRemove: function () {
                 var that = this;
 
-                // disabling all parent imposed sources on all states
+                // removing all parent imposed sources from all states
                 this.binaryStates
                     .forEachItem(function (sources, stateName) {
                         that.removeStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
@@ -171,10 +171,10 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              * @returns {candystore.BinaryStateful}
              */
             addStateSource: function (stateName, sourceId) {
-                // enabling state for self
+                // adding source to self
                 this._addStateSource(stateName, sourceId);
 
-                // enabling state for descendants
+                // adding source to suitable descendants
                 this.getAllDescendants()
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
                         return descendant.binaryStates && descendant.hasState(stateName);
@@ -187,19 +187,19 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             /**
              * Removes the specified source from the specified state.
              * @param {string} stateName
-             * @param {string} sourceId
+             * @param {string} [sourceId]
              * @returns {candystore.BinaryStateful}
              */
             removeStateSource: function (stateName, sourceId) {
-                // enabling state for self
+                // removing source from self
                 this._removeStateSource(stateName, sourceId);
 
-                // enabling state for descendants
+                // removing source from suitable descendants
                 this.getAllDescendants()
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
                         return descendant.binaryStates && descendant.hasState(stateName);
                     })
-                    .callOnEachItem('_removeStateSource', stateName, this.SOURCE_PARENT_IMPOSED);
+                    .callOnEachItem('_removeStateSource', stateName, sourceId && this.SOURCE_PARENT_IMPOSED);
 
                 return this;
             }
