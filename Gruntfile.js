@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                 'src/namespace.js',
                 'src/utils/StringUtils.js',
                 'src/utils/Debouncer.js',
+                'src/behaviors/BinaryStateful.js',
                 'src/behaviors/Disableable.js',
                 'src/behaviors/Highlightable.js',
                 'src/behaviors/Expandable.js',
@@ -60,6 +61,7 @@ module.exports = function (grunt) {
                 'src/widgets/Dropdown.css',
                 'src/widgets/DropdownButton.css',
                 'src/widgets/DynamicImage.css',
+                'src/widgets/Page.css',
                 'src/widgets/form/Input.css',
                 'src/widgets/form/Form.css'
             ],
