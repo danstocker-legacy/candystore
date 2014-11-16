@@ -3,7 +3,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend();
+        self = base.extend(),
+        $document = $(document);
 
     /**
      * The Popup trait allows widgets to be opened and closed like popups.
@@ -48,14 +49,6 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             _hasClosest: function ($element, selector) {
                 return $element.closest(selector).length > 0;
-            },
-
-            /** @private */
-            _removeFromDom: function () {
-                var $element = $(this.getElement());
-                if ($element.length) {
-                    $element.remove();
-                }
             },
 
             /**
@@ -124,15 +117,16 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              * Call from host class' afterRemove.
              */
             afterRemove: function () {
+                // unsubscribing from relevant events
                 this.unsubscribeFrom(this.EVENT_POPUP_OUTSIDE_CLICK);
-                this._removeFromDom();
+                $document.off('click', this._onBodyClick);
             },
 
             /**
              * Call from host class' afterRender.
              */
             afterRender: function () {
-                $(document)
+                $document
                     .off('click', this._onBodyClick)
                     .on('click', this._onBodyClick);
             },
