@@ -120,8 +120,6 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                     dropdown
                         .addToParent(this)
                         .openPopup();
-
-                    event.stopPropagation();
                 }
 
                 this.clearNextOriginalEvent();
