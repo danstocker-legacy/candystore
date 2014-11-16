@@ -3,7 +3,9 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = shoeshine.Widget,
-        self = base.extend(className);
+        self = base.extend(className)
+            .addTraitAndExtend(candystore.BinaryStateful)
+            .addTrait(candystore.Disableable);
 
     /**
      * Creates a Page instance.
@@ -20,6 +22,8 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
      * MyPage.create().setRootWidget();
      * @class
      * @extends shoeshine.Widget
+     * @extends candystore.BinaryStateful
+     * @extends candystore.Disableable
      */
     candystore.Page = self
         .addPrivateMethods(/** @lends candystore.Page# */{
@@ -38,11 +42,14 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
             /** @ignore */
             init: function () {
                 base.init.call(this);
+                candystore.BinaryStateful.init.call(this);
+                candystore.Disableable.init.call(this);
             },
 
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
+                candystore.BinaryStateful.afterAdd.call(this);
 
                 var $body = $('body');
                 this._getPageCssClasses()
@@ -52,6 +59,7 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
             /** @ignore */
             afterRemove: function () {
                 base.afterRemove.call(this);
+                candystore.BinaryStateful.afterRemove.call(this);
 
                 var $body = $('body');
                 this._getPageCssClasses()
