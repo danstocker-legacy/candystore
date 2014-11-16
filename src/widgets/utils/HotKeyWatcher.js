@@ -23,12 +23,19 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
              * @ignore
              */
             onKeyDown: function (event) {
-                shoeshine.Widget.rootWidget
-                    .setNextOriginalEvent(event)
-                    .broadcastSync(this.EVENT_HOT_KEY_DOWN, {
-                        charCode: event.which
-                    })
-                    .clearNextOriginalEvent();
+                var targetTagName = event.target.tagName.toLowerCase(),
+                    inputTagNames = candystore.Input.inputTagNames,
+                    isTargetInput = inputTagNames[targetTagName] === targetTagName;
+
+                if (!isTargetInput) {
+                    // keydown was not triggered in an input element
+                    shoeshine.Widget.rootWidget
+                        .setNextOriginalEvent(event)
+                        .broadcastSync(this.EVENT_HOT_KEY_DOWN, {
+                            charCode: event.which
+                        })
+                        .clearNextOriginalEvent();
+                }
             }
         });
 });
