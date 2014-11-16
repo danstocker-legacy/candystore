@@ -5,6 +5,7 @@ troop.postpone(candystore, 'Button', function (ns, className) {
     var base = shoeshine.Widget,
         self = base.extend(className)
             .addTrait(shoeshine.JqueryWidget)
+            .addTraitAndExtend(candystore.BinaryStateful)
             .addTrait(candystore.Disableable);
 
     /**
@@ -20,6 +21,7 @@ troop.postpone(candystore, 'Button', function (ns, className) {
      * @class
      * @extends shoeshine.Widget
      * @extends shoeshine.JqueryWidget
+     * @extends candystore.BinaryStateful
      * @extends candystore.Disableable
      */
     candystore.Button = self
@@ -31,7 +33,20 @@ troop.postpone(candystore, 'Button', function (ns, className) {
             /** @ignore */
             init: function () {
                 base.init.call(this);
+                candystore.BinaryStateful.init.call(this);
                 candystore.Disableable.init.call(this);
+            },
+
+            /** @ignore */
+            afterAdd: function () {
+                base.afterAdd.call(this);
+                candystore.BinaryStateful.afterAdd.call(this);
+            },
+
+            /** @ignore */
+            afterRemove: function () {
+                base.afterRemove.call(this);
+                candystore.BinaryStateful.afterRemove.call(this);
             },
 
             /**

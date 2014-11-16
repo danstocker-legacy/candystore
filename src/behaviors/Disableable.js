@@ -12,9 +12,14 @@ troop.postpone(candystore, 'Disableable', function () {
      * Expects to be added to a host that also has the Renderable trait.
      * @class
      * @extends troop.Base
+     * @extends candystore.BinaryStateful
      * @extends shoeshine.Renderable
      */
     candystore.Disableable = self
+        .addConstants(/** @lends candystore.Disableable */{
+            /** @constant */
+            LAYER_NAME_DISABLEBABLE: 'disableable'
+        })
         .addPrivateMethods(/** @lends candystore.Disableable# */{
             /** @private */
             _updateEnabledStyle: function () {
@@ -28,21 +33,23 @@ troop.postpone(candystore, 'Disableable', function () {
             }
         })
         .addMethods(/** @lends candystore.Disableable# */{
-            /** Call from host's init. */
+            /** Call from host's .init. */
             init: function () {
-                /** @type {sntls.Collection} */
-                this.disablingSources = sntls.Collection.create();
-                this.forceEnable();
+                this.addStateLayer('disableable');
             },
 
             /**
-             * Releases all disabling sources at once.
-             * @returns {candystore.Disableable}
+             * Call from host's .afterEnableState
              */
-            forceEnable: function () {
-                this.disablingSources.clear();
+            afterEnableState: function () {
                 this._updateEnabledStyle();
-                return this;
+            },
+
+            /**
+             * Call from host's .afterDisableState
+             */
+            afterDisableState: function () {
+                this._updateEnabledStyle();
             },
 
             /**
@@ -51,8 +58,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             enableBy: function (disablingSource) {
-                this.disablingSources.deleteItem(disablingSource);
-                this._updateEnabledStyle();
+                this.disableState(this.LAYER_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -62,8 +68,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             disableBy: function (disablingSource) {
-                this.disablingSources.setItem(disablingSource, disablingSource);
-                this._updateEnabledStyle();
+                this.enableState(this.LAYER_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -72,7 +77,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {boolean}
              */
             isDisabled: function () {
-                return this.disablingSources.getKeyCount() > 0;
+                return this.getLayerState(this.LAYER_NAME_DISABLEBABLE);
             }
         });
 });
