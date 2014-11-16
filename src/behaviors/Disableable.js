@@ -35,20 +35,20 @@ troop.postpone(candystore, 'Disableable', function () {
         .addMethods(/** @lends candystore.Disableable# */{
             /** Call from host's .init. */
             init: function () {
-                this.addStateLayer('disableable');
+                this.addState('disableable');
             },
 
             /**
-             * Call from host's .afterEnableState
+             * Call from host's .afterStateOn
              */
-            afterEnableState: function () {
+            afterStateOn: function () {
                 this._updateEnabledStyle();
             },
 
             /**
-             * Call from host's .afterDisableState
+             * Call from host's .afterStateOff
              */
-            afterDisableState: function () {
+            afterStateOff: function () {
                 this._updateEnabledStyle();
             },
 
@@ -58,7 +58,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             enableBy: function (disablingSource) {
-                this.disableState(this.LAYER_NAME_DISABLEBABLE, disablingSource);
+                this.removeStateSource(this.LAYER_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -68,7 +68,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             disableBy: function (disablingSource) {
-                this.enableState(this.LAYER_NAME_DISABLEBABLE, disablingSource);
+                this.addStateSource(this.LAYER_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -77,7 +77,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {boolean}
              */
             isDisabled: function () {
-                return this.getLayerState(this.LAYER_NAME_DISABLEBABLE);
+                return this.getState(this.LAYER_NAME_DISABLEBABLE);
             }
         });
 });

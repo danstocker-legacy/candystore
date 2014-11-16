@@ -10,6 +10,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
      * A binary state may take two values: true or false, but that value is potentially controlled by
      * a number of sources. A particular binary state may be turned on by any of the sources,
      * however, all sources must release it to be turned off.
+     * TODO: Add unit tests.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -21,26 +22,13 @@ troop.postpone(candystore, 'BinaryStateful', function () {
         })
         .addPrivateMethods(/** @lends candystore.BinaryStateful# */{
             /**
-             * Does not consider previous state, only current one.
-             * @param {string} layerName
-             * @private
-             */
-            _updateStateLayer: function (layerName) {
-                if (this.getLayerState(layerName)) {
-                    this.afterEnableState(layerName);
-                } else {
-                    this.afterDisableState(layerName);
-                }
-            },
-
-            /**
-             * Enables state and calls after handler.
-             * @param {string} layerName
+             * Adds specified controlling source to the specified state.
+             * @param {string} stateName
              * @param {string} sourceId
              * @private
              */
-            _enableState: function (layerName, sourceId) {
-                var sources = this.getLayerSources(layerName),
+            _addStateSource: function (stateName, sourceId) {
+                var sources = this.getStateSources(stateName),
                     sourceCountBefore = sources.getKeyCount(),
                     sourceCountAfter;
 
@@ -51,18 +39,18 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 if (sourceCountBefore === 0 && sourceCountAfter > 0) {
                     // source count increased to non-zero
                     // state just became enabled
-                    this.afterEnableState(layerName);
+                    this.afterStateOn(stateName);
                 }
             },
 
             /**
-             * Enables state and calls after handler.
-             * @param {string} layerName
+             * Removes specified controlling source from the specified state.
+             * @param {string} stateName
              * @param {string} [sourceId]
              * @private
              */
-            _disableState: function (layerName, sourceId) {
-                var sources = this.getLayerSources(layerName),
+            _removeStateSource: function (stateName, sourceId) {
+                var sources = this.getStateSources(stateName),
                     sourceCountBefore = sources.getKeyCount(),
                     sourceCountAfter;
 
@@ -77,7 +65,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 if (sourceCountBefore > 0 && sourceCountAfter === 0) {
                     // source count decreased to zero
                     // state just became disabled
-                    this.afterDisableState(layerName);
+                    this.afterStateOff(stateName);
                 }
             }
         })
@@ -86,8 +74,11 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              * Call from host's init.
              */
             init: function () {
-                /** @type {sntls.Collection} */
-                this.binaryStateLayers = sntls.Collection.create();
+                /**
+                 * Holds a collection of controlling sources for each binary state.
+                 * @type {sntls.Collection}
+                 */
+                this.binaryStates = sntls.Collection.create();
             },
 
             /**
@@ -96,18 +87,24 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             afterAdd: function () {
                 var that = this;
 
-                // querying nearest parent and enabling all matching states
-                this.binaryStateLayers
-                    .forEachItem(function (states, layerName) {
-                        that._updateStateLayer(layerName);
+                this.binaryStates
+                    .forEachItem(function (sources, stateName) {
+                        // initializing binary state
+                        if (that.getState(stateName)) {
+                            that.afterStateOn(stateName);
+                        } else {
+                            that.afterStateOff(stateName);
+                        }
 
+                        // querying nearest parent for matching state
                         var parent = that.getAncestor(function (widget) {
-                            var binaryStateLayers = widget.binaryStateLayers;
-                            return binaryStateLayers && that.hasStateLayer(layerName);
+                            var binaryStateLayers = widget.binaryStates;
+                            return binaryStateLayers && that.hasState(stateName);
                         });
 
-                        if (parent && parent.getLayerState(layerName)) {
-                            that.enableState(layerName, that.SOURCE_PARENT_IMPOSED);
+                        if (parent && parent.getState(stateName)) {
+                            // enabling parent with matching binary state
+                            that.addStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
                         }
                     });
             },
@@ -118,97 +115,105 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             afterRemove: function () {
                 var that = this;
 
-                // disabling all parent imposed sources on all layers
-                this.binaryStateLayers
-                    .forEachItem(function (sources, layerName) {
-                        that.disableState(layerName, that.SOURCE_PARENT_IMPOSED);
+                // disabling all parent imposed sources on all states
+                this.binaryStates
+                    .forEachItem(function (sources, stateName) {
+                        that.removeStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
                     });
             },
 
             /**
-             * @param {string} layerName
+             * Adds a state to the widget. Only those states may be controlled on a widget
+             * that have been added previously.
+             * @param {string} stateName
              * @returns {candystore.BinaryStateful}
              */
-            addStateLayer: function (layerName) {
-                var binaryStateLayers = this.binaryStateLayers;
-                if (!binaryStateLayers.getItem(layerName)) {
-                    binaryStateLayers.setItem(layerName, sntls.Collection.create());
+            addState: function (stateName) {
+                var binaryStateLayers = this.binaryStates;
+                if (!binaryStateLayers.getItem(stateName)) {
+                    binaryStateLayers.setItem(stateName, sntls.Collection.create());
                 }
                 return this;
             },
 
             /**
-             * @param {string} layerName
+             * Tells whether the widget has the specified state.
+             * @param {string} stateName
              * @returns {boolean}
              */
-            hasStateLayer: function (layerName) {
-                return !!this.binaryStateLayers.getItem(layerName);
+            hasState: function (stateName) {
+                return !!this.binaryStates.getItem(stateName);
             },
 
             /**
-             * @param {string} layerName
+             * Retrieves a collection of controlling states for the specified state.
+             * @param {string} stateName
              * @returns {sntls.Collection}
              */
-            getLayerSources: function (layerName) {
-                return this.binaryStateLayers.getItem(layerName);
+            getStateSources: function (stateName) {
+                return this.binaryStates.getItem(stateName);
             },
 
             /**
-             * @param {string} layerName
+             * Retrieves the (aggregated) value for the specified state. The value returned is true
+             * when the state has at least one controlling source, and false when there are none.
+             * @param {string} stateName
              * @returns {boolean}
              */
-            getLayerState: function (layerName) {
-                return this.getLayerSources(layerName).getKeyCount() > 0;
+            getState: function (stateName) {
+                return this.getStateSources(stateName).getKeyCount() > 0;
             },
 
             /**
-             * @param {string} layerName
+             * Adds the specified source to the specified state.
+             * @param {string} stateName
              * @param {string} sourceId
              * @returns {candystore.BinaryStateful}
              */
-            enableState: function (layerName, sourceId) {
+            addStateSource: function (stateName, sourceId) {
                 // enabling state for self
-                this._enableState(layerName, sourceId);
+                this._addStateSource(stateName, sourceId);
 
                 // enabling state for descendants
                 this.getAllDescendants()
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
-                        return descendant.binaryStateLayers && descendant.hasStateLayer(layerName);
+                        return descendant.binaryStates && descendant.hasState(stateName);
                     })
-                    .callOnEachItem('_enableState', layerName, this.SOURCE_PARENT_IMPOSED);
+                    .callOnEachItem('_addStateSource', stateName, this.SOURCE_PARENT_IMPOSED);
 
                 return this;
             },
 
             /**
-             * @param {string} layerName
+             * Removes the specified source from the specified state.
+             * @param {string} stateName
              * @param {string} sourceId
              * @returns {candystore.BinaryStateful}
              */
-            disableState: function (layerName, sourceId) {
+            removeStateSource: function (stateName, sourceId) {
                 // enabling state for self
-                this._disableState(layerName, sourceId);
+                this._removeStateSource(stateName, sourceId);
 
                 // enabling state for descendants
                 this.getAllDescendants()
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
-                        return descendant.binaryStateLayers && descendant.hasStateLayer(layerName);
+                        return descendant.binaryStates && descendant.hasState(stateName);
                     })
-                    .callOnEachItem('_disableState', layerName, this.SOURCE_PARENT_IMPOSED);
+                    .callOnEachItem('_removeStateSource', stateName, this.SOURCE_PARENT_IMPOSED);
 
                 return this;
             }
         });
 
     /**
-     * @name candystore.BinaryStateful#afterEnableState
+     * @name candystore.BinaryStateful#afterStateOn
      * @function
-     * @param {string} layerName
+     * @param {string} stateName
      */
 
     /**
-     * @name candystore.BinaryStateful#afterDisableState
+     * @name candystore.BinaryStateful#afterStateOff
      * @function
-     * @param {string} layerName
+     * @param {string} stateName
      */
 });
