@@ -62,7 +62,8 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
 
                 this
                     .elevateMethod('onFocusIn')
-                    .elevateMethod('onFocusOut');
+                    .elevateMethod('onFocusOut')
+                    .setCanSubmit(textInputType !== 'textarea');
             },
 
             /** @ignore */
