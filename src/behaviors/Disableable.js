@@ -53,6 +53,15 @@ troop.postpone(candystore, 'Disableable', function () {
             },
 
             /**
+             * Releases all disabling sources at once.
+             * @returns {candystore.Disableable}
+             */
+            forceEnable: function () {
+                this.removeStateSource(this.LAYER_NAME_DISABLEBABLE);
+                return this;
+            },
+
+            /**
              * Enables the instance by the specified source.
              * @param {string} disablingSource
              * @returns {candystore.Disableable}
