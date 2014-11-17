@@ -10,7 +10,6 @@ troop.postpone(candystore, 'BinaryStateful', function () {
      * A binary state may take two values: true or false, but that value is potentially controlled by
      * a number of sources. A particular binary state may be turned on by any of the sources,
      * however, all sources must release it to be turned off.
-     * TODO: Add unit tests.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -83,6 +82,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
             /**
              * Call from host's .afterAdd
+             * TODO: Break out contents into private method(s), add unit tests.
              */
             afterAdd: function () {
                 var that = this;
@@ -111,6 +111,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
             /**
              * Call from host's .afterRemove
+             * TODO: Break out contents into private method(s), add unit tests.
              */
             afterRemove: function () {
                 var that = this;
