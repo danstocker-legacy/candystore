@@ -67,6 +67,7 @@ module.exports = function (grunt) {
             ],
 
             test: [
+                'src/utils/jsTestDriver.conf'
             ],
 
             globals: {
@@ -212,8 +213,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-yui-compressor');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    //    grunt.registerTask('build', ['test', 'concat:js', 'concat:css', 'copy:js', 'copy:css', 'min:js', 'min:css']);
-    grunt.registerTask('build', ['concat:js', 'concat:css', 'copy:js', 'copy:css', 'min', 'cssmin']);
+    grunt.registerTask('build', ['test', 'concat:js', 'concat:css', 'copy:js', 'copy:css', 'min', 'cssmin']);
 
     grunt.registerTask('default', ['test']);
 };
