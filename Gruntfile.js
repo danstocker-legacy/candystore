@@ -67,7 +67,8 @@ module.exports = function (grunt) {
             ],
 
             test: [
-                'src/utils/jsTestDriver.conf'
+                'src/utils/jsTestDriver.conf',
+                'src/behaviors/jsTestDriver.conf'
             ],
 
             globals: {
