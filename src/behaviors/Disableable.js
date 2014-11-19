@@ -6,10 +6,11 @@ troop.postpone(candystore, 'Disableable', function () {
         self = base.extend();
 
     /**
-     * The Disableable trait endows Renderable classes with an enabled - disabled state.
+     * The Disableable trait endows Widget classes with an enabled - disabled state.
      * A Disableable may be disabled by multiple sources. All such sources have to
      * re-enable the host to be fully enabled again.
      * Expects to be added to Widget instances.
+     * Expects the host to have the BinaryStateful trait applied.
      * @class
      * @extends troop.Base
      * @extends candystore.BinaryStateful
@@ -18,7 +19,7 @@ troop.postpone(candystore, 'Disableable', function () {
     candystore.Disableable = self
         .addConstants(/** @lends candystore.Disableable */{
             /** @constant */
-            STATE_NAME_DISABLEBABLE: 'disableable'
+            STATE_NAME_DISABLEBABLE: 'state-disableable'
         })
         .addPrivateMethods(/** @lends candystore.Disableable# */{
             /** @private */
@@ -35,21 +36,17 @@ troop.postpone(candystore, 'Disableable', function () {
         .addMethods(/** @lends candystore.Disableable# */{
             /** Call from host's .init. */
             init: function () {
-                this.addState('disableable');
+                this.addState(this.STATE_NAME_DISABLEBABLE);
             },
 
-            /**
-             * Call from host's .afterStateOn
-             */
+            /** Call from host's .afterStateOn */
             afterStateOn: function (stateName) {
                 if (stateName === this.STATE_NAME_DISABLEBABLE) {
                     this._updateEnabledStyle();
                 }
             },
 
-            /**
-             * Call from host's .afterStateOff
-             */
+            /** Call from host's .afterStateOff */
             afterStateOff: function (stateName) {
                 if (stateName === this.STATE_NAME_DISABLEBABLE) {
                     this._updateEnabledStyle();
@@ -57,11 +54,12 @@ troop.postpone(candystore, 'Disableable', function () {
             },
 
             /**
-             * Releases all disabling sources at once.
+             * Disables the instance by the specified source.
+             * @param {string} disablingSource
              * @returns {candystore.Disableable}
              */
-            forceEnable: function () {
-                this.removeStateSource(this.STATE_NAME_DISABLEBABLE);
+            disableBy: function (disablingSource) {
+                this.addStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -76,12 +74,11 @@ troop.postpone(candystore, 'Disableable', function () {
             },
 
             /**
-             * Disables the instance by the specified source.
-             * @param {string} disablingSource
+             * Releases all disabling sources at once.
              * @returns {candystore.Disableable}
              */
-            disableBy: function (disablingSource) {
-                this.addStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
+            forceEnable: function () {
+                this.removeStateSource(this.STATE_NAME_DISABLEBABLE);
                 return this;
             },
 
