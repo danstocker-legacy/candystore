@@ -7,6 +7,7 @@ troop.postpone(candystore, 'DataListItem', function () {
 
     /**
      * The DataListItem trait associates widgets with an item key.
+     * Any widget that to be used as an item in a DataList is expected to have tgis trait.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget

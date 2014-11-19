@@ -14,6 +14,7 @@ troop.postpone(candystore, 'ItemDataLabel', function (ns, className) {
      */
 
     /**
+     * General DataLabel to be used as a list item.
      * @class
      * @extends candystore.DataLabel
      * @extends candystore.DataListItem

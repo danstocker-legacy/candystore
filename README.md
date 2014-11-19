@@ -20,7 +20,8 @@ Supported widgets
 
 ### Basic widgets
 
-- Label, HtmlLabel, DataLabel
+- Label, HtmlLabel, DataLabel, ItemDataLabel
+- Link, DataLink
 - Button, TextButton
 - Input, TextInput, DataTextInput, PasswordInput
 - Image, DataImage
@@ -30,6 +31,8 @@ Supported widgets
 
 - List, DataList
 - Form, FormField
+- Flow
+- Page
 
 ### Dropdowns
 
@@ -39,9 +42,15 @@ Supported widgets
 ### Widget behaviors:
 
 - Popup, AlignedPopup,
-- Disableable, Highlightable
+- BinaryStateful, Disableable, Highlightable, Expandable
 - EntityWidget, FieldBound,
 - Option, OptionList
+- DataListItem
+
+### Widget utilities:
+
+- HotKeyWatcher
+- ResizeWatcher
 
 IE9
 ---
