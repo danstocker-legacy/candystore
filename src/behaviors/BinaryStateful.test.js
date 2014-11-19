@@ -41,6 +41,66 @@
             "should initialize states collection as empty");
     });
 
+    test("Addition handler", function () {
+        expect(5);
+
+        var parent = BinaryStateful.create()
+                .addState('foo')
+                .addState('bar')
+                .setRootWidget(),
+            child = BinaryStateful.create()
+                .addState('foo');
+
+        parent.addMocks({
+            getState: function () {
+                ok(true, "should fetch parent's state");
+                return true;
+            }
+        });
+
+        child.addMocks({
+            getState: function () {
+                ok(true, "should fetch current state");
+                return true;
+            },
+
+            afterStateOn: function (stateName) {
+                equal(stateName, 'foo', "should call state handler");
+            },
+
+            addStateSource: function (stateName, sourceId) {
+                equal(stateName, 'foo', "should add source to matching state");
+                equal(sourceId, candystore.BinaryStateful.SOURCE_PARENT_IMPOSED,
+                    "should add parent imposed source to state");
+            }
+        });
+
+        child.addToParent(parent);
+    });
+
+    test("Removal handler", function () {
+        var parent = BinaryStateful.create()
+                .setRootWidget(),
+            child = BinaryStateful.create()
+                .addState('foo')
+                .addState('bar')
+                .addToParent(parent),
+            removedStates = [];
+
+        child.addMocks({
+            removeStateSource: function (stateName, sourceId) {
+                removedStates.push([stateName, sourceId]);
+            }
+        });
+
+        child.removeFromParent();
+
+        deepEqual(removedStates, [
+            ['foo', candystore.BinaryStateful.SOURCE_PARENT_IMPOSED],
+            ['bar', candystore.BinaryStateful.SOURCE_PARENT_IMPOSED]
+        ], "should remove parent imposed source from all states");
+    });
+
     test("State addition", function () {
         var binaryStateful = BinaryStateful.create();
 

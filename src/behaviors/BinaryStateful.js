@@ -82,7 +82,6 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
             /**
              * Call from host's .afterAdd
-             * TODO: Break out contents into private method(s), add unit tests.
              */
             afterAdd: function () {
                 var that = this;
@@ -98,8 +97,8 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
                         // querying nearest parent for matching state
                         var parent = that.getAncestor(function (widget) {
-                            var binaryStateLayers = widget.binaryStates;
-                            return binaryStateLayers && that.hasState(stateName);
+                            var binaryStates = widget.binaryStates;
+                            return binaryStates && widget.hasState(stateName);
                         });
 
                         if (parent && parent.getState(stateName)) {
@@ -111,7 +110,6 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
             /**
              * Call from host's .afterRemove
-             * TODO: Break out contents into private method(s), add unit tests.
              */
             afterRemove: function () {
                 var that = this;
