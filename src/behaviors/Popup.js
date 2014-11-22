@@ -51,6 +51,14 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                 return $element.closest(selector).length > 0;
             },
 
+            /** @private */
+            _removeFromDom: function () {
+                var $element = $(this.getElement());
+                if ($element.length) {
+                    $element.remove();
+                }
+            },
+
             /**
              * @param {jQuery} $element
              * @returns {boolean}
@@ -117,8 +125,13 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              * Call from host class' afterRemove.
              */
             afterRemove: function () {
-                // unsubscribing from relevant events
                 this.unsubscribeFrom(this.EVENT_POPUP_OUTSIDE_CLICK);
+
+                // removing DOM in case popup was removed via its parent with
+                // which does not contain the DOM of the popup
+                this._removeFromDom();
+
+                // unsubscribing from global click event
                 $document.off('click', this._onBodyClick);
             },
 
