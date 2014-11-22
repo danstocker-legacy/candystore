@@ -42,53 +42,58 @@
     });
 
     test("Addition handler", function () {
-        expect(5);
+        expect(6);
 
         var parent = BinaryStateful.create()
-                .addState('foo')
-                .addState('bar')
+                .addBinaryState('foo')
+                .addBinaryState('bar')
                 .setRootWidget(),
             child = BinaryStateful.create()
-                .addState('foo');
+                .addBinaryState('foo');
 
         parent.addMocks({
-            getState: function () {
+            isStateOn: function () {
                 ok(true, "should fetch parent's state");
                 return true;
             }
         });
 
+        candystore.BinaryState.addMocks({
+            addStateAsSource: function (state, sourceId) {
+                ok(state.isA(candystore.BinaryState), "should add binary state as source");
+                equal(state.stateName, 'foo', "should pass state with matching state name");
+                equal(sourceId, candystore.BinaryStateful.SOURCE_PARENT_IMPOSED,
+                    "should add parent imposed source to state");
+            }
+        });
+
         child.addMocks({
-            getState: function () {
+            isStateOn: function () {
                 ok(true, "should fetch current state");
                 return true;
             },
 
             afterStateOn: function (stateName) {
                 equal(stateName, 'foo', "should call state handler");
-            },
-
-            addStateSource: function (stateName, sourceId) {
-                equal(stateName, 'foo', "should add source to matching state");
-                equal(sourceId, candystore.BinaryStateful.SOURCE_PARENT_IMPOSED,
-                    "should add parent imposed source to state");
             }
         });
 
         child.addToParent(parent);
+
+        candystore.BinaryState.removeMocks();
     });
 
     test("Removal handler", function () {
         var parent = BinaryStateful.create()
                 .setRootWidget(),
             child = BinaryStateful.create()
-                .addState('foo')
-                .addState('bar')
+                .addBinaryState('foo')
+                .addBinaryState('bar')
                 .addToParent(parent),
             removedStates = [];
 
         child.addMocks({
-            removeStateSource: function (stateName, sourceId) {
+            removeBinaryStateSource: function (stateName, sourceId) {
                 removedStates.push([stateName, sourceId]);
             }
         });
@@ -104,45 +109,35 @@
     test("State addition", function () {
         var binaryStateful = BinaryStateful.create();
 
-        strictEqual(binaryStateful.addState('foo'), binaryStateful, "should be chainable");
+        strictEqual(binaryStateful.addBinaryState('foo'), binaryStateful, "should be chainable");
 
-        var sources = binaryStateful.binaryStates.getItem('foo');
+        var state = binaryStateful.binaryStates.getItem('foo');
 
-        ok(sources.isA(sntls.Collection),
-            "should add sources collection to binaryStates by specified name");
-        equal(sources.getKeyCount(), 0,
-            "should initialize sources collection as empty");
+        ok(state.isA(candystore.BinaryState),
+            "should add BinaryState instance to binaryStates by specified name");
 
-        binaryStateful.addState('foo');
+        binaryStateful.addBinaryState('foo');
 
-        strictEqual(binaryStateful.binaryStates.getItem('foo'), sources,
+        strictEqual(binaryStateful.binaryStates.getItem('foo'), state,
             "should not overwrite sources collection on subsequent addition");
     });
 
-    test("State presence tester", function () {
+    test("State getter", function () {
         var binaryStateful = BinaryStateful.create()
-            .addState('foo');
+            .addBinaryState('foo');
 
-        ok(!binaryStateful.hasState('bar'), "should return falsey for absent state");
-        ok(binaryStateful.hasState('foo'), "should return truthy for state already added");
-    });
-
-    test("State sources getter", function () {
-        var binaryStateful = BinaryStateful.create()
-            .addState('foo');
-
-        equal(typeof binaryStateful.getStateSources('bar'), 'undefined',
+        equal(typeof binaryStateful.getBinaryState('bar'), 'undefined',
             "should return undefined for absent state");
-        strictEqual(binaryStateful.getStateSources('foo'),
+        strictEqual(binaryStateful.getBinaryState('foo'),
             binaryStateful.binaryStates.getItem('foo'),
-            "should return sources collection for specified state");
+            "should return BinaryState instance for state already added");
     });
 
     test("Source addition", function () {
-        expect(4);
+        expect(5);
 
         var binaryStateful = BinaryStateful.create()
-            .addState('foo');
+            .addBinaryState('foo');
 
         binaryStateful.addMocks({
             afterStateOn: function (stateName) {
@@ -150,23 +145,33 @@
             }
         });
 
+        var i = 0;
+        candystore.BinaryState.addMocks({
+            addSource: function (sourceId) {
+                equal(this.stateName, 'foo', "should add source to selected state");
+                equal(sourceId, 'hello', "should add specified source to state");
+            },
+
+            getSourceCount: function () {
+                return i++;
+            }
+        });
+
         raises(function () {
-            binaryStateful.addStateSource('bar', 'hello');
+            binaryStateful.addBinaryStateSource('bar', 'hello');
         }, "should raise exception on attempt to add to absent state");
 
-        strictEqual(binaryStateful.addStateSource('foo', 'hello'), binaryStateful,
+        strictEqual(binaryStateful.addBinaryStateSource('foo', 'hello'), binaryStateful,
             "should be chainable");
-        equal(binaryStateful.binaryStates.getItem('foo').items, {
-                hello: true
-            },
-            "should set source in sources collection");
+
+        candystore.BinaryState.removeMocks();
     });
 
     test("Source removal", function () {
         expect(5);
 
         var binaryStateful = BinaryStateful.create()
-            .addState('foo');
+            .addBinaryState('foo');
 
         binaryStateful.addMocks({
             afterStateOff: function (stateName) {
@@ -174,36 +179,42 @@
             }
         });
 
-        binaryStateful.addStateSource('foo', 'hello');
+        binaryStateful.addBinaryStateSource('foo', 'hello');
+
+        var i = 1;
+        candystore.BinaryState.addMocks({
+            removeSource: function (sourceId) {
+                equal(this.stateName, 'foo', "should remove source to selected state");
+                equal(sourceId, 'world', "should remove specified source to state");
+            },
+
+            getSourceCount: function () {
+                return i--;
+            }
+        });
 
         raises(function () {
-            binaryStateful.removeStateSource('bar', 'hello');
+            binaryStateful.removeBinaryStateSource('bar', 'hello');
         }, "should raise exception on attempt to add to absent state");
 
-        strictEqual(binaryStateful.removeStateSource('foo', 'world'), binaryStateful,
+        strictEqual(binaryStateful.removeBinaryStateSource('foo', 'world'), binaryStateful,
             "should be chainable");
-        equal(binaryStateful.binaryStates.getItem('foo').items, {
-                hello: true
-            },
-            "should not change sources collection when attempting to remove absent source");
 
-        binaryStateful.removeStateSource('foo', 'hello');
-        equal(binaryStateful.binaryStates.getItem('foo').items, {},
-            "should remove specified source from collection");
+        candystore.BinaryState.removeMocks();
     });
 
     test("State value getter", function () {
         var binaryStateful = BinaryStateful.create()
-            .addState('foo');
+            .addBinaryState('foo');
 
         raises(function () {
-            binaryStateful.getState('bar');
+            binaryStateful.isStateOn('bar');
         }, "should raise exception on absent state");
 
-        ok(!binaryStateful.getState('foo'), "should return falsey on zero associated sources");
+        ok(!binaryStateful.isStateOn('foo'), "should return falsey on zero associated sources");
 
-        binaryStateful.addStateSource('foo', 'hello');
+        binaryStateful.addBinaryStateSource('foo', 'hello');
 
-        ok(binaryStateful.getState('foo'), "should return truthy on positive number of sources");
+        ok(binaryStateful.isStateOn('foo'), "should return truthy on positive number of sources");
     });
 }());

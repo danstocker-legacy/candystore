@@ -36,7 +36,7 @@ troop.postpone(candystore, 'Disableable', function () {
         .addMethods(/** @lends candystore.Disableable# */{
             /** Call from host's .init. */
             init: function () {
-                this.addState(this.STATE_NAME_DISABLEBABLE);
+                this.addBinaryState(this.STATE_NAME_DISABLEBABLE, true);
             },
 
             /** Call from host's .afterStateOn */
@@ -59,7 +59,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             disableBy: function (disablingSource) {
-                this.addStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
+                this.addBinaryStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -69,7 +69,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             enableBy: function (disablingSource) {
-                this.removeStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
+                this.removeBinaryStateSource(this.STATE_NAME_DISABLEBABLE, disablingSource);
                 return this;
             },
 
@@ -78,7 +78,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {candystore.Disableable}
              */
             forceEnable: function () {
-                this.removeStateSource(this.STATE_NAME_DISABLEBABLE);
+                this.removeBinaryStateSource(this.STATE_NAME_DISABLEBABLE);
                 return this;
             },
 
@@ -87,7 +87,7 @@ troop.postpone(candystore, 'Disableable', function () {
              * @returns {boolean}
              */
             isDisabled: function () {
-                return this.getState(this.STATE_NAME_DISABLEBABLE);
+                return this.isStateOn(this.STATE_NAME_DISABLEBABLE);
             }
         });
 });

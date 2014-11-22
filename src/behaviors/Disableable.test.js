@@ -28,11 +28,16 @@
             });
 
     test("Instantiation", function () {
-        var disableable = Disableable.create();
-        deepEqual(disableable.binaryStates.items, {
-                'state-disableable': sntls.Collection.create()
-            },
-            "should initialize source collection for disabled");
+        Disableable.addMocks({
+            addBinaryState: function (stateName) {
+                equal(stateName, candystore.Disableable.STATE_NAME_DISABLEBABLE,
+                    "should add disableable state to instance");
+            }
+        });
+
+        Disableable.create();
+
+        Disableable.removeMocks();
     });
 
     test("State on handler", function () {
@@ -68,63 +73,70 @@
     });
 
     test("Disabling", function () {
+        expect(3);
+
         var disableable = Disableable.create();
 
+        disableable.addMocks({
+            addBinaryStateSource: function (stateName, sourceId) {
+                equal(stateName, candystore.Disableable.STATE_NAME_DISABLEBABLE,
+                    "should add to state by specified name");
+                equal(sourceId, 'foo', "should pass specified source ID to state");
+            }
+        });
+
         strictEqual(disableable.disableBy('foo'), disableable, "should be chainable");
-
-        deepEqual(
-            disableable.getStateSources(candystore.Disableable.STATE_NAME_DISABLEBABLE).items,
-            {
-                'foo': true
-            },
-            "should set state source");
-
-        disableable.disableBy('bar');
-
-        deepEqual(
-            disableable.getStateSources(candystore.Disableable.STATE_NAME_DISABLEBABLE).items,
-            {
-                'foo': true,
-                'bar': true
-            },
-            "should set state source");
     });
 
     test("Disabling", function () {
-        var disableable = Disableable.create()
-            .disableBy('foo')
-            .disableBy('bar');
+        expect(3);
+
+        var disableable = Disableable.create();
+
+        disableable.addMocks({
+            removeBinaryStateSource: function (stateName, sourceId) {
+                equal(stateName, candystore.Disableable.STATE_NAME_DISABLEBABLE,
+                    "should remove from state by specified name");
+                equal(sourceId, 'foo', "should pass specified source ID to state");
+            }
+        });
 
         strictEqual(disableable.enableBy('foo'), disableable, "should be chainable");
-
-        deepEqual(
-            disableable.getStateSources(candystore.Disableable.STATE_NAME_DISABLEBABLE).items,
-            {
-                'bar': true
-            },
-            "should remove specified state source");
     });
 
     test("Force enable", function () {
-        var disableable = Disableable.create()
-            .disableBy('foo')
-            .disableBy('bar');
+        expect(3);
+
+        var disableable = Disableable.create();
+
+        disableable.addMocks({
+            removeBinaryStateSource: function (stateName, sourceId) {
+                equal(stateName, candystore.Disableable.STATE_NAME_DISABLEBABLE,
+                    "should remove from state by specified name");
+                equal(typeof sourceId, 'undefined', "should pass undefined as source ID");
+            }
+        });
 
         strictEqual(disableable.forceEnable(), disableable, "should be chainable");
-
-        deepEqual(
-            disableable.getStateSources(candystore.Disableable.STATE_NAME_DISABLEBABLE).items,
-            {},
-            "should remove all state sources");
     });
 
     test("Disabled state tester", function () {
-        var disableable = Disableable.create();
+        expect(2);
 
-        ok(!disableable.isDisabled(), "should return false for zero disabling source");
+        var disableable = Disableable.create(),
+            result;
 
-        disableable.disableBy('foo');
+        disableable.addMocks({
+            isStateOn: function (stateName) {
+                equal(stateName, candystore.Disableable.STATE_NAME_DISABLEBABLE,
+                    "should remove from state by specified name");
+                return result;
+            }
+        });
 
-        ok(disableable.isDisabled(), "should return true for non-zero disabling source");
+        strictEqual(
+            disableable.isDisabled(),
+            result,
+            "should return value returned by isStateOn");
     });
 }());

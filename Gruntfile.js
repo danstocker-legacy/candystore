@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                 'src/namespace.js',
                 'src/utils/StringUtils.js',
                 'src/utils/Debouncer.js',
+                'src/utils/BinaryState.js',
                 'src/behaviors/BinaryStateful.js',
                 'src/behaviors/Disableable.js',
                 'src/behaviors/Highlightable.js',

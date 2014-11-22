@@ -23,17 +23,21 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             /**
              * Adds specified controlling source to the specified state.
              * @param {string} stateName
-             * @param {string} sourceId
+             * @param {string|candystore.BinaryState} sourceId
              * @private
              */
             _addStateSource: function (stateName, sourceId) {
-                var sources = this.getStateSources(stateName),
-                    sourceCountBefore = sources.getKeyCount(),
+                var state = this.getBinaryState(stateName),
+                    sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
-                sources.setItem(sourceId, true);
+                if (candystore.BinaryState.isBaseOf(sourceId)) {
+                    state.addStateAsSource(sourceId, this.SOURCE_PARENT_IMPOSED);
+                } else {
+                    state.addSource(sourceId);
+                }
 
-                sourceCountAfter = sources.getKeyCount();
+                sourceCountAfter = state.getSourceCount();
 
                 if (sourceCountBefore === 0 && sourceCountAfter > 0) {
                     // source count increased to non-zero
@@ -49,17 +53,13 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              * @private
              */
             _removeStateSource: function (stateName, sourceId) {
-                var sources = this.getStateSources(stateName),
-                    sourceCountBefore = sources.getKeyCount(),
+                var state = this.getBinaryState(stateName),
+                    sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
-                if (typeof sourceId === 'string') {
-                    sources.deleteItem(sourceId);
-                } else {
-                    sources.clear();
-                }
+                state.removeSource(sourceId);
 
-                sourceCountAfter = sources.getKeyCount();
+                sourceCountAfter = state.getSourceCount();
 
                 if (sourceCountBefore > 0 && sourceCountAfter === 0) {
                     // source count decreased to zero
@@ -74,7 +74,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              */
             init: function () {
                 /**
-                 * Holds a collection of controlling sources for each binary state.
+                 * Holds a collection of BinaryState instances for each binary state.
                  * @type {sntls.Collection}
                  */
                 this.binaryStates = sntls.Collection.create();
@@ -89,7 +89,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 this.binaryStates
                     .forEachItem(function (sources, stateName) {
                         // initializing binary state
-                        if (that.getState(stateName)) {
+                        if (that.isStateOn(stateName)) {
                             that.afterStateOn(stateName);
                         } else {
                             that.afterStateOff(stateName);
@@ -98,12 +98,15 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                         // querying nearest parent for matching state
                         var parent = that.getAncestor(function (widget) {
                             var binaryStates = widget.binaryStates;
-                            return binaryStates && widget.hasState(stateName);
+                            return binaryStates && widget.getBinaryState(stateName);
                         });
 
-                        if (parent && parent.getState(stateName)) {
+                        if (parent && parent.isStateOn(stateName)) {
                             // enabling parent with matching binary state
-                            that.addStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
+                            that.getBinaryState(stateName)
+                                .addStateAsSource(
+                                    parent.getBinaryState(stateName),
+                                    that.SOURCE_PARENT_IMPOSED);
                         }
                     });
             },
@@ -117,7 +120,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 // removing all parent imposed sources from all states
                 this.binaryStates
                     .forEachItem(function (sources, stateName) {
-                        that.removeStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
+                        that.removeBinaryStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
                     });
             },
 
@@ -125,31 +128,25 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              * Adds a state to the widget. Only those states may be controlled on a widget
              * that have been added previously.
              * @param {string} stateName
+             * @param {boolean} [inheritsFromParent]
              * @returns {candystore.BinaryStateful}
              */
-            addState: function (stateName) {
+            addBinaryState: function (stateName, inheritsFromParent) {
                 var binaryStateLayers = this.binaryStates;
                 if (!binaryStateLayers.getItem(stateName)) {
-                    binaryStateLayers.setItem(stateName, sntls.Collection.create());
+                    binaryStateLayers.setItem(
+                        stateName,
+                        stateName.toBinaryState()
+                            .setIsComposable(inheritsFromParent));
                 }
                 return this;
             },
 
             /**
-             * Tells whether the widget has the specified state.
              * @param {string} stateName
-             * @returns {boolean}
+             * @returns {candystore.BinaryState}
              */
-            hasState: function (stateName) {
-                return !!this.binaryStates.getItem(stateName);
-            },
-
-            /**
-             * Retrieves a collection of controlling states for the specified state.
-             * @param {string} stateName
-             * @returns {sntls.Collection}
-             */
-            getStateSources: function (stateName) {
+            getBinaryState: function (stateName) {
                 return this.binaryStates.getItem(stateName);
             },
 
@@ -159,26 +156,27 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              * @param {string} stateName
              * @returns {boolean}
              */
-            getState: function (stateName) {
-                return this.getStateSources(stateName).getKeyCount() > 0;
+            isStateOn: function (stateName) {
+                return this.binaryStates.getItem(stateName).isStateOn();
             },
 
             /**
              * Adds the specified source to the specified state.
+             * TODO: Add unit test for _addStateSource arguments.
              * @param {string} stateName
              * @param {string} sourceId
              * @returns {candystore.BinaryStateful}
              */
-            addStateSource: function (stateName, sourceId) {
+            addBinaryStateSource: function (stateName, sourceId) {
                 // adding source to self
                 this._addStateSource(stateName, sourceId);
 
                 // adding source to suitable descendants
                 this.getAllDescendants()
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
-                        return descendant.binaryStates && descendant.hasState(stateName);
+                        return descendant.binaryStates && descendant.getBinaryState(stateName);
                     })
-                    .callOnEachItem('_addStateSource', stateName, this.SOURCE_PARENT_IMPOSED);
+                    .callOnEachItem('_addStateSource', stateName, this.getBinaryState(stateName));
 
                 return this;
             },
@@ -189,14 +187,14 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              * @param {string} [sourceId]
              * @returns {candystore.BinaryStateful}
              */
-            removeStateSource: function (stateName, sourceId) {
+            removeBinaryStateSource: function (stateName, sourceId) {
                 // removing source from self
                 this._removeStateSource(stateName, sourceId);
 
                 // removing source from suitable descendants
                 this.getAllDescendants()
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
-                        return descendant.binaryStates && descendant.hasState(stateName);
+                        return descendant.binaryStates && descendant.getBinaryState(stateName);
                     })
                     .callOnEachItem('_removeStateSource', stateName, sourceId && this.SOURCE_PARENT_IMPOSED);
 
