@@ -38,18 +38,18 @@ troop.postpone(candystore, 'BinaryState', function () {
                 this.stateSources = sntls.Collection.create();
 
                 /**
-                 * Whether state can be composed of other states of the same kind.
+                 * Whether state can cascade, ie. be influenced by other states.
                  * @type {boolean}
                  */
-                this.isComposable = false;
+                this.isCascading = false;
             },
 
             /**
-             * @param {boolean} isComposable
+             * @param {boolean} isCascading
              * @returns {candystore.BinaryState}
              */
-            setIsComposable: function (isComposable) {
-                this.isComposable = isComposable;
+            setIsCascading: function (isCascading) {
+                this.isCascading = isCascading;
                 return this;
             },
 
@@ -96,7 +96,7 @@ troop.postpone(candystore, 'BinaryState', function () {
              */
             addStateAsSource: function (binaryState, sourceId) {
                 dessert.isBinaryState(binaryState, "Invalid binary state");
-                if (this.isComposable && binaryState.isStateOn()) {
+                if (this.isCascading && binaryState.isStateOn()) {
                     this.addSource(sourceId);
                 }
                 return this;

@@ -137,7 +137,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     binaryStateLayers.setItem(
                         stateName,
                         stateName.toBinaryState()
-                            .setIsComposable(inheritsFromParent));
+                            .setIsCascading(inheritsFromParent));
                 }
                 return this;
             },

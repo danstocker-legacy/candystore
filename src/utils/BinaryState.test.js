@@ -15,7 +15,7 @@
         equal(binaryState.stateName, 'foo', "should set state name");
         ok(binaryState.stateSources.isA(sntls.Collection), "should add source collection");
         equal(binaryState.stateSources.getKeyCount(), 0, "should initialize source collection as empty");
-        equal(binaryState.isComposable, false, "should set composable flag to false");
+        equal(binaryState.isCascading, false, "should set cascading flag to false");
     });
 
     test("Conversion from string", function () {
@@ -25,11 +25,11 @@
         equal(binaryState.stateName, 'foo', "should set state name");
     });
 
-    test("Setting composable flag", function () {
+    test("Setting cascading flag", function () {
         var binaryState = 'foo'.toBinaryState();
 
-        strictEqual(binaryState.setIsComposable(true), binaryState, "should be chainable");
-        equal(binaryState.isComposable, true, "should set isComposable property");
+        strictEqual(binaryState.setIsCascading(true), binaryState, "should be chainable");
+        equal(binaryState.isCascading, true, "should set isCascading property");
     });
 
     test("Source addition", function () {
@@ -103,7 +103,7 @@
             "should be chainable");
 
         binaryState
-            .setIsComposable(true)
+            .setIsCascading(true)
             .addStateAsSource(remoteState, 'baz');
     });
 }());
