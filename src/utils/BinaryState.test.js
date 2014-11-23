@@ -62,6 +62,14 @@
         }, "should clear source collection");
     });
 
+    test("Source tested", function () {
+        var binaryState = 'foo'.toBinaryState()
+            .addSource('bar');
+
+        ok(binaryState.hasSource('bar'), "should return true for source ID that's present");
+        ok(!binaryState.hasSource('baz'), "should return false for absent source ID");
+    });
+
     test("Source count getter", function () {
         var binaryState = 'foo'.toBinaryState();
 
