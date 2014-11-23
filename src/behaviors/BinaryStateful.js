@@ -17,9 +17,18 @@ troop.postpone(candystore, 'BinaryStateful', function () {
     candystore.BinaryStateful = self
         .addConstants(/** @lends candystore.BinaryStateful */{
             /** @constant */
-            SOURCE_PARENT_IMPOSED: 'parent-imposed'
+            SOURCE_IMPOSED_PREFIX: 'imposed'
         })
         .addPrivateMethods(/** @lends candystore.BinaryStateful# */{
+            /**
+             * @param {number} instanceId
+             * @returns {string}
+             * @private
+             */
+            _getImposedSourceId: function (instanceId) {
+                return this.SOURCE_IMPOSED_PREFIX + '-' + instanceId;
+            },
+
             /**
              * Adds specified controlling source to the specified state.
              * @param {string} stateName
@@ -33,7 +42,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     sourceCountAfter;
 
                 if (candystore.BinaryState.isBaseOf(sourceId)) {
-                    state.addStateAsSource(sourceId, this.SOURCE_PARENT_IMPOSED);
+                    state.addStateAsSource(sourceId, this._getImposedSourceId(this.instanceId));
                 } else {
                     state.addSource(sourceId);
                 }
@@ -111,7 +120,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                             that.getBinaryState(stateName)
                                 .addStateAsSource(
                                     parent.getBinaryState(stateName),
-                                    that.SOURCE_PARENT_IMPOSED);
+                                    that._getImposedSourceId(parent.instanceId));
                         }
                     });
             },
@@ -124,8 +133,15 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
                 // removing all parent imposed sources from all states
                 this.binaryStates
-                    .forEachItem(function (sources, stateName) {
-                        that.removeBinaryStateSource(stateName, that.SOURCE_PARENT_IMPOSED);
+                    .forEachItem(function (binaryState, stateName) {
+                        binaryState.stateSources
+                            // fetching imposed source IDs
+                            .filterByPrefix(that.SOURCE_IMPOSED_PREFIX)
+                            .getKeysAsHash()
+                            .toCollection()
+
+                            // removing them from current stateful instance
+                            .passEachItemTo(that.removeBinaryStateSource, that, 1, stateName);
                     });
             },
 
@@ -201,7 +217,10 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
                         return descendant.binaryStates && descendant.getBinaryState(stateName);
                     })
-                    .callOnEachItem('_removeStateSource', stateName, sourceId && this.SOURCE_PARENT_IMPOSED);
+                    .callOnEachItem(
+                        '_removeStateSource',
+                        stateName,
+                        sourceId && this.instanceId.toString());
 
                 return this;
             }

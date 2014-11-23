@@ -45,11 +45,11 @@
         expect(7);
 
         var parent = BinaryStateful.create()
-                .addBinaryState('foo')
-                .addBinaryState('bar')
+                .addBinaryState('foo', true)
+                .addBinaryState('bar', true)
                 .setRootWidget(),
             child = BinaryStateful.create()
-                .addBinaryState('foo');
+                .addBinaryState('foo', true);
 
         parent.addMocks({
         });
@@ -58,7 +58,7 @@
             addStateAsSource: function (state, sourceId) {
                 ok(state.isA(candystore.BinaryState), "should add binary state as source");
                 equal(state.stateName, 'foo', "should pass state with matching state name");
-                equal(sourceId, candystore.BinaryStateful.SOURCE_PARENT_IMPOSED,
+                equal(sourceId, 'imposed-' + parent.instanceId,
                     "should add parent imposed source to state");
             },
 
@@ -87,10 +87,12 @@
 
     test("Removal handler", function () {
         var parent = BinaryStateful.create()
+                .addBinaryState('foo', true)
+                .addBinaryStateSource('foo', 'hello')
                 .setRootWidget(),
             child = BinaryStateful.create()
-                .addBinaryState('foo')
-                .addBinaryState('bar')
+                .addBinaryState('foo', true)
+                .addBinaryState('bar', true)
                 .addToParent(parent),
             removedStates = [];
 
@@ -103,8 +105,7 @@
         child.removeFromParent();
 
         deepEqual(removedStates, [
-            ['foo', candystore.BinaryStateful.SOURCE_PARENT_IMPOSED],
-            ['bar', candystore.BinaryStateful.SOURCE_PARENT_IMPOSED]
+            ['foo', 'imposed-' + parent.instanceId]
         ], "should remove parent imposed source from all states");
     });
 
