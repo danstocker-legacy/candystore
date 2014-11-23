@@ -41,6 +41,15 @@ troop.postpone(candystore, 'Highlightable', function () {
                 this.addBinaryState(this.STATE_NAME_HIGHLIGHTABLE);
             },
 
+            /** Call from host's .afterRemove */
+            afterRemove: function () {
+                // adding current highlights
+                this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                    .getSourceIds()
+                    .toCollection()
+                    .passEachItemTo(this.removeCssClass, this);
+            },
+
             /** Call from host's .afterStateOn */
             afterStateOn: function (stateName, sourceIdsBefore) {
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
