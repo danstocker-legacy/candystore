@@ -1,27 +1,58 @@
 /*global dessert, troop, sntls, shoeshine, candystore */
-troop.postpone(candystore, 'Highlightable', function (ns, className) {
+troop.postpone(candystore, 'Highlightable', function () {
     "use strict";
 
     var base = troop.Base,
         self = base.extend();
 
     /**
-     * The Highlightable trait adds
+     * The Highlightable trait adds switchable highlight to widgets.
+     * Expects to be added to Widget instances.
+     * Expects the host to have the BinaryStateful trait applied.
+     * TODO: Add unit tests.
      * @class
      * @extends troop.Base
+     * @extends candystore.BinaryStateful
      * @extends shoeshine.Widget
      */
     candystore.Highlightable = self
+        .addConstants(/** @lends candystore.Highlightable */{
+            /** @constant */
+            STATE_NAME_HIGHLIGHTABLE: 'state-highlightable'
+        })
+        .addPrivateMethods(/** @lends candystore.Disableable# */{
+            /** @private */
+            _updateHighlightedStyle: function (sourceIdsBefore) {
+                // removing all previous highlights
+                sourceIdsBefore.toCollection()
+                    .passEachItemTo(this.removeCssClass, this);
+
+                // adding current highlights
+                this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                    .getSourceIds()
+                    .toCollection()
+                    .passEachItemTo(this.addCssClass, this);
+            }
+        })
         .addMethods(/** @lends candystore.Highlightable# */{
-            /**
-             * Call from host's init.
-             */
+            /** Call from host's init. */
             init: function () {
-                /**
-                 * Registry of highlight identifiers the widget is *currently* highlighted by.
-                 * @type {sntls.Collection}
-                 */
-                this.highlightIds = sntls.Collection.create();
+                // highlightable state does not cascade
+                this.addBinaryState(this.STATE_NAME_HIGHLIGHTABLE);
+            },
+
+            /** Call from host's .afterStateOn */
+            afterStateOn: function (stateName, sourceIdsBefore) {
+                if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
+                    this._updateHighlightedStyle(sourceIdsBefore);
+                }
+            },
+
+            /** Call from host's .afterStateOff */
+            afterStateOff: function (stateName, sourceIdsBefore) {
+                if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
+                    this._updateHighlightedStyle(sourceIdsBefore);
+                }
             },
 
             /**
@@ -31,12 +62,9 @@ troop.postpone(candystore, 'Highlightable', function (ns, className) {
              */
             highlightOn: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
-
-                highlightId = highlightId || 'highlighted';
-
-                this.addCssClass(highlightId);
-                this.highlightIds.setItem(highlightId, highlightId);
-
+                this.addBinaryStateSource(
+                    this.STATE_NAME_HIGHLIGHTABLE,
+                    highlightId || 'highlighted');
                 return this;
             },
 
@@ -47,12 +75,9 @@ troop.postpone(candystore, 'Highlightable', function (ns, className) {
              */
             highlightOff: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
-
-                highlightId = highlightId || 'highlighted';
-
-                this.removeCssClass(highlightId);
-                this.highlightIds.deleteItem(highlightId);
-
+                this.removeBinaryStateSource(
+                    this.STATE_NAME_HIGHLIGHTABLE,
+                    highlightId || 'highlighted');
                 return this;
             },
 
@@ -64,8 +89,9 @@ troop.postpone(candystore, 'Highlightable', function (ns, className) {
             isHighlighted: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
                 return highlightId ?
-                    !!this.highlightIds.getItem(highlightId) :
-                    !!this.highlightIds.getKeyCount();
+                    this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                        .hasSource(highlightId) :
+                    this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
             }
         });
 });
