@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, candystore */
+/*global dessert, troop, sntls, shoeshine, candystore */
 troop.postpone(candystore, 'BinaryStateful', function () {
     "use strict";
 
@@ -32,7 +32,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             /**
              * Adds specified controlling source to the specified state.
              * @param {string} stateName
-             * @param {string|candystore.BinaryState} sourceId
+             * @param {string|candystore.BinaryStateful} sourceId
              * @private
              */
             _addStateSource: function (stateName, sourceId) {
@@ -41,8 +41,10 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
-                if (candystore.BinaryState.isBaseOf(sourceId)) {
-                    state.addStateAsSource(sourceId, this._getImposedSourceId(this.instanceId));
+                if (sourceId.binaryStates) {
+                    state.addStateAsSource(
+                        sourceId.getBinaryState(stateName),
+                        this._getImposedSourceId(sourceId.instanceId));
                 } else {
                     state.addSource(sourceId);
                 }
@@ -102,13 +104,6 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                         var state = that.getBinaryState(stateName),
                             sourceIdsBefore = state.getSourceIds();
 
-                        // initializing binary state
-                        if (state.isStateOn()) {
-                            that.afterStateOn(stateName, sourceIdsBefore);
-                        } else {
-                            that.afterStateOff(stateName, sourceIdsBefore);
-                        }
-
                         // querying nearest parent for matching state
                         var parent = that.getAncestor(function (widget) {
                             var binaryStates = widget.binaryStates;
@@ -121,6 +116,13 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                                 .addStateAsSource(
                                     parent.getBinaryState(stateName),
                                     that._getImposedSourceId(parent.instanceId));
+                        }
+
+                        // initializing binary state
+                        if (state.isStateOn()) {
+                            that.afterStateOn(stateName, sourceIdsBefore);
+                        } else {
+                            that.afterStateOff(stateName, sourceIdsBefore);
                         }
                     });
             },
@@ -197,7 +199,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
                         return descendant.binaryStates && descendant.getBinaryState(stateName);
                     })
-                    .callOnEachItem('_addStateSource', stateName, this.getBinaryState(stateName));
+                    .callOnEachItem('_addStateSource', stateName, this);
 
                 return this;
             },
@@ -220,7 +222,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     .callOnEachItem(
                         '_removeStateSource',
                         stateName,
-                        sourceId && this.instanceId.toString());
+                        sourceId && this._getImposedSourceId(this.instanceId));
 
                 return this;
             }
