@@ -36,6 +36,7 @@ troop.postpone(candystore, 'Disableable', function () {
         .addMethods(/** @lends candystore.Disableable# */{
             /** Call from host's .init. */
             init: function () {
+                // disableable state is cascading
                 this.addBinaryState(this.STATE_NAME_DISABLEBABLE, true);
             },
 
