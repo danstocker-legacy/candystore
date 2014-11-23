@@ -70,6 +70,15 @@
         ok(!binaryState.hasSource('baz'), "should return false for absent source ID");
     });
 
+    test("Source ID list getter", function () {
+        var binaryState = 'foo'.toBinaryState()
+            .addSource('bar')
+            .addSource('baz');
+
+        deepEqual(binaryState.getSourceIds().sort(), ['bar', 'baz'].sort(),
+            "should return source IDs as array");
+    });
+
     test("Source count getter", function () {
         var binaryState = 'foo'.toBinaryState();
 

@@ -83,9 +83,12 @@ troop.postpone(candystore, 'BinaryState', function () {
                 return this.stateSources.getItem(sourceId);
             },
 
-            /**
-             * @returns {number}
-             */
+            /** @returns {string[]} */
+            getSourceIds: function () {
+                return this.stateSources.getKeys();
+            },
+
+            /** @returns {number} */
             getSourceCount: function () {
                 return this.stateSources.getKeyCount();
             },
