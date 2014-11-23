@@ -12,6 +12,7 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
+     * @extends candystore.BinaryStateful
      * @extends candystore.Highlightable
      */
     candystore.Option = self
