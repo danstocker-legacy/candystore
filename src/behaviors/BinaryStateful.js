@@ -28,6 +28,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              */
             _addStateSource: function (stateName, sourceId) {
                 var state = this.getBinaryState(stateName),
+                    sourceIdsBefore = state.getSourceIds(),
                     sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
@@ -42,7 +43,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 if (sourceCountBefore === 0 && sourceCountAfter > 0) {
                     // source count increased to non-zero
                     // state just got turned on
-                    this.afterStateOn(stateName);
+                    this.afterStateOn(stateName, sourceIdsBefore);
                 }
             },
 
@@ -54,6 +55,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
              */
             _removeStateSource: function (stateName, sourceId) {
                 var state = this.getBinaryState(stateName),
+                    sourceIdsBefore = state.getSourceIds(),
                     sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
@@ -64,7 +66,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 if (sourceCountBefore > 0 && sourceCountAfter === 0) {
                     // source count decreased to zero
                     // state just got turned off
-                    this.afterStateOff(stateName);
+                    this.afterStateOff(stateName, sourceIdsBefore);
                 }
             }
         })
@@ -88,11 +90,14 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
                 this.binaryStates
                     .forEachItem(function (sources, stateName) {
+                        var state = that.getBinaryState(stateName),
+                            sourceIdsBefore = state.getSourceIds();
+
                         // initializing binary state
-                        if (that.isStateOn(stateName)) {
-                            that.afterStateOn(stateName);
+                        if (state.isStateOn()) {
+                            that.afterStateOn(stateName, sourceIdsBefore);
                         } else {
-                            that.afterStateOff(stateName);
+                            that.afterStateOff(stateName, sourceIdsBefore);
                         }
 
                         // querying nearest parent for matching state
@@ -206,11 +211,13 @@ troop.postpone(candystore, 'BinaryStateful', function () {
      * @name candystore.BinaryStateful#afterStateOn
      * @function
      * @param {string} stateName
+     * @param {string[]} sourceIdsBefore
      */
 
     /**
      * @name candystore.BinaryStateful#afterStateOff
      * @function
      * @param {string} stateName
+     * @param {string[]} sourceIdsBefore
      */
 });

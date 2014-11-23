@@ -42,7 +42,7 @@
     });
 
     test("Addition handler", function () {
-        expect(6);
+        expect(7);
 
         var parent = BinaryStateful.create()
                 .addBinaryState('foo')
@@ -52,10 +52,6 @@
                 .addBinaryState('foo');
 
         parent.addMocks({
-            isStateOn: function () {
-                ok(true, "should fetch parent's state");
-                return true;
-            }
         });
 
         candystore.BinaryState.addMocks({
@@ -64,6 +60,11 @@
                 equal(state.stateName, 'foo', "should pass state with matching state name");
                 equal(sourceId, candystore.BinaryStateful.SOURCE_PARENT_IMPOSED,
                     "should add parent imposed source to state");
+            },
+
+            isStateOn: function () {
+                ok(true, "should fetch parent's state");
+                return true;
             }
         });
 
@@ -73,8 +74,9 @@
                 return true;
             },
 
-            afterStateOn: function (stateName) {
+            afterStateOn: function (stateName, sourceIdsBefore) {
                 equal(stateName, 'foo', "should call state handler");
+                deepEqual(sourceIdsBefore, [], "should pass before state of source ID array");
             }
         });
 
@@ -134,14 +136,15 @@
     });
 
     test("Source addition", function () {
-        expect(5);
+        expect(6);
 
         var binaryStateful = BinaryStateful.create()
             .addBinaryState('foo');
 
         binaryStateful.addMocks({
-            afterStateOn: function (stateName) {
+            afterStateOn: function (stateName, sourceIdsBefore) {
                 equal(stateName, 'foo', "should call after handler");
+                deepEqual(sourceIdsBefore, [], "should pass before state of source ID array");
             }
         });
 
@@ -168,14 +171,15 @@
     });
 
     test("Source removal", function () {
-        expect(5);
+        expect(6);
 
         var binaryStateful = BinaryStateful.create()
             .addBinaryState('foo');
 
         binaryStateful.addMocks({
-            afterStateOff: function (stateName) {
+            afterStateOff: function (stateName, sourceIdsBefore) {
                 equal(stateName, 'foo', "should call after handler");
+                deepEqual(sourceIdsBefore, ['hello'], "should pass source ID array before change");
             }
         });
 
