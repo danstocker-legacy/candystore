@@ -7,6 +7,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
     /**
      * The BinaryStateful trait manages multiple binary states with multiple contributing sources.
+     * TODO: Add method for changing cascading flag, re-evaluating any imposed states.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -81,6 +82,26 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     // state just got turned off
                     this.afterStateOff(stateName, sourceIdsBefore);
                 }
+            },
+
+            /**
+             * @param {string} stateName
+             * @private
+             */
+            _applyImposedSources: function (stateName) {
+                // querying nearest parent for matching state
+                var parent = this.getAncestor(function (widget) {
+                    var binaryStates = widget.binaryStates;
+                    return binaryStates && widget.getBinaryState(stateName);
+                });
+
+                if (parent && parent.isStateOn(stateName)) {
+                    // enabling parent with matching binary state
+                    this.getBinaryState(stateName)
+                        .addStateAsSource(
+                            parent.getBinaryState(stateName),
+                            this._getImposedSourceId(parent.instanceId));
+                }
             }
         })
         .addMethods(/** @lends candystore.BinaryStateful# */{
@@ -103,22 +124,11 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
                 this.binaryStates
                     .forEachItem(function (sources, stateName) {
+                        // checking whether any of the parents have matching states set
+                        that._applyImposedSources(stateName);
+
                         var state = that.getBinaryState(stateName),
                             sourceIdsBefore = state.getSourceIds();
-
-                        // querying nearest parent for matching state
-                        var parent = that.getAncestor(function (widget) {
-                            var binaryStates = widget.binaryStates;
-                            return binaryStates && widget.getBinaryState(stateName);
-                        });
-
-                        if (parent && parent.isStateOn(stateName)) {
-                            // enabling parent with matching binary state
-                            that.getBinaryState(stateName)
-                                .addStateAsSource(
-                                    parent.getBinaryState(stateName),
-                                    that._getImposedSourceId(parent.instanceId));
-                        }
 
                         // initializing binary state
                         if (state.isStateOn()) {
