@@ -6,17 +6,18 @@ troop.postpone(candystore, 'BinaryStateful', function () {
         self = base.extend();
 
     /**
-     * The BinaryStateful trait manages multiple binary states with different controlling sources.
-     * A binary state may take two values: true or false, but that value is potentially controlled by
-     * a number of sources. A particular binary state may be turned on by any of the sources,
-     * however, all sources must release it to be turned off.
+     * The BinaryStateful trait manages multiple binary states with multiple contributing sources.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
+     * @see candystore.BinaryState
      */
     candystore.BinaryStateful = self
         .addConstants(/** @lends candystore.BinaryStateful */{
-            /** @constant */
+            /**
+             * Identifier prefix for imposed sources.
+             * @constant
+             */
             SOURCE_IMPOSED_PREFIX: 'imposed'
         })
         .addPrivateMethods(/** @lends candystore.BinaryStateful# */{
@@ -30,7 +31,8 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             },
 
             /**
-             * Adds specified controlling source to the specified state.
+             * Adds specified contributing source to the specified state.
+             * TODO: Separate setting imposed source.
              * @param {string} stateName
              * @param {string|candystore.BinaryStateful} sourceId
              * @private
@@ -59,7 +61,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             },
 
             /**
-             * Removes specified controlling source from the specified state.
+             * Removes specified contributing source from the specified state.
              * @param {string} stateName
              * @param {string} [sourceId]
              * @private
@@ -148,19 +150,18 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             },
 
             /**
-             * Adds a state to the widget. Only those states may be controlled on a widget
-             * that have been added previously.
-             * @param {string} stateName
-             * @param {boolean} [inheritsFromParent]
+             * Adds a state to the widget. A state must be added before it can be manipulated.
+             * @param {string} stateName Identifies the state.
+             * @param {boolean} [isCascading=false] Whether new state is cascading.
              * @returns {candystore.BinaryStateful}
              */
-            addBinaryState: function (stateName, inheritsFromParent) {
+            addBinaryState: function (stateName, isCascading) {
                 var binaryStateLayers = this.binaryStates;
                 if (!binaryStateLayers.getItem(stateName)) {
                     binaryStateLayers.setItem(
                         stateName,
                         stateName.toBinaryState()
-                            .setIsCascading(inheritsFromParent));
+                            .setIsCascading(isCascading));
                 }
                 return this;
             },
@@ -174,9 +175,8 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             },
 
             /**
-             * Retrieves the (aggregated) value for the specified state. The value returned is true
-             * when the state has at least one controlling source, and false when there are none.
-             * @param {string} stateName
+             * Determines whether the specified state evaluates to true.
+             * @param {string} stateName Identifies state.
              * @returns {boolean}
              */
             isStateOn: function (stateName) {
@@ -184,10 +184,10 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             },
 
             /**
-             * Adds the specified source to the specified state.
+             * Adds the specified contributing source to the specified state.
              * TODO: Add unit test for _addStateSource arguments.
-             * @param {string} stateName
-             * @param {string} sourceId
+             * @param {string} stateName Identifies state.
+             * @param {string} sourceId Identifies source.
              * @returns {candystore.BinaryStateful}
              */
             addBinaryStateSource: function (stateName, sourceId) {
@@ -206,8 +206,9 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
             /**
              * Removes the specified source from the specified state.
-             * @param {string} stateName
-             * @param {string} [sourceId]
+             * @param {string} stateName Identifies state.
+             * @param {string} [sourceId] Identifies source. When omitted, all sources will be
+             * removed.
              * @returns {candystore.BinaryStateful}
              */
             removeBinaryStateSource: function (stateName, sourceId) {
@@ -229,6 +230,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
         });
 
     /**
+     * Called after the state value changes from false to true.
      * @name candystore.BinaryStateful#afterStateOn
      * @function
      * @param {string} stateName
@@ -236,6 +238,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
      */
 
     /**
+     * Called after the state value changes from true to false.
      * @name candystore.BinaryStateful#afterStateOff
      * @function
      * @param {string} stateName

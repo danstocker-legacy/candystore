@@ -6,13 +6,19 @@ troop.postpone(candystore, 'BinaryState', function () {
         self = base.extend();
 
     /**
+     * Creates a BinaryState instance.
      * @name candystore.BinaryState.create
      * @function
-     * @param {string} stateName
+     * @param {string} stateName Identifies the binary state.
      * @returns {candystore.BinaryState}
+     * @see String#toBinaryState
      */
 
     /**
+     * The BinaryState implements a named state that can take two values: true or false,
+     * but which value depends on the number of sources contributing the state.
+     * The value is false when no source contributes the state, true otherwise.
+     * TODO: Remove .addStateAsSource.
      * @class
      * @extends troop.Base
      */
@@ -32,7 +38,7 @@ troop.postpone(candystore, 'BinaryState', function () {
                 this.stateName = stateName;
 
                 /**
-                 * Lookup of source identifiers controlling the state.
+                 * Lookup of source identifiers contributing the state.
                  * @type {sntls.Collection}
                  */
                 this.stateSources = sntls.Collection.create();
@@ -54,7 +60,8 @@ troop.postpone(candystore, 'BinaryState', function () {
             },
 
             /**
-             * @param {string} sourceId
+             * Adds the specified source to the state.
+             * @param {string} sourceId Identifies the contributing source.
              * @returns {candystore.BinaryState}
              */
             addSource: function (sourceId) {
@@ -63,7 +70,8 @@ troop.postpone(candystore, 'BinaryState', function () {
             },
 
             /**
-             * @param {string} [sourceId]
+             * Removes the specified source.
+             * @param {string} [sourceId] Identifies the contributing source.
              * @returns {candystore.BinaryState}
              */
             removeSource: function (sourceId) {
@@ -76,6 +84,7 @@ troop.postpone(candystore, 'BinaryState', function () {
             },
 
             /**
+             * Tells whether the specified state contributes to the state.
              * @param {string} sourceId
              * @returns {boolean}
              */
@@ -83,17 +92,25 @@ troop.postpone(candystore, 'BinaryState', function () {
                 return this.stateSources.getItem(sourceId);
             },
 
-            /** @returns {string[]} */
+            /**
+             * Retrieves the identifiers of all contributing sources.
+             * @returns {string[]}
+             */
             getSourceIds: function () {
                 return this.stateSources.getKeys();
             },
 
-            /** @returns {number} */
+            /**
+             * Determines the number of contributing sources.
+             * @returns {number}
+             */
             getSourceCount: function () {
                 return this.stateSources.getKeyCount();
             },
 
             /**
+             * Determines whether the state value is true, ie. there is at leas one source
+             * contributing.
              * @returns {boolean}
              */
             isStateOn: function () {
@@ -101,6 +118,9 @@ troop.postpone(candystore, 'BinaryState', function () {
             },
 
             /**
+             * Adds another state as contributing source.
+             * Takes effect only if state is cascading.
+             * TODO: Remove, and place logic in classes that use BinaryState.
              * @param {candystore.BinaryState} binaryState
              * @param {string} sourceId
              * @returns {candystore.BinaryState}
