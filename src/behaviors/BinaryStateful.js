@@ -16,20 +16,10 @@ troop.postpone(candystore, 'BinaryStateful', function () {
     candystore.BinaryStateful = self
         .addConstants(/** @lends candystore.BinaryStateful */{
             /**
-             * Identifier prefix for imposed sources.
+             * Identifier for imposed source.
              * @constant
              */
-            SOURCE_IMPOSED_PREFIX: 'imposed'
-        })
-        .addPrivateMethods(/** @lends candystore.BinaryStateful# */{
-            /**
-             * @param {number} instanceId
-             * @returns {string}
-             * @private
-             */
-            _getImposedSourceId: function (instanceId) {
-                return this.SOURCE_IMPOSED_PREFIX + '-' + instanceId;
-            }
+            SOURCE_ID_IMPOSED: 'imposed'
         })
         .addMethods(/** @lends candystore.BinaryStateful# */{
             /**
@@ -74,7 +64,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     .forEachItem(function (binaryState, stateName) {
                         binaryState.stateSources
                             // fetching imposed source IDs
-                            .filterByPrefix(that.SOURCE_IMPOSED_PREFIX)
+                            .filterByPrefix(that.SOURCE_ID_IMPOSED)
                             .getKeysAsHash()
                             .toCollection()
 
@@ -142,7 +132,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                             var state = descendant.binaryStates && descendant.getBinaryState(stateName);
                             return state && state.isCascading;
                         })
-                        .callOnEachItem('addImposedStateSource', stateName, this);
+                        .callOnEachItem('addImposedStateSource', stateName);
 
                     this.afterStateOn(stateName);
                 }
@@ -153,15 +143,14 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             /**
              * Imposes a source on the specified state provided that that state allows cascading.
              * @param {string} stateName
-             * @param {candystore.BinaryStateful} statefulInstance
              * @returns {candystore.BinaryStateful}
              */
-            addImposedStateSource: function (stateName, statefulInstance) {
+            addImposedStateSource: function (stateName) {
                 var state = this.getBinaryState(stateName),
                     sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
-                state.addSource(this._getImposedSourceId(statefulInstance.instanceId));
+                state.addSource(this.SOURCE_ID_IMPOSED);
                 sourceCountAfter = state.getSourceCount();
 
                 if (sourceCountAfter && !sourceCountBefore) {
@@ -185,7 +174,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                 });
 
                 if (parent && parent.isStateOn(stateName)) {
-                    this.addImposedStateSource(stateName, parent);
+                    this.addImposedStateSource(stateName);
                 }
 
                 return this;
@@ -215,7 +204,7 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                         .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
                             return descendant.binaryStates && descendant.getBinaryState(stateName);
                         })
-                        .callOnEachItem('removeImposedStateSource', stateName, this);
+                        .callOnEachItem('removeImposedStateSource', stateName);
 
                     this.afterStateOff(stateName);
                 }
@@ -226,15 +215,14 @@ troop.postpone(candystore, 'BinaryStateful', function () {
             /**
              * Removes contributing source imposed by the specified instance from the specified state.
              * @param {string} stateName
-             * @param {candystore.BinaryStateful} statefulInstance
              * @returns {candystore.BinaryStateful}
              */
-            removeImposedStateSource: function (stateName, statefulInstance) {
+            removeImposedStateSource: function (stateName) {
                 var state = this.getBinaryState(stateName),
                     sourceCountBefore = state.getSourceCount(),
                     sourceCountAfter;
 
-                state.removeSource(this._getImposedSourceId(statefulInstance.instanceId));
+                state.removeSource(this.SOURCE_ID_IMPOSED);
                 sourceCountAfter = state.getSourceCount();
 
                 if (!sourceCountAfter && sourceCountBefore) {
