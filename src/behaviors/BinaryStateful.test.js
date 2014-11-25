@@ -179,10 +179,8 @@
     test("Imposed source addition", function () {
         expect(4);
 
-        var parent = BinaryStateful.create()
-                .addBinaryState('foo'),
-            child = BinaryStateful.create()
-                .addBinaryState('foo');
+        var child = BinaryStateful.create()
+            .addBinaryState('foo');
 
         child.addMocks({
             afterStateOn: function (stateName) {
@@ -274,10 +272,8 @@
     test("Source removal", function () {
         expect(4);
 
-        var parent = BinaryStateful.create()
-                .addBinaryState('foo'),
-            child = BinaryStateful.create()
-                .addBinaryState('foo');
+        var child = BinaryStateful.create()
+            .addBinaryState('foo');
 
         child.addMocks({
             afterStateOff: function (stateName) {
@@ -301,5 +297,36 @@
             "should be chainable");
 
         candystore.BinaryState.removeMocks();
+    });
+
+    test("Cascading flag setter", function () {
+        expect(5);
+
+        var child = BinaryStateful.create()
+            .addBinaryState('foo');
+
+        child.addMocks({
+            applyImposedStateSource: function (stateName) {
+                equal(stateName, 'foo', "should apply imposed source on setting flag");
+            }
+        });
+
+        strictEqual(child.setIsCascading('foo', true), child, "should be chainable");
+
+        ok(child.getBinaryState('foo').isCascading, "should set cascading flag on setting");
+
+        child
+            .removeMocks()
+            .addMocks({
+                removeImposedStateSource: function (stateName) {
+                    equal(stateName, 'foo', "should remove imposed source on un-setting flag");
+                }
+            });
+
+        child.setIsCascading('foo', false);
+
+        ok(!child.getBinaryState('foo').isCascading, "should un-set cascading flag on un-setting");
+
+        child.removeMocks();
     });
 }());

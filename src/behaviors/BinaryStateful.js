@@ -7,7 +7,6 @@ troop.postpone(candystore, 'BinaryStateful', function () {
 
     /**
      * The BinaryStateful trait manages multiple binary states with multiple contributing sources.
-     * TODO: Add method for changing cascading flag, re-evaluating any imposed states.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -230,6 +229,30 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     // state just switched to "off"
                     this.afterStateOff(stateName);
                 }
+
+                return this;
+            },
+
+            /**
+             * Sets cascading flag on the specified state and updates imposed state on the current instance.
+             * @param {string} stateName
+             * @param {boolean} isCascading
+             * @returns {candystore.BinaryStateful}
+             */
+            setIsCascading: function (stateName, isCascading) {
+                var state = this.getBinaryState(stateName),
+                    wasCascading = state.isCascading;
+
+                if (isCascading && !wasCascading) {
+                    // applying imposed source
+                    this.applyImposedStateSource(stateName);
+                } else if (!isCascading && wasCascading) {
+                    // removing imposed source from this instance only
+                    // (descendants might still be cascading)
+                    this.removeImposedStateSource(stateName);
+                }
+
+                state.setIsCascading(isCascading);
 
                 return this;
             }
