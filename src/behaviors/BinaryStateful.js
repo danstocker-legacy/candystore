@@ -202,7 +202,8 @@ troop.postpone(candystore, 'BinaryStateful', function () {
                     // adding source to suitable descendants
                     this.getAllDescendants()
                         .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
-                            return descendant.binaryStates && descendant.getBinaryState(stateName);
+                            var state = descendant.binaryStates && descendant.getBinaryState(stateName);
+                            return state && state.isCascading;
                         })
                         .callOnEachItem('removeImposedStateSource', stateName);
 
