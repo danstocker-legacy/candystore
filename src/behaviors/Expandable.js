@@ -47,16 +47,16 @@ troop.postpone(candystore, 'Expandable', function () {
             /** @ignore */
             afterStateOn: function (stateName) {
                 if (stateName === this.STATE_NAME_EXPANDABLE) {
-                this._updateExpandedState();
-                this.triggerSync(this.EVENT_EXPAND);
-                    }
+                    this._updateExpandedState();
+                    this.triggerSync(this.EVENT_EXPAND);
+                }
             },
 
             /** @ignore */
             afterStateOff: function (stateName) {
                 if (stateName === this.STATE_NAME_EXPANDABLE) {
-                this._updateExpandedState();
-                this.triggerSync(this.EVENT_RETRACT);
+                    this._updateExpandedState();
+                    this.triggerSync(this.EVENT_RETRACT);
                 }
             },
 

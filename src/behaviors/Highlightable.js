@@ -21,10 +21,13 @@ troop.postpone(candystore, 'Highlightable', function () {
             STATE_NAME_HIGHLIGHTABLE: 'state-highlightable'
         })
         .addPrivateMethods(/** @lends candystore.Disableable# */{
-            /** @private */
-            _updateHighlightedStyle: function (sourceIdsBefore) {
+            /**
+             * TODO: Refactor to use Set.
+             * @private
+             */
+            _updateHighlightedStyle: function () {
                 // removing all previous highlights
-                sourceIdsBefore.toCollection()
+                this.highlightIds
                     .passEachItemTo(this.removeCssClass, this);
 
                 // adding current highlights
@@ -39,28 +42,40 @@ troop.postpone(candystore, 'Highlightable', function () {
             init: function () {
                 // highlightable state does not cascade
                 this.addBinaryState(this.STATE_NAME_HIGHLIGHTABLE);
+
+                /**
+                 * Lookup of highlight identifiers currently assigned to the instance.
+                 * @type {sntls.Collection}
+                 */
+                this.highlightIds = undefined;
+            },
+
+            /** Call from host's .afterAdd */
+            afterAdd: function ( ){
+                this.highlightIds = this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                    .getSourceIds()
+                    .toCollection();
+                this._updateHighlightedStyle();
             },
 
             /** Call from host's .afterRemove */
             afterRemove: function () {
                 // adding current highlights
-                this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
-                    .getSourceIds()
-                    .toCollection()
+                this.highlightIds
                     .passEachItemTo(this.removeCssClass, this);
             },
 
             /** Call from host's .afterStateOn */
-            afterStateOn: function (stateName, sourceIdsBefore) {
+            afterStateOn: function (stateName) {
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
-                    this._updateHighlightedStyle(sourceIdsBefore);
+                    this._updateHighlightedStyle();
                 }
             },
 
             /** Call from host's .afterStateOff */
-            afterStateOff: function (stateName, sourceIdsBefore) {
+            afterStateOff: function (stateName) {
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
-                    this._updateHighlightedStyle(sourceIdsBefore);
+                    this._updateHighlightedStyle();
                 }
             },
 
@@ -98,9 +113,9 @@ troop.postpone(candystore, 'Highlightable', function () {
             isHighlighted: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
                 return highlightId ?
-                    this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
-                        .hasSource(highlightId) :
-                    this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
+                       this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                           .hasSource(highlightId) :
+                       this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
             }
         });
 });
