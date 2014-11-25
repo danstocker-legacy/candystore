@@ -51,17 +51,18 @@
             child = BinaryStateful.create()
                 .addBinaryState('foo', true);
 
-        parent.addMocks({
+        child.addMocks({
+            applyImposedStateSource: function (stateName) {
+                equal(stateName, 'foo', "should apply imposed sources for specified state");
+            },
+
             isStateOn: function (stateName) {
                 equal(stateName, 'foo', "should test parent's state");
                 return true;
-            }
-        });
+            },
 
-        child.addMocks({
-            addImposeStateSource: function (stateName, statefulInstance) {
+            afterStateOn: function (stateName) {
                 equal(stateName, 'foo', "should add imposed sources");
-                deepEqual(statefulInstance, parent, "should pass imposer instance to source addition");
             }
         });
 
@@ -119,16 +120,33 @@
             "should return BinaryState instance for state already added");
     });
 
-    test("Source addition", function () {
-        expect(6);
-
+    test("State value getter", function () {
         var binaryStateful = BinaryStateful.create()
             .addBinaryState('foo');
 
-        binaryStateful.addMocks({
-            afterStateOn: function (stateName, sourceIdsBefore) {
-                equal(stateName, 'foo', "should call after handler");
-                deepEqual(sourceIdsBefore, [], "should pass before state of source ID array");
+        raises(function () {
+            binaryStateful.isStateOn('bar');
+        }, "should raise exception on absent state");
+
+        ok(!binaryStateful.isStateOn('foo'), "should return falsey on zero associated sources");
+
+        binaryStateful.addBinaryStateSource('foo', 'hello');
+
+        ok(binaryStateful.isStateOn('foo'), "should return truthy on positive number of sources");
+    });
+
+    test("Source addition", function () {
+        expect(7);
+
+        var parent = BinaryStateful.create()
+                .addBinaryState('foo'),
+            child = BinaryStateful.create()
+                .addBinaryState('foo', true)
+                .addToParent(parent);
+
+        parent.addMocks({
+            afterStateOn: function (stateName) {
+                equal(stateName, 'foo', "should call after state handler");
             }
         });
 
@@ -144,30 +162,90 @@
             }
         });
 
-        raises(function () {
-            binaryStateful.addBinaryStateSource('bar', 'hello');
-        }, "should raise exception on attempt to add to absent state");
+        BinaryStateful.addMocks({
+            addImposedStateSource: function (stateName, statefulInstance) {
+                strictEqual(this, child, "should add imposed state to child");
+                equal(stateName, 'foo', "should pass state name to imposed source setter");
+                strictEqual(statefulInstance, parent, "should pass parent to imposed source setter");
+            }
+        });
 
-        strictEqual(binaryStateful.addBinaryStateSource('foo', 'hello'), binaryStateful,
+        strictEqual(parent.addBinaryStateSource('foo', 'hello'), parent,
+            "should be chainable");
+
+        candystore.BinaryState.removeMocks();
+        BinaryStateful.removeMocks();
+    });
+
+    test("Imposed source addition", function () {
+        expect(4);
+
+        var parent = BinaryStateful.create()
+                .addBinaryState('foo'),
+            child = BinaryStateful.create()
+                .addBinaryState('foo');
+
+        child.addMocks({
+            afterStateOn: function (stateName) {
+                equal(stateName, 'foo', "should call after state handler");
+            }
+        });
+
+        var i = 0;
+        candystore.BinaryState.addMocks({
+            addSource: function (sourceId) {
+                equal(this.stateName, 'foo', "should add source to selected state");
+                equal(sourceId, 'imposed-' + parent.instanceId, "should add imposed source to state");
+            },
+
+            getSourceCount: function () {
+                return i++;
+            }
+        });
+
+        strictEqual(child.addImposedStateSource('foo', parent), child,
             "should be chainable");
 
         candystore.BinaryState.removeMocks();
     });
 
-    test("Source removal", function () {
-        expect(6);
+    test("Applying imposed source", function () {
+        expect(3);
 
-        var binaryStateful = BinaryStateful.create()
-            .addBinaryState('foo');
+        var parent = BinaryStateful.create()
+                .addBinaryState('foo')
+                .addBinaryStateSource('foo', 'bar'),
+            child = BinaryStateful.create()
+                .addBinaryState('foo')
+                .addToParent(parent);
 
-        binaryStateful.addMocks({
-            afterStateOff: function (stateName, sourceIdsBefore) {
-                equal(stateName, 'foo', "should call after handler");
-                deepEqual(sourceIdsBefore, ['hello'], "should pass source ID array before change");
+        child.addMocks({
+            addImposedStateSource: function (stateName, statefulInstance) {
+                equal(stateName, 'foo', "should pass state name to imposed source setter");
+                strictEqual(statefulInstance, parent, "should pass parent to imposed source setter");
             }
         });
 
-        binaryStateful.addBinaryStateSource('foo', 'hello');
+        strictEqual(child.applyImposedStateSource('foo'), child,
+            "should be chainable");
+    });
+
+    test("Source removal", function () {
+        expect(7);
+
+        var parent = BinaryStateful.create()
+                .addBinaryState('foo'),
+            child = BinaryStateful.create()
+                .addBinaryState('foo')
+                .addToParent(parent);
+
+        parent.addMocks({
+            afterStateOff: function (stateName) {
+                equal(stateName, 'foo', "should call after handler");
+            }
+        });
+
+        parent.addBinaryStateSource('foo', 'hello');
 
         var i = 1;
         candystore.BinaryState.addMocks({
@@ -181,28 +259,50 @@
             }
         });
 
-        raises(function () {
-            binaryStateful.removeBinaryStateSource('bar', 'hello');
-        }, "should raise exception on attempt to add to absent state");
+        BinaryStateful.addMocks({
+            removeImposedStateSource: function (stateName, statefulInstance) {
+                strictEqual(this, child, "should remove imposed state from child");
+                equal(stateName, 'foo', "should pass state name to imposed source removal");
+                strictEqual(statefulInstance, parent, "should pass parent to imposed source removal");
+            }
+        });
 
-        strictEqual(binaryStateful.removeBinaryStateSource('foo', 'world'), binaryStateful,
+        strictEqual(parent.removeBinaryStateSource('foo', 'world'), parent,
             "should be chainable");
 
         candystore.BinaryState.removeMocks();
+        BinaryStateful.removeMocks();
     });
 
-    test("State value getter", function () {
-        var binaryStateful = BinaryStateful.create()
-            .addBinaryState('foo');
+    test("Source removal", function () {
+        expect(4);
 
-        raises(function () {
-            binaryStateful.isStateOn('bar');
-        }, "should raise exception on absent state");
+        var parent = BinaryStateful.create()
+                .addBinaryState('foo'),
+            child = BinaryStateful.create()
+                .addBinaryState('foo');
 
-        ok(!binaryStateful.isStateOn('foo'), "should return falsey on zero associated sources");
+        child.addMocks({
+            afterStateOff: function (stateName) {
+                equal(stateName, 'foo', "should call after handler");
+            }
+        });
 
-        binaryStateful.addBinaryStateSource('foo', 'hello');
+        var i = 1;
+        candystore.BinaryState.addMocks({
+            removeSource: function (sourceId) {
+                equal(this.stateName, 'foo', "should remove source from selected state");
+                equal(sourceId, 'imposed-' + parent.instanceId, "should remove imposed source from state");
+            },
 
-        ok(binaryStateful.isStateOn('foo'), "should return truthy on positive number of sources");
+            getSourceCount: function () {
+                return i--;
+            }
+        });
+
+        strictEqual(child.removeImposedStateSource('foo', parent), child,
+            "should be chainable");
+
+        candystore.BinaryState.removeMocks();
     });
 }());
