@@ -42,7 +42,7 @@
     });
 
     test("Addition handler", function () {
-        expect(7);
+        expect(3);
 
         var parent = BinaryStateful.create()
                 .addBinaryState('foo', true)
@@ -52,37 +52,20 @@
                 .addBinaryState('foo', true);
 
         parent.addMocks({
-        });
-
-        candystore.BinaryState.addMocks({
-            addStateAsSource: function (state, sourceId) {
-                ok(state.isA(candystore.BinaryState), "should add binary state as source");
-                equal(state.stateName, 'foo', "should pass state with matching state name");
-                equal(sourceId, 'imposed-' + parent.instanceId,
-                    "should add parent imposed source to state");
-            },
-
-            isStateOn: function () {
-                ok(true, "should fetch parent's state");
+            isStateOn: function (stateName) {
+                equal(stateName, 'foo', "should test parent's state");
                 return true;
             }
         });
 
         child.addMocks({
-            isStateOn: function () {
-                ok(true, "should fetch current state");
-                return true;
-            },
-
-            afterStateOn: function (stateName, sourceIdsBefore) {
-                equal(stateName, 'foo', "should call state handler");
-                deepEqual(sourceIdsBefore, [], "should pass before state of source ID array");
+            addImposeStateSource: function (stateName, statefulInstance) {
+                equal(stateName, 'foo', "should add imposed sources");
+                deepEqual(statefulInstance, parent, "should pass imposer instance to source addition");
             }
         });
 
         child.addToParent(parent);
-
-        candystore.BinaryState.removeMocks();
     });
 
     test("Removal handler", function () {
