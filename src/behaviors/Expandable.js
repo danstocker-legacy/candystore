@@ -67,7 +67,7 @@ troop.postpone(candystore, 'Expandable', function () {
             },
 
             /** @returns {candystore.Expandable} */
-            retractWidget: function () {
+            contractWidget: function () {
                 this.removeBinaryStateSource(this.STATE_NAME_EXPANDABLE, 'default');
                 return this;
             },
