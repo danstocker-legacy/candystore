@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/BinaryState.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: utils/BinaryState.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, candystore */
+troop.postpone(candystore, 'BinaryState', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * Creates a BinaryState instance.
+     * @name candystore.BinaryState.create
+     * @function
+     * @param {string} stateName Identifies the binary state.
+     * @returns {candystore.BinaryState}
+     * @see String#toBinaryState
+     */
+
+    /**
+     * The BinaryState implements a named state that can take two values: true or false,
+     * but which value depends on the number of sources contributing the state.
+     * The value is false when no source contributes the state, true otherwise.
+     * TODO: Remove .addStateAsSource.
+     * @class
+     * @extends troop.Base
+     */
+    candystore.BinaryState = self
+        .addMethods(/** @lends candystore.BinaryState# */{
+            /**
+             * @param {string} stateName
+             * @ignore
+             */
+            init: function (stateName) {
+                dessert.isString(stateName, "Invalid state name");
+
+                /**
+                 * Name of the state. Eg. "expandable".
+                 * @type {string}
+                 */
+                this.stateName = stateName;
+
+                /**
+                 * Lookup of source identifiers contributing the state.
+                 * @type {sntls.Collection}
+                 */
+                this.stateSources = sntls.Collection.create();
+
+                /**
+                 * Whether state can cascade, ie. be influenced by other states.
+                 * @type {boolean}
+                 */
+                this.isCascading = false;
+            },
+
+            /**
+             * @param {boolean} isCascading
+             * @returns {candystore.BinaryState}
+             */
+            setIsCascading: function (isCascading) {
+                this.isCascading = isCascading;
+                return this;
+            },
+
+            /**
+             * Adds the specified source to the state.
+             * @param {string} sourceId Identifies the contributing source.
+             * @returns {candystore.BinaryState}
+             */
+            addSource: function (sourceId) {
+                this.stateSources.setItem(sourceId, true);
+                return this;
+            },
+
+            /**
+             * Removes the specified source.
+             * @param {string} [sourceId] Identifies the contributing source.
+             * @returns {candystore.BinaryState}
+             */
+            removeSource: function (sourceId) {
+                if (typeof sourceId === 'string') {
+                    this.stateSources.deleteItem(sourceId);
+                } else {
+                    this.stateSources.clear();
+                }
+                return this;
+            },
+
+            /**
+             * Tells whether the specified state contributes to the state.
+             * @param {string} sourceId
+             * @returns {boolean}
+             */
+            hasSource: function (sourceId) {
+                return this.stateSources.getItem(sourceId);
+            },
+
+            /**
+             * Retrieves the identifiers of all contributing sources.
+             * @returns {string[]}
+             */
+            getSourceIds: function () {
+                return this.stateSources.getKeys();
+            },
+
+            /**
+             * Determines the number of contributing sources.
+             * @returns {number}
+             */
+            getSourceCount: function () {
+                return this.stateSources.getKeyCount();
+            },
+
+            /**
+             * Determines whether the state value is true, ie. there is at leas one source
+             * contributing.
+             * @returns {boolean}
+             */
+            isStateOn: function () {
+                return this.stateSources.getKeyCount() > 0;
+            },
+
+            /**
+             * Adds another state as contributing source.
+             * Takes effect only if state is cascading.
+             * TODO: Remove, and place logic in classes that use BinaryState.
+             * @param {candystore.BinaryState} binaryState
+             * @param {string} sourceId
+             * @returns {candystore.BinaryState}
+             */
+            addStateAsSource: function (binaryState, sourceId) {
+                dessert.isBinaryState(binaryState, "Invalid binary state");
+                if (this.isCascading && binaryState.isStateOn()) {
+                    this.addSource(sourceId);
+                }
+                return this;
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        /** @param {candystore.BinaryState} expr */
+        isBinaryState: function (expr) {
+            return candystore.BinaryState.isBaseOf(expr);
+        },
+
+        /** @param {candystore.BinaryState} [expr] */
+        isBinaryStateOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   candystore.BinaryState.isBaseOf(expr);
+        }
+    });
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * @returns {candystore.BinaryState}
+             */
+            toBinaryState: function () {
+                return candystore.BinaryState.create(this.valueOf());
+            }
+        },
+        false, false, false
+    );
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.BinaryState.html">BinaryState</a></li><li><a href="candystore.BinaryStateful.html">BinaryStateful</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataListItem.html">DataListItem</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.ItemDataLabel.html">ItemDataLabel</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Nov 26 2014 22:32:47 GMT-0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: TextInput</title>
+    <title>JSDoc: Class: BinaryStateful</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: TextInput</h1>
+    <h1 class="page-title">Class: BinaryStateful</h1>
     
     
 
@@ -29,7 +29,7 @@
     <h2>
         <span class="ancestors"><a href="candystore.html">candystore</a>.</span>
     
-    TextInput
+    BinaryStateful
     </h2>
     
 </header>  
@@ -40,9 +40,7 @@
     
     
     <div class="description">
-        The TextInput extends the Input for text input specifically.
-Implements mostly UI event handlers, and channels them into widget events.
-Also delegates surrogate to Input: instantiating an Input with 'type'='text' will yield a TextInput instance.
+        The BinaryStateful trait manages multiple binary states with multiple contributing sources.
     </div>
     
 
@@ -75,12 +73,19 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TextInput.js.html">widgets/form/TextInput.js</a>, line 26
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 15
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="candystore.BinaryState.html">candystore.BinaryState</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -103,9 +108,9 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="candystore.Input.html">candystore.Input</a></li>
+            <li>troop.Base</li>
         
-            <li>shoeshine.JqueryWidget</li>
+            <li>shoeshine.Widget</li>
         </ul>
     
     
@@ -123,14 +128,14 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
         <dl>
             
 <dt>
-    <h4 class="name" id="canSubmit"><span class="type-signature"></span>canSubmit<span class="type-signature"> :boolean</span></h4>
+    <h4 class="name" id="SOURCE_ID_IMPOSED"><span class="type-signature">&lt;static, constant> </span>SOURCE_ID_IMPOSED<span class="type-signature"></span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Whether input can submit form on enter.
+        Identifier for imposed source.
     </div>
     
     
@@ -142,11 +147,6 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
     
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#canSubmit">candystore.Input#canSubmit</a>
-    </li></dd>
     
     
     
@@ -162,7 +162,7 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 144
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 21
     </li></ul></dd>
     
     
@@ -180,14 +180,14 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
         
             
 <dt>
-    <h4 class="name" id="inputValue"><span class="type-signature"></span>inputValue<span class="type-signature"> :*</span></h4>
+    <h4 class="name" id="binaryStates"><span class="type-signature"></span>binaryStates<span class="type-signature"> :sntls.Collection</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Current value of the input.
+        Holds a collection of BinaryState instances for each binary state.
     </div>
     
     
@@ -199,11 +199,6 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
     
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#inputValue">candystore.Input#inputValue</a>
-    </li></dd>
     
     
     
@@ -219,124 +214,7 @@ Also delegates surrogate to Input: instantiating an Input with 'type'='text' wil
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 150
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="lastValidationError"><span class="type-signature"></span>lastValidationError<span class="type-signature"> :*</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Return value of validatorFunction following the latest input value change.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#lastValidationError">candystore.Input#lastValidationError</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 165
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="validatorFunction"><span class="type-signature"></span>validatorFunction<span class="type-signature"> :function</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Function that validates the input's value.
-Receives the input value as argument and is expected to return undefined when it's valid,
-any other value when it's not. Return value will be stored as instance property (lastValidationError)
-as well as passed to the validity event as payload.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#validatorFunction">candystore.Input#validatorFunction</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 159
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 32
     </li></ul></dd>
     
     
@@ -360,7 +238,7 @@ as well as passed to the validity event as payload.
         <dl>
             
 <dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(<span class="optional">textInputType</span>)</span><span class="type-signature"> &rarr; {<a href="candystore.TextInput.html">candystore.TextInput</a>}</span></h4>
+    <h4 class="name" id="addBinaryState"><span class="type-signature"></span>addBinaryState<span class="signature">(stateName, <span class="optional">isCascading</span>)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
     
     
 </dt>
@@ -368,8 +246,1289 @@ as well as passed to the validity event as payload.
     
     
     <div class="description">
-        Creates a TextInput instance.
-PasswordInput instance may also be created by instantiating `candystore.Input` with the type 'text'.
+        Adds a state to the instance. A state must be added before it can be manipulated.
+TODO: Add test for isCascading argument.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Identifies the state.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>isCascading</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">Whether new state is cascading.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 82
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="addBinaryStateSource"><span class="type-signature"></span>addBinaryStateSource<span class="signature">(stateName, sourceId)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adds the specified contributing source to the specified state.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Identifies state.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sourceId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Identifies source.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 116
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="addImposedStateSource"><span class="type-signature"></span>addImposedStateSource<span class="signature">(stateName)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Imposes a source on the specified state provided that that state allows cascading.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 147
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="afterAdd"><span class="type-signature"></span>afterAdd<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Call from host's .afterAdd
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 38
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="afterRemove"><span class="type-signature"></span>afterRemove<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Call from host's .afterRemove
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 58
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="afterStateOff"><span class="type-signature"></span>afterStateOff<span class="signature">(stateName)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Called after the state value changes from true to false.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 263
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="afterStateOn"><span class="type-signature"></span>afterStateOn<span class="signature">(stateName)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Called after the state value changes from false to true.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 261
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="applyImposedStateSource"><span class="type-signature"></span>applyImposedStateSource<span class="signature">(stateName)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Applies sources imposed by parents on the current instance.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Identifies state to add imposed sources to.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 168
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getBinaryState"><span class="type-signature"></span>getBinaryState<span class="signature">(stateName)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryState.html">candystore.BinaryState</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 97
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="init"><span class="type-signature"></span>init<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Call from host's init.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 27
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isStateOn"><span class="type-signature"></span>isStateOn<span class="signature">(stateName)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Determines whether the specified state evaluates to true.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Identifies state.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 106
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="removeBinaryStateSource"><span class="type-signature"></span>removeBinaryStateSource<span class="signature">(stateName, <span class="optional">sourceId</span>)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Removes the specified source from the specified state.
     </div>
     
 
@@ -405,7 +1564,38 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
 	
         <tr>
             
-                <td class="name"><code>textInputType</code></td>
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Identifies state.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sourceId</code></td>
             
             
             <td class="type">
@@ -431,7 +1621,8 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Identifies source. When omitted, all sources will be
+removed.</td>
         </tr>
 	
 	
@@ -462,7 +1653,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TextInput.js.html">widgets/form/TextInput.js</a>, line 9
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 189
     </li></ul></dd>
     
     
@@ -490,7 +1681,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="candystore.TextInput.html">candystore.TextInput</a></span>
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
 
 
 	</dd>
@@ -504,121 +1695,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
         
             
 <dt>
-    <h4 class="name" id="_setInputValue"><span class="type-signature">&lt;private> </span>_setInputValue<span class="signature">(inputValue)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>inputValue</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#_setInputValue">candystore.Input#_setInputValue</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 102
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_triggerChangeEvent"><span class="type-signature">&lt;private> </span>_triggerChangeEvent<span class="signature">(oldInputValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="removeImposedStateSource"><span class="type-signature"></span>removeImposedStateSource<span class="signature">(stateName)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
     
     
 </dt>
@@ -626,7 +1703,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
     
     
     <div class="description">
-        Triggers change event depending on the current and previous input value.
+        Removes contributing source imposed by the specified instance from the specified state.
     </div>
     
 
@@ -660,7 +1737,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
 	
         <tr>
             
-                <td class="name"><code>oldInputValue</code></td>
+                <td class="name"><code>stateName</code></td>
             
             
             <td class="type">
@@ -676,290 +1753,6 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
             
             
             
-            <td class="description last">Input value before the last change</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#_triggerChangeEvent">candystore.Input#_triggerChangeEvent</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 117
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_updateDom"><span class="type-signature">&lt;private> </span>_updateDom<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#_updateDom">candystore.Input#_updateDom</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 108
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="blurInput"><span class="type-signature"></span>blurInput<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Removes focus from the current input.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#blurInput">candystore.Input#blurInput</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 302
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="clearInputValue"><span class="type-signature"></span>clearInputValue<span class="signature">(<span class="optional">updateDom</span>)</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Clears input value and triggers events.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>updateDom</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
             <td class="description last"></td>
         </tr>
 	
@@ -977,11 +1770,6 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#clearInputValue">candystore.Input#clearInputValue</a>
-    </li></dd>
-    
     
     
     
@@ -996,7 +1784,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 228
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 220
     </li></ul></dd>
     
     
@@ -1024,7 +1812,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
 
 
 	</dd>
@@ -1038,7 +1826,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
         
             
 <dt>
-    <h4 class="name" id="focusOnInput"><span class="type-signature"></span>focusOnInput<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
+    <h4 class="name" id="setIsCascading"><span class="type-signature"></span>setIsCascading<span class="signature">(stateName, isCascading)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a>}</span></h4>
     
     
 </dt>
@@ -1046,272 +1834,7 @@ PasswordInput instance may also be created by instantiating `candystore.Input` w
     
     
     <div class="description">
-        Focuses on the current input.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#focusOnInput">candystore.Input#focusOnInput</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 290
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="isFocused"><span class="type-signature"></span>isFocused<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Tells whether current input has the focus.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#isFocused">candystore.Input#isFocused</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 314
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">boolean</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="isValid"><span class="type-signature"></span>isValid<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Determines whether the input value is currently valid.
-Input value is valid when the last validation error was undefined.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#isValid">candystore.Input#isValid</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 199
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">boolean</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setCanSubmit"><span class="type-signature"></span>setCanSubmit<span class="signature">(canSubmit)</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Sets whether the input can signal to submit the form (if it is in a form).
+        Sets cascading flag on the specified state and updates imposed state on the current instance.
     </div>
     
 
@@ -1345,7 +1868,30 @@ Input value is valid when the last validation error was undefined.
 	
         <tr>
             
-                <td class="name"><code>canSubmit</code></td>
+                <td class="name"><code>stateName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>isCascading</code></td>
             
             
             <td class="type">
@@ -1378,11 +1924,6 @@ Input value is valid when the last validation error was undefined.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#setCanSubmit">candystore.Input#setCanSubmit</a>
-    </li></dd>
-    
     
     
     
@@ -1397,7 +1938,7 @@ Input value is valid when the last validation error was undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 189
+        <a href="BinaryStateful.js.html">behaviors/BinaryStateful.js</a>, line 242
     </li></ul></dd>
     
     
@@ -1425,420 +1966,7 @@ Input value is valid when the last validation error was undefined.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setInputValue"><span class="type-signature"></span>setInputValue<span class="signature">(inputValue, <span class="optional">updateDom</span>)</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Sets input value and triggers events.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>inputValue</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>updateDom</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#setInputValue">candystore.Input#setInputValue</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 209
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setValidatorFunction"><span class="type-signature"></span>setValidatorFunction<span class="signature">(validatorFunction)</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Sets validator function. The validator function will be passed the current input value
-and is expected to return a validation error (code or message) or undefined.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>validatorFunction</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#setValidatorFunction">candystore.Input#setValidatorFunction</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 240
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="candystore.Input.html#validatorFunction">candystore.Input#validatorFunction</a></li>
-        </ul>
-    </dd>
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="validateInputValue"><span class="type-signature"></span>validateInputValue<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.Input.html">candystore.Input</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Updates the validity of the current input value, and triggers validity events accordingly.
-TODO: Manage validity separately from validationError. Validity should start out as undefined
-and could take values true or false.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Input.html#validateInputValue">candystore.Input#validateInputValue</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">widgets/form/Input.js</a>, line 252
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Input.html">candystore.Input</a></span>
+<span class="param-type"><a href="candystore.BinaryStateful.html">candystore.BinaryStateful</a></span>
 
 
 	</dd>
@@ -1871,7 +1999,7 @@ and could take values true or false.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Nov 26 2014 22:32:54 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Nov 26 2014 22:32:48 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

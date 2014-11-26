@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DataLink</title>
+    <title>JSDoc: Class: BinaryState</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: DataLink</h1>
+    <h1 class="page-title">Class: BinaryState</h1>
     
     
 
@@ -29,7 +29,7 @@
     <h2>
         <span class="ancestors"><a href="candystore.html">candystore</a>.</span>
     
-    DataLink
+    BinaryState
     </h2>
     
 </header>  
@@ -40,11 +40,10 @@
     
     
     <div class="description">
-        The DataLink displays a link based on the value of a field in the cache.
-Keeps the target URL in sync with the changes of the corresponding field.
-This is a general implementation with independent fields for URL and text.
-For data links where the two fields are connected (eg. by being in the same document)
-it might be a better idea to subclass Link directly than using DataLink.
+        The BinaryState implements a named state that can take two values: true or false,
+but which value depends on the number of sources contributing the state.
+The value is false when no source contributes the state, true otherwise.
+TODO: Remove .addStateAsSource.
     </div>
     
 
@@ -77,7 +76,7 @@ it might be a better idea to subclass Link directly than using DataLink.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DataLink.js.html">widgets/DataLink.js</a>, line 32
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 25
     </li></ul></dd>
     
     
@@ -105,13 +104,7 @@ it might be a better idea to subclass Link directly than using DataLink.
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="candystore.Link.html">candystore.Link</a></li>
-        
-            <li>bookworm.EntityBound</li>
-        
-            <li><a href="candystore.EntityWidget.html">candystore.EntityWidget</a></li>
-        
-            <li><a href="candystore.FieldBound.html">candystore.FieldBound</a></li>
+            <li>troop.Base</li>
         </ul>
     
     
@@ -129,67 +122,14 @@ it might be a better idea to subclass Link directly than using DataLink.
         <dl>
             
 <dt>
-    <h4 class="name" id="entityKey"><span class="type-signature"></span>entityKey<span class="type-signature"> :bookworm.EntityKey</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.EntityWidget.html#entityKey">candystore.EntityWidget#entityKey</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="EntityWidget.js.html">behaviors/EntityWidget.js</a>, line 25
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="textKey"><span class="type-signature"></span>textKey<span class="type-signature"> :bookworm.FieldKey</span></h4>
+    <h4 class="name" id="isCascading"><span class="type-signature"></span>isCascading<span class="type-signature"> :boolean</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Field key that identifies the text
+        Whether state can cascade, ie. be influenced by other states.
     </div>
     
     
@@ -216,7 +156,111 @@ it might be a better idea to subclass Link directly than using DataLink.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DataLink.js.html">widgets/DataLink.js</a>, line 48
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 50
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="stateName"><span class="type-signature"></span>stateName<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Name of the state. Eg. "expandable".
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 38
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="stateSources"><span class="type-signature"></span>stateSources<span class="type-signature"> :sntls.Collection</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Lookup of source identifiers contributing the state.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 44
     </li></ul></dd>
     
     
@@ -240,7 +284,7 @@ it might be a better idea to subclass Link directly than using DataLink.
         <dl>
             
 <dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(urlKey, textKey)</span><span class="type-signature"> &rarr; {<a href="candystore.DataLink.html">candystore.DataLink</a>}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(stateName)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryState.html">candystore.BinaryState</a>}</span></h4>
     
     
 </dt>
@@ -248,7 +292,7 @@ it might be a better idea to subclass Link directly than using DataLink.
     
     
     <div class="description">
-        Creates a DataLink instance.
+        Creates a BinaryState instance.
     </div>
     
 
@@ -282,13 +326,13 @@ it might be a better idea to subclass Link directly than using DataLink.
 	
         <tr>
             
-                <td class="name"><code>urlKey</code></td>
+                <td class="name"><code>stateName</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">bookworm.FieldKey</span>
+<span class="param-type">string</span>
 
 
             
@@ -298,30 +342,7 @@ it might be a better idea to subclass Link directly than using DataLink.
             
             
             
-            <td class="description last">Points to the link's URL.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>textKey</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">bookworm.FieldKey</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Points to the link's text.</td>
+            <td class="description last">Identifies the binary state.</td>
         </tr>
 	
 	
@@ -352,12 +373,19 @@ it might be a better idea to subclass Link directly than using DataLink.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DataLink.js.html">widgets/DataLink.js</a>, line 11
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 8
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="String.html#toBinaryState">String#toBinaryState</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -380,7 +408,7 @@ it might be a better idea to subclass Link directly than using DataLink.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="candystore.DataLink.html">candystore.DataLink</a></span>
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
 
 
 	</dd>
@@ -394,12 +422,16 @@ it might be a better idea to subclass Link directly than using DataLink.
         
             
 <dt>
-    <h4 class="name" id="_onDocumentReplace"><span class="type-signature">&lt;private> </span>_onDocumentReplace<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="addSource"><span class="type-signature"></span>addSource<span class="signature">(sourceId)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryState.html">candystore.BinaryState</a>}</span></h4>
     
     
 </dt>
 <dd>
     
+    
+    <div class="description">
+        Adds the specified source to the state.
+    </div>
     
 
     
@@ -432,13 +464,146 @@ it might be a better idea to subclass Link directly than using DataLink.
 	
         <tr>
             
-                <td class="name"><code>event</code></td>
+                <td class="name"><code>sourceId</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">flock.ChangeEvent</span>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Identifies the contributing source.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 67
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="addStateAsSource"><span class="type-signature"></span>addStateAsSource<span class="signature">(binaryState, sourceId)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryState.html">candystore.BinaryState</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adds another state as contributing source.
+Takes effect only if state is cascading.
+TODO: Remove, and place logic in classes that use BinaryState.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>binaryState</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
 
 
             
@@ -452,543 +617,10 @@ it might be a better idea to subclass Link directly than using DataLink.
         </tr>
 	
 	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.FieldBound.html#_onDocumentReplace">candystore.FieldBound#_onDocumentReplace</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FieldBound.js.html">behaviors/FieldBound.js</a>, line 39
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_onFieldChange"><span class="type-signature">&lt;private> </span>_onFieldChange<span class="signature">(event)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
 	
         <tr>
             
-                <td class="name"><code>event</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">flock.ChangeEvent</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.FieldBound.html#_onFieldChange">candystore.FieldBound#_onFieldChange</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FieldBound.js.html">behaviors/FieldBound.js</a>, line 49
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_updateFieldValue"><span class="type-signature">&lt;private> </span>_updateFieldValue<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.FieldBound.html#_updateFieldValue">candystore.FieldBound#_updateFieldValue</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FieldBound.js.html">behaviors/FieldBound.js</a>, line 30
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getLabelWidget"><span class="type-signature"></span>getLabelWidget<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.Label.html">candystore.Label</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Retrieves the label widget contained within the link.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Link.html#getLabelWidget">candystore.Link#getLabelWidget</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Link.js.html">widgets/Link.js</a>, line 53
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Label.html">candystore.Label</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="hideKey"><span class="type-signature"></span>hideKey<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.EntityWidget.html">candystore.EntityWidget</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.EntityWidget.html#hideKey">candystore.EntityWidget#hideKey</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="EntityWidget.js.html">behaviors/EntityWidget.js</a>, line 39
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.EntityWidget.html">candystore.EntityWidget</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="revealKey"><span class="type-signature"></span>revealKey<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.EntityWidget.html">candystore.EntityWidget</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.EntityWidget.html#revealKey">candystore.EntityWidget#revealKey</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="EntityWidget.js.html">behaviors/EntityWidget.js</a>, line 31
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.EntityWidget.html">candystore.EntityWidget</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setCaption"><span class="type-signature"></span>setCaption<span class="signature">(caption)</span><span class="type-signature"> &rarr; {<a href="candystore.Link.html">candystore.Link</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Sets the link's caption.
-Expects the caption widget to be a Label.
-Override when caption widget is something other than Label.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>caption</code></td>
+                <td class="name"><code>sourceId</code></td>
             
             
             <td class="type">
@@ -1021,11 +653,6 @@ Override when caption widget is something other than Label.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Link.html#setCaption">candystore.Link#setCaption</a>
-    </li></dd>
-    
     
     
     
@@ -1040,7 +667,7 @@ Override when caption widget is something other than Label.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Link.js.html">widgets/Link.js</a>, line 79
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 128
     </li></ul></dd>
     
     
@@ -1068,7 +695,7 @@ Override when caption widget is something other than Label.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="candystore.Link.html">candystore.Link</a></span>
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
 
 
 	</dd>
@@ -1082,7 +709,7 @@ Override when caption widget is something other than Label.
         
             
 <dt>
-    <h4 class="name" id="setTargetUrl"><span class="type-signature"></span>setTargetUrl<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.Link.html">candystore.Link</a>}</span></h4>
+    <h4 class="name" id="getSourceCount"><span class="type-signature"></span>getSourceCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
     
     
 </dt>
@@ -1090,96 +717,7 @@ Override when caption widget is something other than Label.
     
     
     <div class="description">
-        Sets URL for the link.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="candystore.Link.html#setTargetUrl">candystore.Link#setTargetUrl</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Link.js.html">widgets/Link.js</a>, line 61
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="candystore.Link.html">candystore.Link</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="spawnLabelWidget"><span class="type-signature"></span>spawnLabelWidget<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="candystore.DataLabel.html">candystore.DataLabel</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Creates default data bound Label widget based on the textKey provided at instantiation.
-Override to specify custom widget.
+        Determines the number of contributing sources.
     </div>
     
 
@@ -1212,7 +750,7 @@ Override to specify custom widget.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DataLink.js.html">widgets/DataLink.js</a>, line 72
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 107
     </li></ul></dd>
     
     
@@ -1240,7 +778,575 @@ Override to specify custom widget.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="candystore.DataLabel.html">candystore.DataLabel</a></span>
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getSourceIds"><span class="type-signature"></span>getSourceIds<span class="signature">()</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves the identifiers of all contributing sources.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 99
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string[]</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="hasSource"><span class="type-signature"></span>hasSource<span class="signature">(sourceId)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Tells whether the specified state contributes to the state.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>sourceId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 91
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isStateOn"><span class="type-signature"></span>isStateOn<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Determines whether the state value is true, ie. there is at leas one source
+contributing.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 116
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="removeSource"><span class="type-signature"></span>removeSource<span class="signature">(<span class="optional">sourceId</span>)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryState.html">candystore.BinaryState</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Removes the specified source.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>sourceId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Identifies the contributing source.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 77
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setIsCascading"><span class="type-signature"></span>setIsCascading<span class="signature">(isCascading)</span><span class="type-signature"> &rarr; {<a href="candystore.BinaryState.html">candystore.BinaryState</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>isCascading</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BinaryState.js.html">utils/BinaryState.js</a>, line 57
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="candystore.BinaryState.html">candystore.BinaryState</a></span>
 
 
 	</dd>
@@ -1273,7 +1379,7 @@ Override to specify custom widget.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Nov 26 2014 22:32:49 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Nov 26 2014 22:32:48 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

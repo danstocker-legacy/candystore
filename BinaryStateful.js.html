@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behaviors/BinaryStateful.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behaviors/BinaryStateful.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, shoeshine, candystore */
+troop.postpone(candystore, 'BinaryStateful', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * The BinaryStateful trait manages multiple binary states with multiple contributing sources.
+     * @class
+     * @extends troop.Base
+     * @extends shoeshine.Widget
+     * @see candystore.BinaryState
+     */
+    candystore.BinaryStateful = self
+        .addConstants(/** @lends candystore.BinaryStateful */{
+            /**
+             * Identifier for imposed source.
+             * @constant
+             */
+            SOURCE_ID_IMPOSED: 'imposed'
+        })
+        .addMethods(/** @lends candystore.BinaryStateful# */{
+            /**
+             * Call from host's init.
+             */
+            init: function () {
+                /**
+                 * Holds a collection of BinaryState instances for each binary state.
+                 * @type {sntls.Collection}
+                 */
+                this.binaryStates = sntls.Collection.create();
+            },
+
+            /**
+             * Call from host's .afterAdd
+             */
+            afterAdd: function () {
+                var that = this;
+
+                this.binaryStates
+                    .forEachItem(function (sources, stateName) {
+                        // checking whether any of the parents have matching states set
+                        that.applyImposedStateSource(stateName);
+
+                        // initializing binary state
+                        if (that.isStateOn(stateName)) {
+                            that.afterStateOn(stateName);
+                        } else {
+                            that.afterStateOff(stateName);
+                        }
+                    });
+            },
+
+            /**
+             * Call from host's .afterRemove
+             */
+            afterRemove: function () {
+                var that = this;
+
+                // removing all parent imposed sources from all states
+                this.binaryStates
+                    .forEachItem(function (binaryState, stateName) {
+                        binaryState.stateSources
+                            // fetching imposed source IDs
+                            .filterByPrefix(that.SOURCE_ID_IMPOSED)
+                            .getKeysAsHash()
+                            .toCollection()
+
+                            // removing them from current stateful instance
+                            .passEachItemTo(that.removeBinaryStateSource, that, 1, stateName);
+                    });
+            },
+
+            /**
+             * Adds a state to the instance. A state must be added before it can be manipulated.
+             * TODO: Add test for isCascading argument.
+             * @param {string} stateName Identifies the state.
+             * @param {boolean} [isCascading=false] Whether new state is cascading.
+             * @returns {candystore.BinaryStateful}
+             */
+            addBinaryState: function (stateName, isCascading) {
+                var binaryStateLayers = this.binaryStates;
+                if (!binaryStateLayers.getItem(stateName)) {
+                    binaryStateLayers.setItem(
+                        stateName,
+                        stateName.toBinaryState()
+                            .setIsCascading(isCascading));
+                }
+                return this;
+            },
+
+            /**
+             * @param {string} stateName
+             * @returns {candystore.BinaryState}
+             */
+            getBinaryState: function (stateName) {
+                return this.binaryStates.getItem(stateName);
+            },
+
+            /**
+             * Determines whether the specified state evaluates to true.
+             * @param {string} stateName Identifies state.
+             * @returns {boolean}
+             */
+            isStateOn: function (stateName) {
+                return this.binaryStates.getItem(stateName).isStateOn();
+            },
+
+            /**
+             * Adds the specified contributing source to the specified state.
+             * @param {string} stateName Identifies state.
+             * @param {string} sourceId Identifies source.
+             * @returns {candystore.BinaryStateful}
+             */
+            addBinaryStateSource: function (stateName, sourceId) {
+                var state = this.getBinaryState(stateName),
+                    sourceCountBefore = state.getSourceCount(),
+                    sourceCountAfter;
+
+                // adding source to self
+                state.addSource(sourceId);
+                sourceCountAfter = state.getSourceCount();
+
+                if (sourceCountAfter && !sourceCountBefore) {
+                    // state just switched to "on"
+
+                    // adding source to suitable descendants
+                    this.getAllDescendants()
+                        .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
+                            var state = descendant.binaryStates && descendant.getBinaryState(stateName);
+                            return state && state.isCascading;
+                        })
+                        .callOnEachItem('addImposedStateSource', stateName);
+
+                    this.afterStateOn(stateName);
+                }
+
+                return this;
+            },
+
+            /**
+             * Imposes a source on the specified state provided that that state allows cascading.
+             * @param {string} stateName
+             * @returns {candystore.BinaryStateful}
+             */
+            addImposedStateSource: function (stateName) {
+                var state = this.getBinaryState(stateName),
+                    sourceCountBefore = state.getSourceCount(),
+                    sourceCountAfter;
+
+                state.addSource(this.SOURCE_ID_IMPOSED);
+                sourceCountAfter = state.getSourceCount();
+
+                if (sourceCountAfter && !sourceCountBefore) {
+                    // state just switched to "on"
+                    this.afterStateOn(stateName);
+                }
+
+                return this;
+            },
+
+            /**
+             * Applies sources imposed by parents on the current instance.
+             * @param {string} stateName Identifies state to add imposed sources to.
+             * @returns {candystore.BinaryStateful}
+             */
+            applyImposedStateSource: function (stateName) {
+                // querying nearest parent for matching state
+                var parent = this.getAncestor(function (statefulInstance) {
+                    var binaryStates = statefulInstance.binaryStates;
+                    return binaryStates && statefulInstance.getBinaryState(stateName);
+                });
+
+                if (parent && parent.isStateOn(stateName)) {
+                    this.addImposedStateSource(stateName);
+                }
+
+                return this;
+            },
+
+            /**
+             * Removes the specified source from the specified state.
+             * @param {string} stateName Identifies state.
+             * @param {string} [sourceId] Identifies source. When omitted, all sources will be
+             * removed.
+             * @returns {candystore.BinaryStateful}
+             */
+            removeBinaryStateSource: function (stateName, sourceId) {
+                var state = this.getBinaryState(stateName),
+                    sourceCountBefore = state.getSourceCount(),
+                    sourceCountAfter;
+
+                // adding source to self
+                state.removeSource(sourceId);
+                sourceCountAfter = state.getSourceCount();
+
+                if (!sourceCountAfter && sourceCountBefore) {
+                    // state just switched to "off"
+
+                    // adding source to suitable descendants
+                    this.getAllDescendants()
+                        .filterBySelector(function (/**candystore.BinaryStateful*/descendant) {
+                            var state = descendant.binaryStates && descendant.getBinaryState(stateName);
+                            return state && state.isCascading;
+                        })
+                        .callOnEachItem('removeImposedStateSource', stateName);
+
+                    this.afterStateOff(stateName);
+                }
+
+                return this;
+            },
+
+            /**
+             * Removes contributing source imposed by the specified instance from the specified state.
+             * @param {string} stateName
+             * @returns {candystore.BinaryStateful}
+             */
+            removeImposedStateSource: function (stateName) {
+                var state = this.getBinaryState(stateName),
+                    sourceCountBefore = state.getSourceCount(),
+                    sourceCountAfter;
+
+                state.removeSource(this.SOURCE_ID_IMPOSED);
+                sourceCountAfter = state.getSourceCount();
+
+                if (!sourceCountAfter && sourceCountBefore) {
+                    // state just switched to "off"
+                    this.afterStateOff(stateName);
+                }
+
+                return this;
+            },
+
+            /**
+             * Sets cascading flag on the specified state and updates imposed state on the current instance.
+             * @param {string} stateName
+             * @param {boolean} isCascading
+             * @returns {candystore.BinaryStateful}
+             */
+            setIsCascading: function (stateName, isCascading) {
+                var state = this.getBinaryState(stateName),
+                    wasCascading = state.isCascading;
+
+                if (isCascading && !wasCascading) {
+                    // applying imposed source
+                    this.applyImposedStateSource(stateName);
+                } else if (!isCascading && wasCascading) {
+                    // removing imposed source from this instance only
+                    // (descendants might still be cascading)
+                    this.removeImposedStateSource(stateName);
+                }
+
+                state.setIsCascading(isCascading);
+
+                return this;
+            }
+        });
+
+    /**
+     * Called after the state value changes from false to true.
+     * @name candystore.BinaryStateful#afterStateOn
+     * @function
+     * @param {string} stateName
+     */
+
+    /**
+     * Called after the state value changes from true to false.
+     * @name candystore.BinaryStateful#afterStateOff
+     * @function
+     * @param {string} stateName
+     */
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="candystore.AlignedPopup.html">AlignedPopup</a></li><li><a href="candystore.BinaryState.html">BinaryState</a></li><li><a href="candystore.BinaryStateful.html">BinaryStateful</a></li><li><a href="candystore.Button.html">Button</a></li><li><a href="candystore.DataDropdown.html">DataDropdown</a></li><li><a href="candystore.DataDropdownButton.html">DataDropdownButton</a></li><li><a href="candystore.DataDynamicImage.html">DataDynamicImage</a></li><li><a href="candystore.DataImage.html">DataImage</a></li><li><a href="candystore.DataLabel.html">DataLabel</a></li><li><a href="candystore.DataLink.html">DataLink</a></li><li><a href="candystore.DataList.html">DataList</a></li><li><a href="candystore.DataListItem.html">DataListItem</a></li><li><a href="candystore.DataTextInput.html">DataTextInput</a></li><li><a href="candystore.Debouncer.html">Debouncer</a></li><li><a href="candystore.Disableable.html">Disableable</a></li><li><a href="candystore.Dropdown.html">Dropdown</a></li><li><a href="candystore.DropdownButton.html">DropdownButton</a></li><li><a href="candystore.DynamicImage.html">DynamicImage</a></li><li><a href="candystore.EntityWidget.html">EntityWidget</a></li><li><a href="candystore.Expandable.html">Expandable</a></li><li><a href="candystore.FieldBound.html">FieldBound</a></li><li><a href="candystore.Flow.html">Flow</a></li><li><a href="candystore.Form.html">Form</a></li><li><a href="candystore.FormField.html">FormField</a></li><li><a href="candystore.Highlightable.html">Highlightable</a></li><li><a href="candystore.HotKeyWatcher.html">HotKeyWatcher</a></li><li><a href="candystore.HtmlLabel.html">HtmlLabel</a></li><li><a href="candystore.Image.html">Image</a></li><li><a href="candystore.Input.html">Input</a></li><li><a href="candystore.ItemDataLabel.html">ItemDataLabel</a></li><li><a href="candystore.Label.html">Label</a></li><li><a href="candystore.Link.html">Link</a></li><li><a href="candystore.List.html">List</a></li><li><a href="candystore.Option.html">Option</a></li><li><a href="candystore.OptionList.html">OptionList</a></li><li><a href="candystore.Page.html">Page</a></li><li><a href="candystore.PasswordInput.html">PasswordInput</a></li><li><a href="candystore.Popup.html">Popup</a></li><li><a href="candystore.ResizeWatcher.html">ResizeWatcher</a></li><li><a href="candystore.StringUtils.html">StringUtils</a></li><li><a href="candystore.TextButton.html">TextButton</a></li><li><a href="candystore.TextInput.html">TextInput</a></li><li><a href="dessert.html">dessert</a></li></ul><h3>Namespaces</h3><ul><li><a href="candystore.html">candystore</a></li><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed Nov 26 2014 22:32:47 GMT-0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
