@@ -9,7 +9,6 @@ troop.postpone(candystore, 'Highlightable', function () {
      * The Highlightable trait adds switchable highlight to widgets.
      * Expects to be added to Widget instances.
      * Expects the host to have the BinaryStateful trait applied.
-     * TODO: Add unit tests.
      * @class
      * @extends troop.Base
      * @extends candystore.BinaryStateful
@@ -20,21 +19,24 @@ troop.postpone(candystore, 'Highlightable', function () {
             /** @constant */
             STATE_NAME_HIGHLIGHTABLE: 'state-highlightable'
         })
-        .addPrivateMethods(/** @lends candystore.Disableable# */{
+        .addPrivateMethods(/** @lends candystore.Highlightable# */{
             /**
              * TODO: Refactor to use Set.
              * @private
              */
-            _updateHighlightedStyle: function () {
+            _updateHighlightedState: function () {
                 // removing all previous highlights
                 this.highlightIds
                     .passEachItemTo(this.removeCssClass, this);
 
-                // adding current highlights
-                this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                var highlightIds = this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
                     .getSourceIds()
-                    .toCollection()
-                    .passEachItemTo(this.addCssClass, this);
+                    .toCollection();
+
+                // adding current highlights
+                highlightIds.passEachItemTo(this.addCssClass, this);
+
+                this.highlightIds = highlightIds;
             }
         })
         .addMethods(/** @lends candystore.Highlightable# */{
@@ -47,35 +49,20 @@ troop.postpone(candystore, 'Highlightable', function () {
                  * Lookup of highlight identifiers currently assigned to the instance.
                  * @type {sntls.Collection}
                  */
-                this.highlightIds = undefined;
-            },
-
-            /** Call from host's .afterAdd */
-            afterAdd: function ( ){
-                this.highlightIds = this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
-                    .getSourceIds()
-                    .toCollection();
-                this._updateHighlightedStyle();
-            },
-
-            /** Call from host's .afterRemove */
-            afterRemove: function () {
-                // adding current highlights
-                this.highlightIds
-                    .passEachItemTo(this.removeCssClass, this);
+                this.highlightIds = sntls.Collection.create();
             },
 
             /** Call from host's .afterStateOn */
             afterStateOn: function (stateName) {
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
-                    this._updateHighlightedStyle();
+                    this._updateHighlightedState();
                 }
             },
 
             /** Call from host's .afterStateOff */
             afterStateOff: function (stateName) {
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
-                    this._updateHighlightedStyle();
+                    this._updateHighlightedState();
                 }
             },
 
@@ -113,9 +100,9 @@ troop.postpone(candystore, 'Highlightable', function () {
             isHighlighted: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
                 return highlightId ?
-                       this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
-                           .hasSource(highlightId) :
-                       this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
+                    this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                        .hasSource(highlightId) :
+                    this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
             }
         });
 });
