@@ -6,7 +6,6 @@ troop.postpone(candystore, 'Expandable', function () {
         self = base.extend();
 
     /**
-     * TODO: Add unit tests.
      * @class
      * @extends troop.Base
      * @extends shoeshine.BinaryStateful
