@@ -9,6 +9,8 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
      * Static class that watches key events globally and broadcasts widget events in response.
      * Listen to candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN in any widget to get notified of
      * global key events. (Eg. for navigating within a custom control.)
+     * In case you want to suppress hotkey events originating from eg. Input widgets,
+     * query the original events and look at the target that received the keydown.
      * @class
      * @extends troop.Base
      */
@@ -23,19 +25,12 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
              * @ignore
              */
             onKeyDown: function (event) {
-                var targetTagName = event.target.tagName.toLowerCase(),
-                    inputTagNames = candystore.Input.inputTagNames,
-                    isTargetInput = inputTagNames[targetTagName] === targetTagName;
-
-                if (!isTargetInput) {
-                    // keydown was not triggered in an input element
-                    shoeshine.Widget.rootWidget
-                        .setNextOriginalEvent(event)
-                        .broadcastSync(this.EVENT_HOT_KEY_DOWN, {
-                            charCode: event.which
-                        })
-                        .clearNextOriginalEvent();
-                }
+                shoeshine.Widget.rootWidget
+                    .setNextOriginalEvent(event)
+                    .broadcastSync(this.EVENT_HOT_KEY_DOWN, {
+                        charCode: event.which
+                    })
+                    .clearNextOriginalEvent();
             }
         });
 });
