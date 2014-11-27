@@ -3,7 +3,14 @@
  */
 /*global require */
 /** @namespace */
-var candystore = {},
+var candystore = {
+        /**
+         * Whether to poll input values at a regular interval.
+         * Set to true when change/input events do not get fired on form autofill, etc.
+         * @type {boolean}
+         */
+        pollInputValues: false
+    },
     c$ = candystore;
 
 /**
