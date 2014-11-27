@@ -93,7 +93,10 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
             /** @ignore */
             afterRemove: function () {
                 base.afterRemove.call(this);
-                this._stopChangePolling();
+
+                if (candystore.pollInputValues) {
+                    this._stopChangePolling();
+                }
             },
 
             /** @ignore */
@@ -106,8 +109,10 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                     .on('focusin', this.onFocusIn)
                     .on('focusout', this.onFocusOut);
 
-                this._stopChangePolling();
-                this._startChangePolling();
+                if (candystore.pollInputValues) {
+                    this._stopChangePolling();
+                    this._startChangePolling();
+                }
             },
 
             /**
