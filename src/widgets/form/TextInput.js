@@ -50,6 +50,24 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 url     : 'url'
             }
         })
+        .addPrivateMethods(/** @lends candystore.TextInput# */{
+            /** @private */
+            _startChangePolling: function () {
+                var that = this;
+                this.changePollTimer = setInterval(function () {
+                    that.setInputValue($(that.getElement()).val(), false);
+                }, 1000);
+            },
+
+            /** @private */
+            _stopChangePolling: function () {
+                var changePollTimer = this.changePollTimer;
+                if (changePollTimer) {
+                    clearInterval(changePollTimer);
+                    this.changePollTimer = undefined;
+                }
+            }
+        })
         .addMethods(/** @lends candystore.TextInput# */{
             /**
              * @param {string} textInputType
@@ -64,6 +82,18 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                     .elevateMethod('onFocusIn')
                     .elevateMethod('onFocusOut')
                     .setCanSubmit(textInputType !== 'textarea');
+
+                /**
+                 * Timer for polling for input changes.
+                 * @type {number}
+                 */
+                this.changePollTimer = undefined;
+            },
+
+            /** @ignore */
+            afterRemove: function () {
+                base.afterRemove.call(this);
+                this._stopChangePolling();
             },
 
             /** @ignore */
@@ -75,6 +105,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 $element
                     .on('focusin', this.onFocusIn)
                     .on('focusout', this.onFocusOut);
+
+                this._stopChangePolling();
+                this._startChangePolling();
             },
 
             /**
