@@ -30,26 +30,6 @@ troop.postpone(candystore, 'FieldBound', function () {
             _updateFieldValue: function () {
                 var fieldValue = this.entityKey.toField().getValue();
                 this.setFieldValue(fieldValue);
-            },
-
-            /**
-             * @param {flock.ChangeEvent} event
-             * @private
-             */
-            _onDocumentReplace: function (event) {
-                this.setNextOriginalEvent(event);
-                this._updateFieldValue();
-                this.clearNextOriginalEvent();
-            },
-
-            /**
-             * @param {flock.ChangeEvent} event
-             * @private
-             */
-            _onFieldChange: function (event) {
-                this.setNextOriginalEvent(event);
-                this._updateFieldValue();
-                this.clearNextOriginalEvent();
             }
         })
         .addMethods(/** @lends candystore.FieldBound# */{
@@ -57,8 +37,8 @@ troop.postpone(candystore, 'FieldBound', function () {
             afterAdd: function () {
                 this._updateFieldValue();
                 this
-                    .bindToEntityNodeChange(this.entityKey.documentKey, '_onDocumentReplace')
-                    .bindToEntityNodeChange(this.entityKey, '_onFieldChange');
+                    .bindToEntityNodeChange(this.entityKey.documentKey, 'onDocumentReplace')
+                    .bindToEntityNodeChange(this.entityKey, 'onFieldChange');
             },
 
             /** Call from host's afterRemove. */
@@ -66,6 +46,26 @@ troop.postpone(candystore, 'FieldBound', function () {
                 this
                     .unbindFromEntityChange(this.entityKey.documentKey)
                     .unbindFromEntityChange(this.entityKey);
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onDocumentReplace: function (event) {
+                this.setNextOriginalEvent(event);
+                this._updateFieldValue();
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {flock.ChangeEvent} event
+             * @ignore
+             */
+            onFieldChange: function (event) {
+                this.setNextOriginalEvent(event);
+                this._updateFieldValue();
+                this.clearNextOriginalEvent();
             }
         });
 });

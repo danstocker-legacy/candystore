@@ -80,19 +80,6 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                 } else {
                     return !$element.closest(this.getElement()).length;
                 }
-            },
-
-            /**
-             * @param {UIEvent} event
-             * @private
-             */
-            _onBodyClick: function (event) {
-                if (this._isOutside($(event.target))) {
-                    this
-                        .setNextOriginalEvent(event)
-                        .triggerSync(this.EVENT_POPUP_OUTSIDE_CLICK)
-                        .clearNextOriginalEvent();
-                }
             }
         })
         .addMethods(/** @lends candystore.Popup# */{
@@ -101,7 +88,7 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             init: function () {
                 this
-                    .elevateMethod('_onBodyClick')
+                    .elevateMethod('onBodyClick')
                     .elevateMethod('onOutsideClick');
 
                 /** @type {boolean} */
@@ -132,7 +119,7 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                 this._removeFromDom();
 
                 // unsubscribing from global click event
-                $document.off('click', this._onBodyClick);
+                $document.off('click', this.onBodyClick);
             },
 
             /**
@@ -140,8 +127,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             afterRender: function () {
                 $document
-                    .off('click', this._onBodyClick)
-                    .on('click', this._onBodyClick);
+                    .off('click', this.onBodyClick)
+                    .on('click', this.onBodyClick);
             },
 
             /**
@@ -221,6 +208,19 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                     .setNextOriginalEvent(event)
                     .closePopup()
                     .clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {UIEvent} event
+             * @ignore
+             */
+            onBodyClick: function (event) {
+                if (this._isOutside($(event.target))) {
+                    this
+                        .setNextOriginalEvent(event)
+                        .triggerSync(this.EVENT_POPUP_OUTSIDE_CLICK)
+                        .clearNextOriginalEvent();
+                }
             }
         });
 }, jQuery);

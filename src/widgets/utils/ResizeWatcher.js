@@ -35,24 +35,10 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
              */
             RESIZE_DEBOUNCE_DELAY: 100
         })
-        .addPrivateMethods(/** @lends candystore.ResizeWatcher# */{
-            /**
-             * @param {jQuery.Event} event
-             * @private
-             */
-            _onWindowResize: function (event) {
-                var rootWidget = shoeshine.Widget.rootWidget;
-                if (rootWidget) {
-                    rootWidget.setNextOriginalEvent(event);
-                    this.updateDimensions();
-                    rootWidget.clearNextOriginalEvent();
-                }
-            }
-        })
         .addMethods(/** @lends candystore.ResizeWatcher# */{
             /** @ignore */
             init: function () {
-                this.elevateMethod('_onWindowResize');
+                this.elevateMethod('onDebouncedWindowResize');
 
                 /**
                  * Stores current window width.
@@ -70,7 +56,7 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
                  * Debouncer instance for debouncing window resize events, which may come in rapid succession.
                  * @type {candystore.Debouncer}
                  */
-                this.windowResizeDebouncer = candystore.Debouncer.create(this._onWindowResize);
+                this.windowResizeDebouncer = candystore.Debouncer.create(this.onDebouncedWindowResize);
 
                 // setting initial dimensions
                 this.updateDimensions();
@@ -106,6 +92,19 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
              */
             onWindowResize: function (event) {
                 this.windowResizeDebouncer.runDebounced(this.RESIZE_DEBOUNCE_DELAY, event);
+            },
+
+            /**
+             * @param {jQuery.Event} event
+             * @ignore
+             */
+            onDebouncedWindowResize: function (event) {
+                var rootWidget = shoeshine.Widget.rootWidget;
+                if (rootWidget) {
+                    rootWidget.setNextOriginalEvent(event);
+                    this.updateDimensions();
+                    rootWidget.clearNextOriginalEvent();
+                }
             }
         });
 }, jQuery);

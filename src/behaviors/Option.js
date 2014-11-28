@@ -35,31 +35,6 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
             /** @constant */
             HIGHLIGHTED_ACTIVE: 'highlighted-active'
         })
-        .addPrivateMethods(/** @lends candystore.Option# */{
-            /**
-             * @param {jQuery.Event} event
-             * @private
-             * @ignore
-             */
-            _onOptionClick: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .markAsActive()
-                    .clearNextOriginalEvent();
-            },
-
-            /**
-             * @param {jQuery.Event} event
-             * @private
-             * @ignore
-             */
-            _onOptionHover: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .markAsFocused()
-                    .clearNextOriginalEvent();
-            }
-        })
         .addMethods(/** @lends candystore.Option# */{
             /**
              * Call from host's init.
@@ -67,8 +42,8 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              */
             init: function (optionValue) {
                 this
-                    .elevateMethod('_onOptionClick')
-                    .elevateMethod('_onOptionHover');
+                    .elevateMethod('onOptionClick')
+                    .elevateMethod('onOptionHover');
 
                 /**
                  * Value carried by option.
@@ -82,8 +57,8 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
             /** Call from host's afterRender. */
             afterRender: function () {
                 $(this.getElement())
-                    .on('click', this._onOptionClick)
-                    .on('mouseenter', this._onOptionHover);
+                    .on('click', this.onOptionClick)
+                    .on('mouseenter', this.onOptionHover);
             },
 
             /**
@@ -174,6 +149,28 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              */
             isActive: function () {
                 return this.isHighlighted(this.HIGHLIGHTED_ACTIVE);
+            },
+
+            /**
+             * @param {jQuery.Event} event
+             * @ignore
+             */
+            onOptionClick: function (event) {
+                this
+                    .setNextOriginalEvent(event)
+                    .markAsActive()
+                    .clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {jQuery.Event} event
+             * @ignore
+             */
+            onOptionHover: function (event) {
+                this
+                    .setNextOriginalEvent(event)
+                    .markAsFocused()
+                    .clearNextOriginalEvent();
             }
         });
 }, jQuery);

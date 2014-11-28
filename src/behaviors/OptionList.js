@@ -104,108 +104,17 @@ troop.postpone(candystore, 'OptionList', function () {
                     // there is a suitable option to focus on
                     focusedOption.markAsFocused();
                 }
-            },
-
-            /**
-             * @param {shoeshine.WidgetEvent} event
-             * @private
-             */
-            _onItemsChange: function (event) {
-                this.setNextOriginalEvent(event);
-                this._focusOnOption();
-                this._updateFocusedOptionName();
-                this.clearNextOriginalEvent();
-            },
-
-            /**
-             * TODO: break up into smaller methods
-             * @param {shoeshine.WidgetEvent} event
-             * @private
-             */
-            _onHotKeyPress: function (event) {
-                var charCode = event.payload.charCode,
-                    children = this.children,
-                    sortedChildNames = children.getKeys().sort(),
-                    currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
-                    newFocusedOptionName;
-
-                switch (charCode) {
-                case 38: // up
-                    currentChildIndex = Math.max(currentChildIndex - 1, 0);
-                    newFocusedOptionName = sortedChildNames[currentChildIndex];
-                    this.getChild(newFocusedOptionName)
-                        .setNextOriginalEvent(event)
-                        .markAsFocused()
-                        .clearNextOriginalEvent();
-                    break;
-
-                case 40: // down
-                    currentChildIndex = Math.min(currentChildIndex + 1, sortedChildNames.length - 1);
-                    newFocusedOptionName = sortedChildNames[currentChildIndex];
-                    this.getChild(newFocusedOptionName)
-                        .setNextOriginalEvent(event)
-                        .markAsFocused()
-                        .clearNextOriginalEvent();
-                    break;
-
-                case 27: // esc
-                    this
-                        .setNextOriginalEvent(event)
-                        .triggerSync(this.EVENT_OPTIONS_ESCAPE)
-                        .clearNextOriginalEvent();
-                    break;
-
-                case 13: // enter
-                    this.getChild(this.focusedOptionName)
-                        .setNextOriginalEvent(event)
-                        .markAsActive()
-                        .clearNextOriginalEvent();
-                    break;
-                }
-            },
-
-            /**
-             * @param {shoeshine.WidgetEvent} event
-             * @private
-             */
-            _onOptionFocus: function (event) {
-                var newFocusedOptionName = event.senderWidget.childName;
-
-                this.setNextOriginalEvent(event);
-                this._setFocusedOptionName(newFocusedOptionName);
-                this.clearNextOriginalEvent();
-            },
-
-            /**
-             * @param {shoeshine.WidgetEvent} event
-             * @ignore
-             */
-            _onOptionActive: function (event) {
-                var optionWidget = event.senderWidget;
-
-                this.setNextOriginalEvent(event);
-                this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
-                this.clearNextOriginalEvent();
-            },
-
-            /**
-             * @param {shoeshine.WidgetEvent} event
-             * @private
-             */
-            _onOptionSelect: function (event) {
-                var optionName = event.payload.optionName;
-                this._setActiveOptionName(optionName);
             }
         })
         .addMethods(/** @lends candystore.OptionList# */{
             /** Call from host's init. */
             init: function () {
                 this
-                    .elevateMethod('_onItemsChange')
-                    .elevateMethod('_onHotKeyPress')
-                    .elevateMethod('_onOptionFocus')
-                    .elevateMethod('_onOptionActive')
-                    .elevateMethod('_onOptionSelect');
+                    .elevateMethod('onItemsChange')
+                    .elevateMethod('onHotKeyPress')
+                    .elevateMethod('onOptionFocus')
+                    .elevateMethod('onOptionActive')
+                    .elevateMethod('onOptionSelect');
 
                 /**
                  * Identifier of option in focus.
@@ -225,11 +134,11 @@ troop.postpone(candystore, 'OptionList', function () {
             /** Call from host's afterAdd. */
             afterAdd: function () {
                 this
-                    .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this._onItemsChange)
-                    .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this._onHotKeyPress)
-                    .subscribeTo(candystore.Option.EVENT_OPTION_FOCUS, this._onOptionFocus)
-                    .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this._onOptionActive)
-                    .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this._onOptionSelect);
+                    .subscribeTo(candystore.List.EVENT_LIST_ITEMS_CHANGE, this.onItemsChange)
+                    .subscribeTo(candystore.HotKeyWatcher.EVENT_HOT_KEY_DOWN, this.onHotKeyPress)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_FOCUS, this.onOptionFocus)
+                    .subscribeTo(candystore.Option.EVENT_OPTION_ACTIVE, this.onOptionActive)
+                    .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect);
 
                 this._focusOnOption();
                 this._updateFocusedOptionName();
@@ -305,6 +214,97 @@ troop.postpone(candystore, 'OptionList', function () {
                 option.markAsActive();
 
                 return this;
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onItemsChange: function (event) {
+                this.setNextOriginalEvent(event);
+                this._focusOnOption();
+                this._updateFocusedOptionName();
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * TODO: break up into smaller methods
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onHotKeyPress: function (event) {
+                var charCode = event.payload.charCode,
+                    children = this.children,
+                    sortedChildNames = children.getKeys().sort(),
+                    currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
+                    newFocusedOptionName;
+
+                switch (charCode) {
+                case 38: // up
+                    currentChildIndex = Math.max(currentChildIndex - 1, 0);
+                    newFocusedOptionName = sortedChildNames[currentChildIndex];
+                    this.getChild(newFocusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsFocused()
+                        .clearNextOriginalEvent();
+                    break;
+
+                case 40: // down
+                    currentChildIndex = Math.min(currentChildIndex + 1, sortedChildNames.length - 1);
+                    newFocusedOptionName = sortedChildNames[currentChildIndex];
+                    this.getChild(newFocusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsFocused()
+                        .clearNextOriginalEvent();
+                    break;
+
+                case 27: // esc
+                    this
+                        .setNextOriginalEvent(event)
+                        .triggerSync(this.EVENT_OPTIONS_ESCAPE)
+                        .clearNextOriginalEvent();
+                    break;
+
+                case 13: // enter
+                    this.getChild(this.focusedOptionName)
+                        .setNextOriginalEvent(event)
+                        .markAsActive()
+                        .clearNextOriginalEvent();
+                    break;
+                }
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onOptionFocus: function (event) {
+                var newFocusedOptionName = event.senderWidget.childName;
+
+                this.setNextOriginalEvent(event);
+                this._setFocusedOptionName(newFocusedOptionName);
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onOptionActive: function (event) {
+                var optionWidget = event.senderWidget;
+
+                this.setNextOriginalEvent(event);
+                this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
+                this.clearNextOriginalEvent();
+            },
+
+            /**
+             * @param {shoeshine.WidgetEvent} event
+             * @ignore
+             */
+            onOptionSelect: function (event) {
+                var optionName = event.payload.optionName;
+                this._setActiveOptionName(optionName);
             }
         });
 });
