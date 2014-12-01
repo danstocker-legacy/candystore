@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
+/*global Event, dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'HotKeyWatcher', function () {
     "use strict";
 
@@ -25,10 +25,17 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
              * @ignore
              */
             onKeyDown: function (event) {
-                shoeshine.Widget.rootWidget
+                var rootWidget = shoeshine.Widget.rootWidget,
+                    keyboardEvent = event.originalEvent,
+                    originWidget = keyboardEvent instanceof Event &&
+                                   keyboardEvent.toWidget() ||
+                                   rootWidget;
+
+                rootWidget
                     .setNextOriginalEvent(event)
                     .broadcastSync(this.EVENT_HOT_KEY_DOWN, {
-                        charCode: event.which
+                        charCode    : event.which,
+                        originWidget: originWidget
                     })
                     .clearNextOriginalEvent();
             }
