@@ -9,6 +9,8 @@ troop.postpone(candystore, 'Highlightable', function () {
      * The Highlightable trait adds switchable highlight to widgets.
      * Expects to be added to Widget instances.
      * Expects the host to have the BinaryStateful trait applied.
+     * Overrides BinaryStateful's methods, must be added *after* BinaryStateful, and on a different
+     * prototype level (using addTraitAndExtend()).
      * @class
      * @extends troop.Base
      * @extends candystore.BinaryStateful
@@ -52,18 +54,68 @@ troop.postpone(candystore, 'Highlightable', function () {
                 this.highlightIds = sntls.Collection.create();
             },
 
-            /** Call from host's .afterStateOn */
-            afterStateOn: function (stateName) {
+            /**
+             * @param {string} stateName
+             * @param {string} sourceId
+             * @returns {candystore.Highlightable}
+             */
+            addBinaryStateSource: function (stateName, sourceId) {
+                candystore.BinaryStateful.addBinaryStateSource.call(this, stateName, sourceId);
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
                     this._updateHighlightedState();
                 }
+                return this;
             },
 
-            /** Call from host's .afterStateOff */
-            afterStateOff: function (stateName) {
+            /**
+             * @param {string} stateName
+             * @returns {candystore.Highlightable}
+             */
+            addImposedStateSource: function (stateName) {
+                candystore.BinaryStateful.addImposedStateSource.call(this, stateName);
                 if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
                     this._updateHighlightedState();
                 }
+                return this;
+            },
+
+            /**
+             * @param {string} stateName
+             * @param {string} sourceId
+             * @returns {candystore.Highlightable}
+             */
+            removeBinaryStateSource: function (stateName, sourceId) {
+                candystore.BinaryStateful.removeBinaryStateSource.call(this, stateName, sourceId);
+                if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
+                    this._updateHighlightedState();
+                }
+                return this;
+            },
+
+            /**
+             * @param {string} stateName
+             * @returns {candystore.Highlightable}
+             */
+            removeImposedStateSource: function (stateName) {
+                candystore.BinaryStateful.removeImposedStateSource.call(this, stateName);
+                if (stateName === this.STATE_NAME_HIGHLIGHTABLE) {
+                    this._updateHighlightedState();
+                }
+                return this;
+            },
+
+            /**
+             * Dummy handler.
+             * @param {string} stateName
+             */
+            afterStateOn: function (stateName) {
+            },
+
+            /**
+             * Dummy handler.
+             * @param {string} stateName
+             */
+            afterStateOff: function (stateName) {
             },
 
             /**
@@ -100,9 +152,9 @@ troop.postpone(candystore, 'Highlightable', function () {
             isHighlighted: function (highlightId) {
                 dessert.isStringOptional(highlightId, "Invalid highlight ID");
                 return highlightId ?
-                    this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
-                        .hasSource(highlightId) :
-                    this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
+                       this.getBinaryState(this.STATE_NAME_HIGHLIGHTABLE)
+                           .hasSource(highlightId) :
+                       this.isStateOn(this.STATE_NAME_HIGHLIGHTABLE);
             }
         });
 });
