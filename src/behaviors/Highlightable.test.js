@@ -44,10 +44,17 @@
             "should initialize highlightIds to empty collection");
     });
 
-    test("State on handler", function () {
-        expect(1);
+    test("Binary state addition", function () {
+        expect(4);
 
         var highlightable = Highlightable.create();
+
+        candystore.BinaryStateful.addMocks({
+            addBinaryStateSource: function (stateName, sourceId) {
+                equal(stateName, 'foo', "should pass state name to super");
+                equal(sourceId, 'bar', "should pass source ID to super");
+            }
+        });
 
         highlightable.addMocks({
             _updateHighlightedState: function () {
@@ -55,15 +62,24 @@
             }
         });
 
-        highlightable.afterStateOn('foo');
+        strictEqual(highlightable.addBinaryStateSource('foo', 'bar'), highlightable,
+            "should be chainable");
 
-        highlightable.afterStateOn(candystore.Highlightable.STATE_NAME_HIGHLIGHTABLE);
+        candystore.BinaryStateful.removeMocks();
+
+        highlightable.addBinaryStateSource(candystore.Highlightable.STATE_NAME_HIGHLIGHTABLE, 'bar');
     });
 
-    test("State off handler", function () {
-        expect(1);
+    test("Imposed state addition", function () {
+        expect(3);
 
         var highlightable = Highlightable.create();
+
+        candystore.BinaryStateful.addMocks({
+            addImposedStateSource: function (stateName) {
+                equal(stateName, 'foo', "should pass state name to super");
+            }
+        });
 
         highlightable.addMocks({
             _updateHighlightedState: function () {
@@ -71,9 +87,63 @@
             }
         });
 
-        highlightable.afterStateOff('foo');
+        strictEqual(highlightable.addImposedStateSource('foo'), highlightable,
+            "should be chainable");
 
-        highlightable.afterStateOff(candystore.Highlightable.STATE_NAME_HIGHLIGHTABLE);
+        candystore.BinaryStateful.removeMocks();
+
+        highlightable.addImposedStateSource(candystore.Highlightable.STATE_NAME_HIGHLIGHTABLE);
+    });
+
+    test("Binary state removal", function () {
+        expect(4);
+
+        var highlightable = Highlightable.create();
+
+        candystore.BinaryStateful.addMocks({
+            removeBinaryStateSource: function (stateName, sourceId) {
+                equal(stateName, 'foo', "should pass state name to super");
+                equal(sourceId, 'bar', "should pass source ID to super");
+            }
+        });
+
+        highlightable.addMocks({
+            _updateHighlightedState: function () {
+                ok(true, "should update highlighted state");
+            }
+        });
+
+        strictEqual(highlightable.removeBinaryStateSource('foo', 'bar'), highlightable,
+            "should be chainable");
+
+        candystore.BinaryStateful.removeMocks();
+
+        highlightable.removeBinaryStateSource(candystore.Highlightable.STATE_NAME_HIGHLIGHTABLE, 'bar');
+    });
+
+    test("Imposed state removal", function () {
+        expect(3);
+
+        var highlightable = Highlightable.create();
+
+        candystore.BinaryStateful.addMocks({
+            removeImposedStateSource: function (stateName) {
+                equal(stateName, 'foo', "should pass state name to super");
+            }
+        });
+
+        highlightable.addMocks({
+            _updateHighlightedState: function () {
+                ok(true, "should update highlighted state");
+            }
+        });
+
+        strictEqual(highlightable.removeImposedStateSource('foo'), highlightable,
+            "should be chainable");
+
+        candystore.BinaryStateful.removeMocks();
+
+        highlightable.removeImposedStateSource(candystore.Highlightable.STATE_NAME_HIGHLIGHTABLE);
     });
 
     test("Highlight on", function () {
