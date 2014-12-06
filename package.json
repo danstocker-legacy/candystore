@@ -15,12 +15,12 @@
     "dependencies"   : {
         "dessert"  : "~0.3.2",
         "troop"    : "~0.7.2 || ~0.8.0",
-        "sntls"    : "~0.17.0",
-        "evan"     : "~0.4.1",
+        "sntls"    : "~0.17.3",
+        "evan"     : "~0.4.5",
         "jquery"   : "~2.1.0",
-        "bookworm" : "~0.2.0",
-        "shoeshine": "~0.1.11",
-        "poodle"   : "~0.3.0"
+        "bookworm" : "~0.2.2",
+        "shoeshine": "~0.1.15",
+        "poodle"   : "~0.3.4"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
