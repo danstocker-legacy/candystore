@@ -15,6 +15,7 @@ module.exports = function (grunt) {
                 'src/behaviors/Disableable.js',
                 'src/behaviors/Highlightable.js',
                 'src/behaviors/Expandable.js',
+                'src/behaviors/Editable.js',
                 'src/behaviors/EntityWidget.js',
                 'src/behaviors/Popup.js',
                 'src/behaviors/AlignedPopup.js',
