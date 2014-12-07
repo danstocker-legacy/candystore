@@ -77,6 +77,17 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 if (childName) {
                     this.getChild(childName).removeFromParent();
                 }
+            },
+
+            /** @private */
+            _initChildLookup: function () {
+                this.childNamesByItemKey = this.children
+                    .mapKeys(function (childWidget) {
+                        return childWidget.itemKey.toString();
+                    })
+                    .mapValues(function (childWidget) {
+                        return childWidget.childName;
+                    });
             }
         })
         .addMethods(/** @lends candystore.DataList# */{
@@ -106,6 +117,9 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             afterAdd: function () {
                 base.afterAdd.call(this);
                 candystore.FieldBound.afterAdd.call(this);
+
+                this._initChildLookup();
+
                 this
                     .subscribeTo(this.EVENT_CHILD_ADD, this.onChildAdd)
                     .subscribeTo(this.EVENT_CHILD_REMOVE, this.onChildRemove)
