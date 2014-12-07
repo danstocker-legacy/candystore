@@ -66,6 +66,11 @@ troop.postpone(candystore, 'Editable', function () {
                 this.addBinaryState(this.STATE_NAME_EDITABLE);
             },
 
+            /** Call from host's .afterAdd */
+            afterAdd: function () {
+                this._updateEditableState();
+            },
+
             /**
              * Call from host's .contentMarkup, and implement .editMarkup and .displayMarkup
              * if the host changes its markup between 'edit' and 'display' modes.
