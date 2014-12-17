@@ -80,9 +80,12 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
 
             /** Call from host's afterRender. */
             afterRender: function () {
-                $(this.getElement())
-                    .on('click', this._onOptionClick)
-                    .on('mouseenter', this._onOptionHover);
+                var element = this.getElement();
+                if (element) {
+                    $(element)
+                        .on('click', this._onOptionClick)
+                        .on('mouseenter', this._onOptionHover);
+                }
             },
 
             /**

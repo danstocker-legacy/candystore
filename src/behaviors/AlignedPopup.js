@@ -16,12 +16,18 @@ troop.postpone(candystore, 'AlignedPopup', function (ns, className, /**jQuery*/$
         .addPrivateMethods(/** @lends candystore.AlignedPopup# */{
             /** @private */
             _alignPopup: function () {
-                $(this.getElement()).position(this.positionOptions.items);
+                var element = this.getElement();
+                if (element) {
+                    $(element).position(this.positionOptions.items);
+                }
             },
 
             /** @private */
             _updateOfPositionOption: function () {
-                this.setPositionOption('of', $(this.parent.getElement()));
+                var parentElement = this.parent.getElement();
+                if (parentElement) {
+                    this.setPositionOption('of', $(parentElement));
+                }
                 return this;
             }
         })

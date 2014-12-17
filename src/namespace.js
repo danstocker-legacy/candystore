@@ -48,3 +48,38 @@ var jQuery = jQuery || require('jquery');
  * @see https://github.com/danstocker/shoeshine
  */
 var shoeshine = shoeshine || require('shoeshine');
+
+/**
+ * Built-in global window object.
+ * @type {Window}
+ */
+var window = window || undefined;
+
+/**
+ * Built-in global document object.
+ * @type {Document}
+ */
+var document = document || undefined;
+
+/**
+ * Native number class.
+ * @name Number
+ * @class
+ */
+
+/**
+ * Native string class.
+ * @name String
+ * @class
+ */
+
+/**
+ * Native array class.
+ * @name Array
+ * @class
+ */
+
+/**
+ * @name sntls.Hash
+ * @class
+ */
