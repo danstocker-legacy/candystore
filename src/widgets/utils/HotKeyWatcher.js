@@ -45,7 +45,9 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
 (function (/**jQuery*/$) {
     "use strict";
 
-    $(document).on('keydown', function (event) {
-        candystore.HotKeyWatcher.onKeyDown(event);
-    });
+    if (document) {
+        $(document).on('keydown', function (event) {
+            candystore.HotKeyWatcher.onKeyDown(event);
+        });
+    }
 }(jQuery));

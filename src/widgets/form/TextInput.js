@@ -55,7 +55,10 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
             _startChangePolling: function () {
                 var that = this;
                 this.changePollTimer = setInterval(function () {
-                    that.setInputValue($(that.getElement()).val(), false);
+                    var element = that.getElement();
+                    if (element) {
+                        that.setInputValue($(element).val(), false);
+                    }
                 }, 1000);
             },
 
@@ -104,10 +107,13 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 base.afterRender.call(this);
 
                 // TODO: use JqueryWidget based subscription when it's fixed
-                var $element = $(this.getElement());
-                $element
-                    .on('focusin', this.onFocusIn)
-                    .on('focusout', this.onFocusOut);
+                var element = this.getElement();
+
+                if (element) {
+                    $(element)
+                        .on('focusin', this.onFocusIn)
+                        .on('focusout', this.onFocusOut);
+                }
 
                 if (candystore.pollInputValues) {
                     this._stopChangePolling();
@@ -147,13 +153,17 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onChange: function (event) {
-                var $element = $(this.getElement()),
-                    newInputValue = $element.val();
+                var element = this.getElement(),
+                    newInputValue;
 
-                this
-                    .setNextOriginalEvent(event)
-                    .setInputValue(newInputValue)
-                    .clearNextOriginalEvent();
+                if (element) {
+                    newInputValue = $(element).val();
+
+                    this
+                        .setNextOriginalEvent(event)
+                        .setInputValue(newInputValue)
+                        .clearNextOriginalEvent();
+                }
             },
 
             /**

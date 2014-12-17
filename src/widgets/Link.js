@@ -61,8 +61,10 @@ troop.postpone(candystore, 'Link', function (ns, className, /**jQuery*/$) {
             setTargetUrl: function (targetUrl) {
                 dessert.isString(targetUrl, "Invalid target URL");
 
-                $(this.getElement())
-                    .attr('href', targetUrl);
+                var element = this.getElement();
+                if (element) {
+                    $(element).attr('href', targetUrl);
+                }
 
                 this.addAttribute('href', targetUrl);
 

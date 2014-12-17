@@ -95,7 +95,13 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionFocus: function (event) {
-                var $element = $(this.getElement()),
+                var element = this.getElement();
+
+                if (!element) {
+                    return;
+                }
+
+                var $element = $(element),
                     dropdownHeight = $element.outerHeight(),
                     optionList = this.getChild('options-list'),
                     optionListTop = $element.scrollTop(),

@@ -34,8 +34,10 @@ troop.postpone(candystore, 'HtmlLabel', function (ns, className, /**jQuery*/$) {
             setLabelText: function (labelText) {
                 dessert.isStringOptional(labelText, "Invalid label text");
 
-                $(this.getElement())
-                    .html(labelText);
+                var element = this.getElement();
+                if (element) {
+                    $(element).html(labelText);
+                }
 
                 this.labelText = labelText;
 

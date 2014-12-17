@@ -112,13 +112,15 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
 (function (/**jQuery*/$) {
     "use strict";
 
-    $(window).on('resize', function (event) {
-        candystore.ResizeWatcher.create()
-            .onWindowResize(event);
-    });
+    if (window) {
+        $(window).on('resize', function (event) {
+            candystore.ResizeWatcher.create()
+                .onWindowResize(event);
+        });
 
-    $(function () {
-        candystore.ResizeWatcher.create()
-            .updateDimensions();
-    });
+        $(function () {
+            candystore.ResizeWatcher.create()
+                .updateDimensions();
+        });
+    }
 }(jQuery));

@@ -106,7 +106,10 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
             /** @private */
             _updateDom: function () {
-                $(this.getElement()).val(this.inputValue);
+                var element = this.getElement();
+                if (element) {
+                    $(element).val(this.inputValue);
+                }
             },
 
             /**
