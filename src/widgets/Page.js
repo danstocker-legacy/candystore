@@ -44,18 +44,20 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
             afterAdd: function () {
                 base.afterAdd.call(this);
 
-                var $body = $('body');
+                var documentBody = candystore.documentBody;
+
                 this._getPageCssClasses()
-                    .passEachItemTo($body.addClass, $body);
+                    .passEachItemTo(documentBody.addCssClass, documentBody);
             },
 
             /** @ignore */
             afterRemove: function () {
                 base.afterRemove.call(this);
 
-                var $body = $('body');
+                var documentBody = candystore.documentBody;
+
                 this._getPageCssClasses()
-                    .passEachItemTo($body.removeClass, $body);
+                    .passEachItemTo(documentBody.removeCssClass, documentBody);
             }
         });
 }, jQuery);
