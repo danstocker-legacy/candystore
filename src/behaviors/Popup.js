@@ -53,9 +53,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
 
             /** @private */
             _removeFromDom: function () {
-                var $element = $(this.getElement());
-                if ($element.length) {
-                    $element.remove();
+                var element = this.getElement();
+                if (element) {
+                    $(element).remove();
                 }
             },
 
