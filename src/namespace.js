@@ -45,6 +45,12 @@ var jQuery = jQuery || require('jquery');
 
 /**
  * @namespace
+ * @see https://github.com/danstocker/bookworm
+ */
+var bookworm = bookworm || require('bookworm');
+
+/**
+ * @namespace
  * @see https://github.com/danstocker/shoeshine
  */
 var shoeshine = shoeshine || require('shoeshine');
