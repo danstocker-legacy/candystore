@@ -51,9 +51,10 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
                 base.afterAdd.call(this);
                 candystore.BinaryStateful.afterAdd.call(this);
 
-                var $body = $('body');
+                var documentBody = candystore.DocumentBody.create();
+
                 this._getPageCssClasses()
-                    .passEachItemTo($body.addClass, $body);
+                    .passEachItemTo(documentBody.addCssClass, documentBody);
             },
 
             /** @ignore */
@@ -61,9 +62,10 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
                 base.afterRemove.call(this);
                 candystore.BinaryStateful.afterRemove.call(this);
 
-                var $body = $('body');
+                var documentBody = candystore.DocumentBody.create();
+
                 this._getPageCssClasses()
-                    .passEachItemTo($body.removeClass, $body);
+                    .passEachItemTo(documentBody.removeCssClass, documentBody);
             }
         });
 }, jQuery);
