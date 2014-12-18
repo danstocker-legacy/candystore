@@ -4,7 +4,7 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
 
     var base = troop.Base,
         self = base.extend(),
-        $window = $(window);
+        $window = window && $(window);
 
     /**
      * Creates a ResizeWatcher instance, or pulls up an existing one from registry.
