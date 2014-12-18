@@ -23,7 +23,6 @@ module.exports = function (grunt) {
                 'src/behaviors/FieldBound.js',
                 'src/widgets/utils/ResizeWatcher.js',
                 'src/widgets/utils/HotKeyWatcher.js',
-                'src/widgets/utils/documentBody.js',
                 'src/widgets/Label.js',
                 'src/widgets/HtmlLabel.js',
                 'src/widgets/DataLabel.js',

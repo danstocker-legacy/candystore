@@ -18,6 +18,9 @@ troop.postpone(candystore, 'DocumentBody', function () {
      * @extends shoeshine.Renderable
      */
     candystore.DocumentBody = self
+        .setInstanceMapper(function () {
+            return 'singleton';
+        })
         .addPrivateMethods(/** @lends candystore.DocumentBody# */{
             /**
              * @returns {HTMLElement}

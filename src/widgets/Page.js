@@ -44,7 +44,7 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
             afterAdd: function () {
                 base.afterAdd.call(this);
 
-                var documentBody = candystore.documentBody;
+                var documentBody = candystore.DocumentBody.create();
 
                 this._getPageCssClasses()
                     .passEachItemTo(documentBody.addCssClass, documentBody);
@@ -54,7 +54,7 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
             afterRemove: function () {
                 base.afterRemove.call(this);
 
-                var documentBody = candystore.documentBody;
+                var documentBody = candystore.DocumentBody.create();
 
                 this._getPageCssClasses()
                     .passEachItemTo(documentBody.removeCssClass, documentBody);
