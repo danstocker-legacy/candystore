@@ -17,10 +17,11 @@
         "troop"    : "~0.7.2 || ~0.8.0",
         "sntls"    : "~0.17.4",
         "evan"     : "~0.4.5",
+        "flock"    : "~0.3.6",
         "jquery"   : "~2.1.0",
         "bookworm" : "~0.2.3",
-        "shoeshine": "~0.1.18",
-        "poodle"   : "~0.3.5"
+        "shoeshine": "~0.1.20",
+        "poodle"   : "~0.3.6"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
