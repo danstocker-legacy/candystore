@@ -1,6 +1,6 @@
 {
     "name"           : "candystore",
-    "version"        : "0.5.0",
+    "version"        : "0.5.1",
     "description"    : "Common widgets",
     "keywords"       : [
         "widgets", "button", "label", "form", "dropdown", "popup"
