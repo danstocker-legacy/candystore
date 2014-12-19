@@ -55,17 +55,21 @@ var bookworm = bookworm || require('bookworm');
  */
 var shoeshine = shoeshine || require('shoeshine');
 
-/**
- * Built-in global window object.
- * @type {Window}
- */
-var window = window || undefined;
+if (typeof window === 'undefined') {
+    /**
+     * Built-in global window object.
+     * @type {Window}
+     */
+    window = undefined;
+}
 
-/**
- * Built-in global document object.
- * @type {Document}
- */
-var document = document || undefined;
+if (typeof document === 'undefined') {
+    /**
+     * Built-in global document object.
+     * @type {Document}
+     */
+    document = undefined;
+}
 
 /**
  * Native number class.
