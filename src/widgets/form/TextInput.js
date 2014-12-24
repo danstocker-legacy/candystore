@@ -91,6 +91,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                  * @type {number}
                  */
                 this.changePollTimer = undefined;
+
+                // setting default input value to empty string
+                this.inputValue = '';
             },
 
             /** @ignore */
