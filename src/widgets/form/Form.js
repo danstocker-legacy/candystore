@@ -4,6 +4,8 @@ troop.postpone(candystore, 'Form', function (ns, className) {
 
     var base = shoeshine.Widget,
         self = base.extend(className)
+            .addTraitAndExtend(candystore.BinaryStateful)
+            .addTrait(candystore.Disableable)
             .addTrait(shoeshine.JqueryWidget);
 
     /**
@@ -16,6 +18,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
     /**
      * The Form encloses multiple FormField's, provides validity events for the entire form,
      * and supports submitting the form.
+     * TODO: Implement disabling for form elements like inputs, etc.
      * @class
      * @extends shoeshine.Widget
      * @extends shoeshine.JqueryWidget
@@ -49,7 +52,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 this.validFieldCount = validFieldNames ?
                     validFieldNames instanceof Array ?
                         validFieldNames.length :
-                        1:
+                        1 :
                     0;
             },
 
@@ -78,6 +81,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             /** @ignore */
             init: function () {
                 base.init.call(this);
+                candystore.BinaryStateful.init.call(this);
+                candystore.Disableable.init.call(this);
+
                 this.setTagName('form');
 
                 this
@@ -113,7 +119,10 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             /** @ignore */
             afterRender: function () {
                 base.afterRender.call(this);
-                this.focusOnFirstField();
+
+                if (!this.isDisabled()) {
+                    this.focusOnFirstField();
+                }
             },
 
             /**
