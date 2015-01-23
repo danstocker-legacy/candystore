@@ -1,6 +1,6 @@
 {
     "name"           : "candystore",
-    "version"        : "0.5.4",
+    "version"        : "0.5.5",
     "description"    : "Common widgets",
     "keywords"       : [
         "widgets", "button", "label", "form", "dropdown", "popup"
@@ -20,7 +20,7 @@
         "flock"    : "~0.3.6",
         "jquery"   : "~2.1.0",
         "bookworm" : "~0.2.3",
-        "shoeshine": "~0.1.20",
+        "shoeshine": "~0.1.23",
         "poodle"   : "~0.3.6"
     },
     "devDependencies": {

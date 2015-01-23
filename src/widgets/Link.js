@@ -30,14 +30,6 @@ troop.postpone(candystore, 'Link', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return this.children.toString();
-            },
-
-            /**
              * Creates Label widget to be used inside the link.
              * Override to specify custom widget.
              * @returns {candystore.Label}

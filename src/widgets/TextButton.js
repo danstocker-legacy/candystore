@@ -29,14 +29,6 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
             },
 
             /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return this.children.toString();
-            },
-
-            /**
              * Creates Label widget to be used inside the button.
              * Override to specify custom widget.
              * @returns {candystore.Label}

@@ -86,14 +86,6 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
             },
 
             /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return this.children.toString();
-            },
-
-            /**
              * Creates input widget.
              * Override to specify custom input field.
              * With the input type-based surrogates in place, overriding this method is rarely needed.

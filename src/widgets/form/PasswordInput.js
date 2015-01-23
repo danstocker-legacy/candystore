@@ -28,14 +28,6 @@ troop.postpone(candystore, 'PasswordInput', function (ns, className) {
             },
 
             /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return this.children.toString();
-            },
-
-            /**
              * Reveals password by changing the input type to 'text', and re-rendering the widget.
              * @returns {candystore.PasswordInput}
              */

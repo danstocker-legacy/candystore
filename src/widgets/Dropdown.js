@@ -65,14 +65,6 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return this.children.toString();
-            },
-
-            /**
              * Creates the internal list widget.
              * Override this method to specify other List-based widgets to use.
              * Ones that have the OptionList trait, and its items have the Option trait, are the best.
