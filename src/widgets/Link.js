@@ -48,6 +48,7 @@ troop.postpone(candystore, 'Link', function (ns, className, /**jQuery*/$) {
 
             /**
              * Sets URL for the link.
+             * @param {string} targetUrl
              * @returns {candystore.Link}
              */
             setTargetUrl: function (targetUrl) {
