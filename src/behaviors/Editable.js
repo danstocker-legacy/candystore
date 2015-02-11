@@ -8,6 +8,7 @@ troop.postpone(candystore, 'Editable', function () {
     /**
      * The Editable trait provides a simple way to manage state changes for widgets that may operate
      * in two modes: display mode, and edit mode, each mode implementing a different markup.
+     * TODO: Refactor .editMarkup() and .displayMarkup() into .editTemplate and .displayTemplate.
      * @class
      * @extends troop.Base
      * @extends candystore.BinaryStateful

@@ -35,6 +35,21 @@ troop.postpone(candystore, 'DocumentBody', function () {
             init: function () {
                 shoeshine.Renderable.init.call(this);
                 this.setTagName('body');
+
+                /**
+                 * @type {string}
+                 * @private
+                 */
+                this._contentMarkup = '';
+            },
+
+            /**
+             * @param {string} contentMarkup
+             * @returns {candystore.DocumentBody}
+             */
+            setContentMarkup: function (contentMarkup) {
+                this._contentMarkup = contentMarkup;
+                return this;
             },
 
             /**
@@ -46,12 +61,10 @@ troop.postpone(candystore, 'DocumentBody', function () {
             },
 
             /**
-             * Includes the placeholder string "body-contents".
-             * To fill with actual content, convert to Template, and use Template.fillPlaceholder().
              * @returns {string}
              */
             contentMarkup: function () {
-                return '{{body-contents}}';
+                return this._contentMarkup;
             }
         });
 });

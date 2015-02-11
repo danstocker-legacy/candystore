@@ -37,6 +37,16 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             /** @constant */
             EVENT_FORM_RESET: 'form-reset'
         })
+        .addPublic(/** @lends candystore.Form */{
+            /**
+             * @type {shoeshine.MarkupTemplate}
+             * @constant
+             */
+            contentTemplate: [
+                '<ul class="inputs-container">',
+                '</ul>'
+            ].join('').toMarkupTemplate()
+        })
         .addPrivateMethods(/** @lends candystore.Form# */{
             /** @private */
             _updateCounters: function () {
@@ -123,20 +133,6 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 if (!this.isDisabled()) {
                     this.focusOnFirstField();
                 }
-            },
-
-            /**
-             * @returns {string}
-             * @ignore
-             */
-            contentMarkup: function () {
-                return [
-                    //@formatter:off
-                    '<ul class="inputs-container">',
-                    this.children,
-                    '</ul>'
-                    //@formatter:on
-                ].join('');
             },
 
             /**
