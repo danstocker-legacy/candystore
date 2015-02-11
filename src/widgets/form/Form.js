@@ -40,7 +40,6 @@ troop.postpone(candystore, 'Form', function (ns, className) {
         .addPublic(/** @lends candystore.Form */{
             /**
              * @type {shoeshine.MarkupTemplate}
-             * @constant
              */
             contentTemplate: [
                 '<ul class="inputs-container">',
