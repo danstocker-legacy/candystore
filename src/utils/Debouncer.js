@@ -77,3 +77,21 @@ troop.postpone(candystore, 'Debouncer', function () {
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        Function.prototype,
+        /** @lends Function# */{
+            /**
+             * Converts `Function` to `Debouncer` instance.
+             * @returns {candystore.Debouncer}
+             */
+            toDebouncer: function () {
+                return candystore.Debouncer.create(this);
+            }
+        },
+        false, false, false
+    );
+}());

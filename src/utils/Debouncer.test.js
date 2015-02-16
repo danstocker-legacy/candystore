@@ -24,6 +24,16 @@
         equal(typeof debounced.debounceTimer, 'undefined', "should set debounceTimer property to undefined");
     });
 
+    test("Conversion from function", function () {
+        function foo() {
+        }
+
+        var debouncer = foo.toDebouncer();
+
+        ok(debouncer.isA(candystore.Debouncer), "should return Debouncer instance");
+        strictEqual(debouncer.originalFunction, foo, "should set originalFunction property");
+    });
+
     test("Method invocation", function () {
         expect(5);
 
