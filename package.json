@@ -6,7 +6,7 @@
         "widgets", "button", "label", "form", "dropdown", "popup"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
-    "copyright"      : "Copyright (c) 2014 Dan Stocker",
+    "copyright"      : "Copyright (c) 2014-2015 Dan Stocker",
     "license"        : "MIT",
     "repository"     : {
         "type": "git",
@@ -16,12 +16,13 @@
         "dessert"  : "~0.3.2",
         "troop"    : "~0.8.0",
         "sntls"    : "~0.18.0 || ~0.19.0",
-        "evan"     : "~0.5.0",
-        "flock"    : "~0.3.6",
+        "evan"     : "~0.6.0",
+        "flock"    : "~0.3.8",
         "jquery"   : "~2.1.0",
-        "bookworm" : "~0.2.3",
-        "shoeshine": "~0.2.0",
-        "poodle"   : "~0.3.6"
+        "bookworm" : "~0.2.6",
+        "shoeshine": "~0.2.2",
+        "q"        : "~1.1.2",
+        "poodle"   : "~0.3.12"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",

@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -159,10 +159,9 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionClick: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .markAsActive()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.markAsActive();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -170,10 +169,9 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionHover: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .markAsFocused()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.markAsFocused();
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 }, jQuery);

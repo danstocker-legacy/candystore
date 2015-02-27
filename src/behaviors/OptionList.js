@@ -218,10 +218,10 @@ troop.postpone(candystore, 'OptionList', function () {
              * @ignore
              */
             onItemsChange: function (event) {
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._focusOnOption();
                 this._updateFocusedOptionName();
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -236,39 +236,34 @@ troop.postpone(candystore, 'OptionList', function () {
                     currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
                     newFocusedOptionName;
 
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+
                 switch (charCode) {
                 case 38: // up
                     currentChildIndex = Math.max(currentChildIndex - 1, 0);
                     newFocusedOptionName = sortedChildNames[currentChildIndex];
                     this.getChild(newFocusedOptionName)
-                        .setNextOriginalEvent(event)
-                        .markAsFocused()
-                        .clearNextOriginalEvent();
+                        .markAsFocused();
                     break;
 
                 case 40: // down
                     currentChildIndex = Math.min(currentChildIndex + 1, sortedChildNames.length - 1);
                     newFocusedOptionName = sortedChildNames[currentChildIndex];
                     this.getChild(newFocusedOptionName)
-                        .setNextOriginalEvent(event)
-                        .markAsFocused()
-                        .clearNextOriginalEvent();
+                        .markAsFocused();
                     break;
 
                 case 27: // esc
-                    this
-                        .setNextOriginalEvent(event)
-                        .triggerSync(this.EVENT_OPTIONS_ESCAPE)
-                        .clearNextOriginalEvent();
+                    this.triggerSync(this.EVENT_OPTIONS_ESCAPE);
                     break;
 
                 case 13: // enter
                     this.getChild(this.focusedOptionName)
-                        .setNextOriginalEvent(event)
-                        .markAsActive()
-                        .clearNextOriginalEvent();
+                        .markAsActive();
                     break;
                 }
+
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -278,9 +273,9 @@ troop.postpone(candystore, 'OptionList', function () {
             onOptionFocus: function (event) {
                 var newFocusedOptionName = event.senderWidget.childName;
 
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._setFocusedOptionName(newFocusedOptionName);
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -290,9 +285,9 @@ troop.postpone(candystore, 'OptionList', function () {
             onOptionActive: function (event) {
                 var optionWidget = event.senderWidget;
 
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**

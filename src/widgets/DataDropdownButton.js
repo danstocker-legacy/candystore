@@ -94,9 +94,9 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
              * @ignore
              */
             onSelectedChange: function (event) {
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._updateSelectedOption();
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -104,9 +104,9 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
              * @ignore
              */
             onListItemsChange: function (event) {
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._updateSelectedOption();
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -116,9 +116,10 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             onOptionSelect: function (event) {
                 var optionValue = event.payload.optionValue;
 
-                bookworm.entities.setNextOriginalEvent(event);
-                this.entityKey.toField().setValue(optionValue);
-                bookworm.entities.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.entityKey.toField()
+                    .setValue(optionValue);
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 });

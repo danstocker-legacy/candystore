@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -128,10 +128,9 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
                     originalEvent.type === 'keydown' && originalEvent.which === 13
                     )) {
                     // only when select was initiated by user interaction (click on Option)
-                    this
-                        .setNextOriginalEvent(event)
-                        .closePopup()
-                        .clearNextOriginalEvent();
+                    evan.eventSpaceRegistry.pushOriginalEvent(event);
+                    this.closePopup();
+                    evan.eventSpaceRegistry.popOriginalEvent();
                 }
             },
 
@@ -140,10 +139,9 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionsEscape: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .closePopup()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.closePopup();
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 }, jQuery);

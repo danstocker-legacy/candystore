@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, shoeshine, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, candystore */
 troop.postpone(candystore, 'DropdownButton', function (ns, className) {
     "use strict";
 
@@ -111,7 +111,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
 
                 var dropdown = this.dropdown;
 
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
 
                 if (dropdown.isOpen) {
                     dropdown
@@ -122,7 +122,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                         .openPopup();
                 }
 
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 });

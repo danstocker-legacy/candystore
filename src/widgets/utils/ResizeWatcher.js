@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -101,9 +101,9 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
             onDebouncedWindowResize: function (event) {
                 var rootWidget = shoeshine.Widget.rootWidget;
                 if (rootWidget) {
-                    rootWidget.setNextOriginalEvent(event);
+                    evan.eventSpaceRegistry.pushOriginalEvent(event);
                     this.updateDimensions();
-                    rootWidget.clearNextOriginalEvent();
+                    evan.eventSpaceRegistry.popOriginalEvent();
                 }
             }
         });

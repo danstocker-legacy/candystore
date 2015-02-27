@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, shoeshine, poodle, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, poodle, jQuery, candystore */
 troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -128,10 +128,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
              * @ignore
              */
             onImageLoadStart: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_IMAGE_LOAD_START)
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.triggerSync(this.EVENT_IMAGE_LOAD_START);
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -141,10 +140,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
             onImageLoadSuccess: function (event) {
                 this._setImageElement(event.imageElement);
 
-                this
-                    .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_IMAGE_LOAD_SUCCESS)
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.triggerSync(this.EVENT_IMAGE_LOAD_SUCCESS);
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -152,10 +150,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
              * @ignore
              */
             onImageLoadFailure: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_IMAGE_LOAD_FAILURE)
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.triggerSync(this.EVENT_IMAGE_LOAD_FAILURE);
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 }, jQuery);

@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, jQuery, candystore */
+/*global dessert, troop, sntls, evan, jQuery, candystore */
 troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -206,10 +206,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOutsideClick: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .closePopup()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.closePopup();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -218,10 +217,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             onBodyClick: function (event) {
                 if (this._isOutside($(event.target))) {
-                    this
-                        .setNextOriginalEvent(event)
-                        .triggerSync(this.EVENT_POPUP_OUTSIDE_CLICK)
-                        .clearNextOriginalEvent();
+                    evan.eventSpaceRegistry.pushOriginalEvent(event);
+                    this.triggerSync(this.EVENT_POPUP_OUTSIDE_CLICK);
+                    evan.eventSpaceRegistry.popOriginalEvent();
                 }
             }
         });

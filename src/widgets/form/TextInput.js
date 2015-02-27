@@ -133,18 +133,16 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 case 13:
                     if (this.canSubmit) {
                         // signaling that the input is attempting to submit the form
-                        this
-                            .setNextOriginalEvent(event)
-                            .triggerSync(this.EVENT_INPUT_SUBMIT)
-                            .clearNextOriginalEvent();
+                        evan.eventSpaceRegistry.pushOriginalEvent(event);
+                        this.triggerSync(this.EVENT_INPUT_SUBMIT);
+                        evan.eventSpaceRegistry.popOriginalEvent();
                     }
                     break;
 
                 case 9:
-                    this
-                        .setNextOriginalEvent(event)
-                        .triggerSync(this.EVENT_INPUT_TAB)
-                        .clearNextOriginalEvent();
+                    evan.eventSpaceRegistry.pushOriginalEvent(event);
+                    this.triggerSync(this.EVENT_INPUT_TAB);
+                    evan.eventSpaceRegistry.popOriginalEvent();
                     break;
                 }
             },
@@ -162,10 +160,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 if (element) {
                     newInputValue = $(element).val();
 
-                    this
-                        .setNextOriginalEvent(event)
-                        .setInputValue(newInputValue)
-                        .clearNextOriginalEvent();
+                    evan.eventSpaceRegistry.pushOriginalEvent(event);
+                    this.setInputValue(newInputValue);
+                    evan.eventSpaceRegistry.popOriginalEvent();
                 }
             },
 
@@ -174,10 +171,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onFocusIn: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_INPUT_FOCUS)
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.triggerSync(this.EVENT_INPUT_FOCUS);
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -185,10 +181,9 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onFocusOut: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .triggerSync(this.EVENT_INPUT_BLUR)
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.triggerSync(this.EVENT_INPUT_BLUR);
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 

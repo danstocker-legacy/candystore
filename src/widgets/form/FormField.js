@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'FormField', function (ns, className) {
     "use strict";
 
@@ -255,10 +255,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onInputBlur: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .updateWarningMessage()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.updateWarningMessage();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -279,10 +278,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onInputValid: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .updateWarningMessage()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.updateWarningMessage();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -290,10 +288,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onFormReset: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .clearWarningMessage()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.clearWarningMessage();
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 });

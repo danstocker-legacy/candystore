@@ -332,9 +332,9 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
                 this._setInputValue(newInputValue);
 
-                this
-                    .setNextOriginalEvent(event)
-                    .validateInputValue();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+
+                this.validateInputValue();
 
                 if (newInputValue && !oldInputValue) {
                     this.triggerSync(this.EVENT_INPUT_GOT_VALUE);
@@ -342,7 +342,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     this.triggerSync(this.EVENT_INPUT_LOST_VALUE);
                 }
 
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             }
         });
 }, jQuery);

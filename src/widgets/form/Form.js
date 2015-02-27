@@ -250,10 +250,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              * @ignore
              */
             onInputSubmit: function (event) {
-                this
-                    .setNextOriginalEvent(event)
-                    .trySubmittingForm()
-                    .clearNextOriginalEvent();
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                this.trySubmittingForm();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -264,9 +263,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 var wasValid = this.isValid();
 
                 this.validFieldCount++;
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._triggerValidityEvent(wasValid);
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
@@ -277,9 +276,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 var wasValid = this.isValid();
 
                 this.validFieldCount--;
-                this.setNextOriginalEvent(event);
+                evan.eventSpaceRegistry.pushOriginalEvent(event);
                 this._triggerValidityEvent(wasValid);
-                this.clearNextOriginalEvent();
+                evan.eventSpaceRegistry.popOriginalEvent();
             },
 
             /**
