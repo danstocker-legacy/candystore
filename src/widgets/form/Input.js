@@ -268,10 +268,9 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     // input just became invalid
                     // TODO: revise as soon as evan supports collection payload
                     // clobbers previously set payload
-                    this
-                        .setNextPayload(newValidationError)
-                        .triggerSync(this.EVENT_INPUT_INVALID)
-                        .clearNextPayload();
+                    evan.eventSpaceRegistry.pushPayload(newValidationError);
+                    this.triggerSync(this.EVENT_INPUT_INVALID);
+                    evan.eventSpaceRegistry.popPayload();
                 } else if (!wasValid && isValid) {
                     // input just became valid
                     this.triggerSync(this.EVENT_INPUT_VALID);
