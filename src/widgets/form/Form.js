@@ -250,9 +250,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              * @ignore
              */
             onInputSubmit: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.trySubmittingForm();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -263,9 +263,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 var wasValid = this.isValid();
 
                 this.validFieldCount++;
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._triggerValidityEvent(wasValid);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -276,9 +276,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 var wasValid = this.isValid();
 
                 this.validFieldCount--;
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._triggerValidityEvent(wasValid);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**

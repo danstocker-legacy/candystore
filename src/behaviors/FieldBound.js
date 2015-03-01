@@ -53,9 +53,9 @@ troop.postpone(candystore, 'FieldBound', function () {
              * @ignore
              */
             onDocumentReplace: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._updateFieldValue();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -63,9 +63,9 @@ troop.postpone(candystore, 'FieldBound', function () {
              * @ignore
              */
             onFieldChange: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._updateFieldValue();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 });

@@ -255,9 +255,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onInputBlur: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.updateWarningMessage();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -278,9 +278,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onInputValid: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.updateWarningMessage();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -288,9 +288,9 @@ troop.postpone(candystore, 'FormField', function (ns, className) {
              * @ignore
              */
             onFormReset: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.clearWarningMessage();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 });

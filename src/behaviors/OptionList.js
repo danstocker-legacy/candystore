@@ -218,10 +218,10 @@ troop.postpone(candystore, 'OptionList', function () {
              * @ignore
              */
             onItemsChange: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._focusOnOption();
                 this._updateFocusedOptionName();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -236,7 +236,7 @@ troop.postpone(candystore, 'OptionList', function () {
                     currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
                     newFocusedOptionName;
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
 
                 switch (charCode) {
                 case 38: // up
@@ -263,7 +263,7 @@ troop.postpone(candystore, 'OptionList', function () {
                     break;
                 }
 
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -273,9 +273,9 @@ troop.postpone(candystore, 'OptionList', function () {
             onOptionFocus: function (event) {
                 var newFocusedOptionName = event.senderWidget.childName;
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._setFocusedOptionName(newFocusedOptionName);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -285,9 +285,9 @@ troop.postpone(candystore, 'OptionList', function () {
             onOptionActive: function (event) {
                 var optionWidget = event.senderWidget;
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**

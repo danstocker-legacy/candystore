@@ -159,9 +159,9 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionClick: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.markAsActive();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -169,9 +169,9 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionHover: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.markAsFocused();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 }, jQuery);

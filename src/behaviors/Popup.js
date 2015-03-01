@@ -206,9 +206,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOutsideClick: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.closePopup();
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -217,9 +217,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             onBodyClick: function (event) {
                 if (this._isOutside($(event.target))) {
-                    evan.eventSpaceRegistry.pushOriginalEvent(event);
+                    evan.eventPropertyStack.pushOriginalEvent(event);
                     this.triggerSync(this.EVENT_POPUP_OUTSIDE_CLICK);
-                    evan.eventSpaceRegistry.popOriginalEvent();
+                    evan.eventPropertyStack.popOriginalEvent();
                 }
             }
         });

@@ -31,14 +31,14 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
                                    keyboardEvent.toWidget() ||
                                    rootWidget;
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
 
                 rootWidget.broadcastSync(this.EVENT_HOT_KEY_DOWN, {
                     charCode    : event.which,
                     originWidget: originWidget
                 });
 
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 });

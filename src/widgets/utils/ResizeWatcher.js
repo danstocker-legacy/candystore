@@ -101,9 +101,9 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
             onDebouncedWindowResize: function (event) {
                 var rootWidget = shoeshine.Widget.rootWidget;
                 if (rootWidget) {
-                    evan.eventSpaceRegistry.pushOriginalEvent(event);
+                    evan.eventPropertyStack.pushOriginalEvent(event);
                     this.updateDimensions();
-                    evan.eventSpaceRegistry.popOriginalEvent();
+                    evan.eventPropertyStack.popOriginalEvent();
                 }
             }
         });

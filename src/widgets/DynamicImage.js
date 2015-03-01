@@ -128,9 +128,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
              * @ignore
              */
             onImageLoadStart: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.triggerSync(this.EVENT_IMAGE_LOAD_START);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -140,9 +140,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
             onImageLoadSuccess: function (event) {
                 this._setImageElement(event.imageElement);
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.triggerSync(this.EVENT_IMAGE_LOAD_SUCCESS);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             },
 
             /**
@@ -150,9 +150,9 @@ troop.postpone(candystore, 'DynamicImage', function (ns, className, /**jQuery*/$
              * @ignore
              */
             onImageLoadFailure: function (event) {
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
                 this.triggerSync(this.EVENT_IMAGE_LOAD_FAILURE);
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 }, jQuery);

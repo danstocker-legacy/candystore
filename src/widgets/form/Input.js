@@ -268,9 +268,9 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     // input just became invalid
                     // TODO: revise as soon as evan supports collection payload
                     // clobbers previously set payload
-                    evan.eventSpaceRegistry.pushPayload(newValidationError);
+                    evan.eventPropertyStack.pushPayload(newValidationError);
                     this.triggerSync(this.EVENT_INPUT_INVALID);
-                    evan.eventSpaceRegistry.popPayload();
+                    evan.eventPropertyStack.popPayload();
                 } else if (!wasValid && isValid) {
                     // input just became valid
                     this.triggerSync(this.EVENT_INPUT_VALID);
@@ -331,7 +331,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
 
                 this._setInputValue(newInputValue);
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
 
                 this.validateInputValue();
 
@@ -341,7 +341,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     this.triggerSync(this.EVENT_INPUT_LOST_VALUE);
                 }
 
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 }, jQuery);

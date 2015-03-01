@@ -111,7 +111,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
 
                 var dropdown = this.dropdown;
 
-                evan.eventSpaceRegistry.pushOriginalEvent(event);
+                evan.eventPropertyStack.pushOriginalEvent(event);
 
                 if (dropdown.isOpen) {
                     dropdown
@@ -122,7 +122,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                         .openPopup();
                 }
 
-                evan.eventSpaceRegistry.popOriginalEvent();
+                evan.eventPropertyStack.popOriginalEvent();
             }
         });
 });
