@@ -47,7 +47,8 @@ troop.postpone(candystore, 'TextInput', function (ns, className, /**jQuery*/$) {
                 email   : 'email',
                 search  : 'search',
                 tel     : 'tel',
-                url     : 'url'
+                url     : 'url',
+		number  : 'number'
             }
         })
         .addPrivateMethods(/** @lends candystore.TextInput# */{
