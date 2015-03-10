@@ -55,7 +55,7 @@ troop.postpone(candystore, 'DataTextInput', function (ns, className) {
              * @ignore
              */
             setFieldValue: function (fieldValue) {
-                this.setInputValue(String(fieldValue || ''), true);
+                this.setInputValue(typeof fieldValue === 'undefined' ? fieldValue : String(fieldValue), true);
                 return this;
             }
         });
