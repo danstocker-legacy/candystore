@@ -250,9 +250,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              * @ignore
              */
             onInputSubmit: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this.trySubmittingForm();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -260,12 +260,13 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              * @ignore
              */
             onInputValid: function (event) {
-                var wasValid = this.isValid();
+                var wasValid = this.isValid(),
+                    link = evan.pushOriginalEvent(event);
 
                 this.validFieldCount++;
-                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._triggerValidityEvent(wasValid);
-                evan.eventPropertyStack.popOriginalEvent();
+
+                link.unLink();
             },
 
             /**
@@ -273,12 +274,13 @@ troop.postpone(candystore, 'Form', function (ns, className) {
              * @ignore
              */
             onInputInvalid: function (event) {
-                var wasValid = this.isValid();
+                var wasValid = this.isValid(),
+                    link = evan.pushOriginalEvent(event);
 
                 this.validFieldCount--;
-                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._triggerValidityEvent(wasValid);
-                evan.eventPropertyStack.popOriginalEvent();
+
+                link.unLink();
             },
 
             /**

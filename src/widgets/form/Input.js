@@ -121,10 +121,12 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                 var newInputValue = this.inputValue;
 
                 if (oldInputValue !== newInputValue) {
-                    this.triggerSync(this.EVENT_INPUT_VALUE_CHANGE, {
-                        oldInputValue: oldInputValue,
-                        newInputValue: newInputValue
-                    });
+                    this.spawnEvent(this.EVENT_INPUT_VALUE_CHANGE)
+                        .setPayloadItems({
+                            oldInputValue: oldInputValue,
+                            newInputValue: newInputValue
+                        })
+                        .triggerSync();
                 }
             }
         })
@@ -327,11 +329,10 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
             onValueChange: function (event) {
                 var payload = event.payload,
                     oldInputValue = payload.oldInputValue,
-                    newInputValue = payload.newInputValue;
+                    newInputValue = payload.newInputValue,
+                    link = evan.pushOriginalEvent(event);
 
                 this._setInputValue(newInputValue);
-
-                evan.eventPropertyStack.pushOriginalEvent(event);
 
                 this.validateInputValue();
 
@@ -341,7 +342,7 @@ troop.postpone(candystore, 'Input', function (ns, className, /**jQuery*/$) {
                     this.triggerSync(this.EVENT_INPUT_LOST_VALUE);
                 }
 
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 }, jQuery);

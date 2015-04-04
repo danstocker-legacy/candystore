@@ -202,10 +202,12 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 itemWidgetsToAdd
                     .passEachItemTo(this.addItemWidget, this);
 
-                this.triggerSync(this.EVENT_LIST_ITEMS_CHANGE, {
-                    itemsRemoved: itemWidgetsToRemove,
-                    itemsAdded  : itemWidgetsToAdd
-                });
+                this.spawnEvent(this.EVENT_LIST_ITEMS_CHANGE)
+                    .setPayloadItems({
+                        itemsRemoved: itemWidgetsToRemove,
+                        itemsAdded  : itemWidgetsToAdd
+                    })
+                    .triggerSync();
 
                 return this;
             },

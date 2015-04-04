@@ -94,9 +94,9 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
              * @ignore
              */
             onSelectedChange: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this._updateSelectedOption();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -104,9 +104,9 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
              * @ignore
              */
             onListItemsChange: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this._updateSelectedOption();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -116,10 +116,10 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             onOptionSelect: function (event) {
                 var optionValue = event.payload.optionValue;
 
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this.entityKey.toField()
                     .setValue(optionValue);
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 });

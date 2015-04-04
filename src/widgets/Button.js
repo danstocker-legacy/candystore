@@ -64,9 +64,9 @@ troop.postpone(candystore, 'Button', function (ns, className) {
              * @param {jQuery.Event} event
              * @ignore */
             onClick: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this.clickButton();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 

@@ -80,12 +80,13 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              */
             markAsFocused: function () {
                 if (!this.isFocused()) {
-                    this
-                        .highlightOn(this.HIGHLIGHTED_FOCUS)
-                        .triggerSync(this.EVENT_OPTION_FOCUS, {
+                    this.highlightOn(this.HIGHLIGHTED_FOCUS)
+                        .spawnEvent(this.EVENT_OPTION_FOCUS)
+                        .setPayloadItems({
                             optionName : this.childName,
                             optionValue: this.optionValue
-                        });
+                        })
+                        .triggerSync();
                 }
                 return this;
             },
@@ -96,12 +97,13 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              */
             markAsBlurred: function () {
                 if (this.isFocused()) {
-                    this
-                        .highlightOff(this.HIGHLIGHTED_FOCUS)
-                        .triggerSync(this.EVENT_OPTION_BLUR, {
+                    this.highlightOff(this.HIGHLIGHTED_FOCUS)
+                        .spawnEvent(this.EVENT_OPTION_BLUR)
+                        .setPayloadItems({
                             optionName : this.childName,
                             optionValue: this.optionValue
-                        });
+                        })
+                        .triggerSync();
                 }
                 return this;
             },
@@ -120,12 +122,13 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              */
             markAsActive: function () {
                 if (!this.isActive()) {
-                    this
-                        .highlightOn(this.HIGHLIGHTED_ACTIVE)
-                        .triggerSync(this.EVENT_OPTION_ACTIVE, {
+                    this.highlightOn(this.HIGHLIGHTED_ACTIVE)
+                        .spawnEvent(this.EVENT_OPTION_ACTIVE)
+                        .setPayloadItems({
                             optionName : this.childName,
                             optionValue: this.optionValue
-                        });
+                        })
+                        .triggerSync();
                 }
                 return this;
             },
@@ -136,12 +139,13 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              */
             markAsInactive: function () {
                 if (this.isActive()) {
-                    this
-                        .highlightOff(this.HIGHLIGHTED_ACTIVE)
-                        .triggerSync(this.EVENT_OPTION_INACTIVE, {
+                    this.highlightOff(this.HIGHLIGHTED_ACTIVE)
+                        .spawnEvent(this.EVENT_OPTION_INACTIVE)
+                        .setPayloadItems({
                             optionName : this.childName,
                             optionValue: this.optionValue
-                        });
+                        })
+                        .triggerSync();
                 }
                 return this;
             },
@@ -159,9 +163,9 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionClick: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this.markAsActive();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -169,9 +173,9 @@ troop.postpone(candystore, 'Option', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionHover: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this.markAsFocused();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 }, jQuery);

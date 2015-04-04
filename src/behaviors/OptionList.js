@@ -29,10 +29,12 @@ troop.postpone(candystore, 'OptionList', function () {
              * @private
              */
             _triggerSelectEvent: function (optionName, optionValue) {
-                this.triggerSync(this.EVENT_OPTION_SELECT, {
-                    optionName: optionName,
-                    optionValue: optionValue
-                });
+                this.spawnEvent(this.EVENT_OPTION_SELECT)
+                    .setPayloadItems({
+                        optionName : optionName,
+                        optionValue: optionValue
+                    })
+                    .triggerSync();
             },
 
             /**
@@ -218,10 +220,10 @@ troop.postpone(candystore, 'OptionList', function () {
              * @ignore
              */
             onItemsChange: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this._focusOnOption();
                 this._updateFocusedOptionName();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -234,9 +236,8 @@ troop.postpone(candystore, 'OptionList', function () {
                     children = this.children,
                     sortedChildNames = children.getKeys().sort(),
                     currentChildIndex = sortedChildNames.indexOf(this.focusedOptionName),
+                    link = evan.pushOriginalEvent(event),
                     newFocusedOptionName;
-
-                evan.eventPropertyStack.pushOriginalEvent(event);
 
                 switch (charCode) {
                 case 38: // up
@@ -263,7 +264,7 @@ troop.postpone(candystore, 'OptionList', function () {
                     break;
                 }
 
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -271,11 +272,12 @@ troop.postpone(candystore, 'OptionList', function () {
              * @ignore
              */
             onOptionFocus: function (event) {
-                var newFocusedOptionName = event.senderWidget.childName;
+                var newFocusedOptionName = event.senderWidget.childName,
+                    link = evan.pushOriginalEvent(event);
 
-                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._setFocusedOptionName(newFocusedOptionName);
-                evan.eventPropertyStack.popOriginalEvent();
+
+                link.unLink();
             },
 
             /**
@@ -283,11 +285,11 @@ troop.postpone(candystore, 'OptionList', function () {
              * @ignore
              */
             onOptionActive: function (event) {
-                var optionWidget = event.senderWidget;
+                var optionWidget = event.senderWidget,
+                    link = evan.pushOriginalEvent(event);
 
-                evan.eventPropertyStack.pushOriginalEvent(event);
                 this._triggerSelectEvent(optionWidget.childName, optionWidget.optionValue);
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             },
 
             /**
@@ -295,8 +297,12 @@ troop.postpone(candystore, 'OptionList', function () {
              * @ignore
              */
             onOptionSelect: function (event) {
-                var optionName = event.payload.optionName;
+                var link = evan.pushOriginalEvent(event),
+                    optionName = event.payload.optionName;
+
                 this._setActiveOptionName(optionName);
+
+                link.unLink();
             }
         });
 });

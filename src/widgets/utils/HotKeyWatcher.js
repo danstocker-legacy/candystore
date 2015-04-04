@@ -31,14 +31,17 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
                                    keyboardEvent.toWidget() ||
                                    rootWidget;
 
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
 
-                rootWidget.broadcastSync(this.EVENT_HOT_KEY_DOWN, {
-                    charCode    : event.which,
-                    originWidget: originWidget
-                });
+                rootWidget
+                    .spawnEvent(this.EVENT_HOT_KEY_DOWN)
+                    .setPayloadItems({
+                        charCode    : event.which,
+                        originWidget: originWidget
+                    })
+                    .broadcastSync();
 
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 });

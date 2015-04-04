@@ -122,15 +122,17 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionSelect: function (event) {
-                var originalEvent = event.getOriginalEventByType(jQuery.Event);
+                var originalEvent = event.getOriginalEventByType(jQuery.Event),
+                    link;
+
                 if (originalEvent && (
                     originalEvent.type === 'click' ||
                     originalEvent.type === 'keydown' && originalEvent.which === 13
                     )) {
                     // only when select was initiated by user interaction (click on Option)
-                    evan.eventPropertyStack.pushOriginalEvent(event);
+                    link = evan.pushOriginalEvent(event);
                     this.closePopup();
-                    evan.eventPropertyStack.popOriginalEvent();
+                    link.unLink();
                 }
             },
 
@@ -139,9 +141,9 @@ troop.postpone(candystore, 'Dropdown', function (ns, className, /**jQuery*/$) {
              * @ignore
              */
             onOptionsEscape: function (event) {
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var link = evan.pushOriginalEvent(event);
                 this.closePopup();
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 }, jQuery);

@@ -57,7 +57,7 @@ troop.postpone(candystore, 'Editable', function () {
                 // triggering event about state change
                 this.spawnEvent(eventName)
                     .allowBubbling(false)
-                    .triggerSync(this.eventPath);
+                    .triggerSync();
             }
         })
         .addMethods(/** @lends candystore.Editable# */{

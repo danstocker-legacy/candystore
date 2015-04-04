@@ -109,9 +109,8 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
             onClick: function (event) {
                 base.onClick.call(this);
 
-                var dropdown = this.dropdown;
-
-                evan.eventPropertyStack.pushOriginalEvent(event);
+                var dropdown = this.dropdown,
+                    link = evan.pushOriginalEvent(event);
 
                 if (dropdown.isOpen) {
                     dropdown
@@ -122,7 +121,7 @@ troop.postpone(candystore, 'DropdownButton', function (ns, className) {
                         .openPopup();
                 }
 
-                evan.eventPropertyStack.popOriginalEvent();
+                link.unLink();
             }
         });
 });
