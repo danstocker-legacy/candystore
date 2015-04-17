@@ -16,34 +16,15 @@ troop.postpone(candystore, 'HtmlLabel', function (ns, className, /**jQuery*/$) {
      * Label that is able to display HTML markup.
      * @class
      * @extends candystore.Label
+     * @deprecated
+     * Use candystore.Label with htmlEscaped set to false.
      */
     candystore.HtmlLabel = self
         .addMethods(/** @lends candystore.HtmlLabel# */{
             /** @ignore */
-            contentMarkup: function () {
-                var labelText = this.labelText;
-                return labelText ? labelText : '';
-            },
-
-            /**
-             * Sets HTML label text. Overrides Label's implementation.
-             * <em>Use with care: malicious code in labelText can affect your application!</em>
-             * @param {string} labelText
-             * @returns {candystore.Label}
-             */
-            setLabelText: function (labelText) {
-                dessert.isStringOptional(labelText, "Invalid label text");
-
-                var element = this.getElement();
-                if (element) {
-                    $(element).html(labelText);
-                }
-
-                this.labelText = labelText;
-
-                this.updateContentStyle();
-
-                return this;
+            init: function () {
+                base.init.call(this);
+                this.htmlEscaped = false;
             }
         });
 }, jQuery);
