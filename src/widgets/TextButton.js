@@ -53,8 +53,6 @@ troop.postpone(candystore, 'TextButton', function (ns, className) {
              * @returns {candystore.TextButton}
              */
             setCaption: function (caption) {
-                dessert.isString(caption, "Invalid label text");
-
                 this.getChild('button-label')
                     .setLabelText(caption);
 
