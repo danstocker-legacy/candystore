@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
+/*global dessert, troop, sntls, evan, rubberband, shoeshine, jQuery, candystore */
 troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -35,31 +35,13 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
                 }
             },
 
-            /**
-             * @returns {string}
-             * @private
-             */
-            _getCurrentLabelText: function () {
-                var labelText = this.labelText;
-                if (typeof labelText === 'string' || labelText instanceof String) {
-                    // label text is genuine string
-                    return labelText;
-                } else if (labelText instanceof Object) {
-                    // label text is not string but can be stringified
-                    return labelText.toString();
-                } else {
-                    // everything else (mostly undefined & null)
-                    return '';
-                }
-            },
-
             /** @private */
             _updateLabelDom: function () {
                 var element = this.getElement(),
                     currentLabelText;
 
                 if (element) {
-                    currentLabelText = this._getCurrentLabelText();
+                    currentLabelText = rubberband.Stringifier.stringify(this.labelText);
                     $(element).html(this.htmlEscaped ?
                         currentLabelText.toHtml() :
                         currentLabelText);
@@ -90,7 +72,7 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
 
             /** @ignore */
             contentMarkup: function () {
-                var currentLabelText = this._getCurrentLabelText();
+                var currentLabelText = rubberband.Stringifier.stringify(this.labelText);
                 return this.htmlEscaped ?
                     currentLabelText.toHtml() :
                     currentLabelText;

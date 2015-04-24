@@ -1,6 +1,6 @@
 {
     "name"           : "candystore",
-    "version"        : "0.6.0",
+    "version"        : "0.6.1",
     "description"    : "Common widgets",
     "keywords"       : [
         "widgets", "button", "label", "form", "dropdown", "popup"
@@ -13,16 +13,17 @@
         "url" : "git://github.com/danstocker/candystore.git"
     },
     "dependencies"   : {
-        "dessert"  : "~0.3.2",
-        "troop"    : "~0.8.0",
-        "sntls"    : "~0.18.0 || ~0.19.0",
-        "evan"     : "~0.7.0",
-        "flock"    : "~0.3.9",
-        "jquery"   : "~2.1.0",
-        "bookworm" : "~0.2.7",
-        "shoeshine": "~0.2.3",
-        "q"        : "~1.1.2",
-        "poodle"   : "~0.3.15"
+        "dessert"   : "~0.3.2",
+        "troop"     : "~0.8.0",
+        "sntls"     : "~0.18.0 || ~0.19.0",
+        "evan"      : "~0.7.0",
+        "rubberband": "~0.1.2",
+        "flock"     : "~0.3.9",
+        "jquery"    : "~2.1.0",
+        "bookworm"  : "~0.2.7",
+        "shoeshine" : "~0.2.3",
+        "q"         : "~1.1.2",
+        "poodle"    : "~0.3.15"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
