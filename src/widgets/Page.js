@@ -65,7 +65,7 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
                 var documentBody = candystore.DocumentBody.create();
 
                 this._getPageCssClasses()
-                    .passEachItemTo(documentBody.decreaseRefCount, documentBody);
+                    .passEachItemTo(documentBody.decreaseCssClassRefCount, documentBody);
             }
         });
 }, jQuery);
