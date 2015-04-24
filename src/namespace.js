@@ -38,6 +38,12 @@ var sntls = sntls || require('sntls');
 var evan = evan || require('evan');
 
 /**
+ * @namespace
+ * @see https://github.com/danstocker/rubberband
+ */
+var rubberband = rubberband || require('rubberband');
+
+/**
  * @function
  * @see http://api.jquery.com
  */
