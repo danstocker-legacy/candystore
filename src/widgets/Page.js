@@ -33,7 +33,7 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
              */
             _getPageCssClasses: function () {
                 return this.getBase().htmlAttributes.cssClasses
-                    .mapValues(function (className) {
+                    .mapValues(function (refCount, className) {
                         return 'page-' + className;
                     });
             }
@@ -65,7 +65,7 @@ troop.postpone(candystore, 'Page', function (ns, className, /**jQuery*/$) {
                 var documentBody = candystore.DocumentBody.create();
 
                 this._getPageCssClasses()
-                    .passEachItemTo(documentBody.removeCssClass, documentBody);
+                    .passEachItemTo(documentBody.decreaseRefCount, documentBody);
             }
         });
 }, jQuery);
