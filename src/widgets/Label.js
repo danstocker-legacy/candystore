@@ -24,7 +24,8 @@ troop.postpone(candystore, 'Label', function (ns, className, /**jQuery*/$) {
              * @private
              */
             _updateLabelStyle: function () {
-                if (this.labelText) {
+                var labelText = rubberband.Stringifier.stringify(this.labelText);
+                if (labelText) {
                     this
                         .removeCssClass('no-text')
                         .addCssClass('has-text');
