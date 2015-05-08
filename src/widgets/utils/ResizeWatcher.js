@@ -54,9 +54,9 @@ troop.postpone(candystore, 'ResizeWatcher', function (ns, className, /**jQuery*/
 
                 /**
                  * Debouncer instance for debouncing window resize events, which may come in rapid succession.
-                 * @type {candystore.Debouncer}
+                 * @type {sntls.Debouncer}
                  */
-                this.windowResizeDebouncer = candystore.Debouncer.create(this.onDebouncedWindowResize);
+                this.windowResizeDebouncer = this.onDebouncedWindowResize.toDebouncer();
 
                 // setting initial dimensions
                 this.updateDimensions();

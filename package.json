@@ -1,6 +1,6 @@
 {
     "name"           : "candystore",
-    "version"        : "0.6.5",
+    "version"        : "0.7.0",
     "description"    : "Common widgets",
     "keywords"       : [
         "widgets", "button", "label", "form", "dropdown", "popup"
@@ -15,7 +15,7 @@
     "dependencies"   : {
         "dessert"   : "~0.3.2",
         "troop"     : "~0.8.0",
-        "sntls"     : "~0.18.0 || ~0.19.0",
+        "sntls"     : "~0.19.1",
         "evan"      : "~0.7.0",
         "rubberband": "~0.1.2",
         "flock"     : "~0.3.9",
