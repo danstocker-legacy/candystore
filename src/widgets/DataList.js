@@ -123,7 +123,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
                 this
                     .subscribeTo(this.EVENT_CHILD_ADD, this.onChildAdd)
                     .subscribeTo(this.EVENT_CHILD_REMOVE, this.onChildRemove)
-                    .bindToEntityChange(this.entityKey, 'onItemChange');
+                    .bindToEntityContentChange(this.entityKey, 'onItemChange');
             },
 
             /** @ignore */
@@ -245,7 +245,7 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
             },
 
             /**
-             * @param {flock.ChangeEvent} event
+             * @param {bookworm.EntityChangeEvent} event
              * @ignore
              */
             onItemChange: function (event) {

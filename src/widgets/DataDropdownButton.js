@@ -68,7 +68,7 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
                 this._updateSelectedOption();
 
                 this
-                    .bindToEntityNodeChange(this.entityKey, 'onSelectedChange')
+                    .bindToEntityChange(this.entityKey, 'onSelectedChange')
                     .subscribeTo(candystore.DataList.EVENT_LIST_ITEMS_CHANGE, this.onListItemsChange)
                     .subscribeTo(candystore.OptionList.EVENT_OPTION_SELECT, this.onOptionSelect);
             },
@@ -90,7 +90,7 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             },
 
             /**
-             * @param {flock.ChangeEvent} event
+             * @param {bookworm.EntityChangeEvent} event
              * @ignore
              */
             onSelectedChange: function (event) {
@@ -100,7 +100,7 @@ troop.postpone(candystore, 'DataDropdownButton', function (ns, className) {
             },
 
             /**
-             * @param {flock.ChangeEvent} event
+             * @param {bookworm.EntityChangeEvent} event
              * @ignore
              */
             onListItemsChange: function (event) {

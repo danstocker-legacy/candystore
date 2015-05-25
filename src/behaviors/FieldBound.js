@@ -36,20 +36,21 @@ troop.postpone(candystore, 'FieldBound', function () {
             /** Call from host's afterAdd. */
             afterAdd: function () {
                 this._updateFieldValue();
+                // TODO: Use .bindToFieldChange().
                 this
-                    .bindToEntityNodeChange(this.entityKey.documentKey, 'onDocumentReplace')
-                    .bindToEntityNodeChange(this.entityKey, 'onFieldChange');
+                    .bindToEntityChange(this.entityKey.documentKey, 'onDocumentReplace')
+                    .bindToEntityChange(this.entityKey, 'onFieldChange');
             },
 
             /** Call from host's afterRemove. */
             afterRemove: function () {
                 this
-                    .unbindFromEntityChange(this.entityKey.documentKey)
-                    .unbindFromEntityChange(this.entityKey);
+                    .unbindFromEntityChange(this.entityKey.documentKey, 'onDocumentReplace')
+                    .unbindFromEntityChange(this.entityKey, 'onFieldChange');
             },
 
             /**
-             * @param {flock.ChangeEvent} event
+             * @param {bookworm.EntityChangeEvent} event
              * @ignore
              */
             onDocumentReplace: function (event) {
@@ -59,7 +60,7 @@ troop.postpone(candystore, 'FieldBound', function () {
             },
 
             /**
-             * @param {flock.ChangeEvent} event
+             * @param {bookworm.EntityChangeEvent} event
              * @ignore
              */
             onFieldChange: function (event) {
