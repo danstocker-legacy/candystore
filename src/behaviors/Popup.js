@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, jQuery, candystore */
+/*global dessert, troop, sntls, evan, jQuery, shoeshine, candystore */
 troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -101,6 +101,19 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
 
                 /** @type {sntls.Collection} */
                 this.insideSelectors = sntls.Collection.create();
+            },
+
+            /**
+             * Overrides rendering, ensuring that popups get only rendered inside the document body.
+             * This override is supposed to overshadow Widget's implementation.
+             * @param {HTMLElement} element
+             * @returns {candystore.Popup}
+             */
+            renderInto: function (element) {
+                if (element === document.body) {
+                    shoeshine.Widget.renderInto.call(this, element);
+                }
+                return this;
             },
 
             /**
