@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, jQuery, shoeshine, candystore */
+/*global dessert, troop, sntls, evan, jQuery, UIEvent, shoeshine, candystore */
 troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
     "use strict";
 
@@ -82,6 +82,14 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                     element = this.getElement();
                     return element && !$element.closest(element).length;
                 }
+            },
+
+            /**
+             * @returns {evan.Event}
+             * @private
+             */
+            _getLastUiEvent: function () {
+                return window && evan.originalEventStack.getLastEvent().getOriginalEventByType(UIEvent);
             }
         })
         .addMethods(/** @lends candystore.Popup# */{
@@ -101,6 +109,12 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
 
                 /** @type {sntls.Collection} */
                 this.insideSelectors = sntls.Collection.create();
+
+                /**
+                 * DOM Event that led to opening the popup.
+                 * @type {UIEvent}
+                 */
+                this.openUiEvent = undefined;
             },
 
             /**
@@ -135,6 +149,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
 
                 // unsubscribing from global click event
                 $document.off('click', this.onBodyClick);
+
+                this.openUiEvent = undefined;
             },
 
             /**
@@ -154,6 +170,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                 dessert.assert(this.parent, "Popup has no parent");
 
                 if (!this.isOpen) {
+                    this.openUiEvent = this._getLastUiEvent();
+
                     this.renderInto(document.body);
 
                     this.isOpen = true;
@@ -169,7 +187,7 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Popup}
              */
             closePopup: function () {
-                if (this.isOpen) {
+                if (this.isOpen && this.openUiEvent !== this._getLastUiEvent()) {
                     // must set flag before triggering event
                     // otherwise event handlers would see mixed state
                     // (event says it's closed, but widget state says it's open)
