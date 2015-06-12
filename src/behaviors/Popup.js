@@ -85,11 +85,12 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
             },
 
             /**
-             * @returns {evan.Event}
+             * @returns {UIEvent}
              * @private
              */
             _getLastUiEvent: function () {
-                return window && evan.originalEventStack.getLastEvent().getOriginalEventByType(UIEvent);
+                var lastEvent = window && evan.originalEventStack.getLastEvent();
+                return lastEvent && lastEvent.getOriginalEventByType(UIEvent);
             }
         })
         .addMethods(/** @lends candystore.Popup# */{
