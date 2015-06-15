@@ -90,7 +90,9 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              */
             _getLastUiEvent: function () {
                 var lastEvent = window && evan.originalEventStack.getLastEvent();
-                return lastEvent && lastEvent.getOriginalEventByType(UIEvent);
+                return lastEvent && evan.Event.isBaseOf(lastEvent) ?
+                    lastEvent.getOriginalEventByType(UIEvent) :
+                    undefined;
             }
         })
         .addMethods(/** @lends candystore.Popup# */{
