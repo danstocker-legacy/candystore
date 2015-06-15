@@ -18,7 +18,7 @@
         "url" : "git://github.com/danstocker/candystore.git"
     },
     "dependencies"   : {
-        "bookworm"  : "~0.3.0",
+        "bookworm"  : "~0.3.1",
         "dessert"   : "~0.3.2",
         "evan"      : "~0.7.4",
         "jquery"    : "~2.1.0",
