@@ -249,18 +249,12 @@ troop.postpone(candystore, 'DataList', function (ns, className) {
              * @ignore
              */
             onItemChange: function (event) {
-                var fieldPath = this.entityKey.getEntityPath().asArray,
-                    itemQuery = fieldPath.concat(['|'.toKVP(), '\\'.toKVP()]).toQuery(),
-                    itemKey;
-
-                if (itemQuery.matchesPath(event.originalPath)) {
-                    // TODO: Revisit after entity path to entity key conversion is resolved.
-                    itemKey = event.originalPath.clone().trimLeft().asArray.toItemKey();
-
-                    if (event.beforeValue !== undefined && event.afterValue === undefined) {
+                var itemKey = event.sender;
+                if (itemKey.isA(bookworm.ItemKey)) {
+                    if (event.beforeNode !== undefined && event.afterNode === undefined) {
                         // item was removed
                         this._removeItem(itemKey);
-                    } else if (event.afterValue !== undefined) {
+                    } else if (event.afterNode !== undefined) {
                         // item was added
                         this._addItem(itemKey);
                     }
