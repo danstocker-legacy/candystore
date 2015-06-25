@@ -190,7 +190,10 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
              * @returns {candystore.Popup}
              */
             closePopup: function () {
-                if (this.isOpen && this.openUiEvent !== this._getLastUiEvent()) {
+                var openUiEvent = this.openUiEvent,
+                    isClosedBySameEvent = openUiEvent && openUiEvent === this._getLastUiEvent();
+
+                if (this.isOpen && !isClosedBySameEvent) {
                     // must set flag before triggering event
                     // otherwise event handlers would see mixed state
                     // (event says it's closed, but widget state says it's open)
@@ -202,6 +205,7 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
 
                     this.removeFromParent();
                 }
+
                 return this;
             },
 
