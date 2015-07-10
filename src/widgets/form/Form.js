@@ -1,12 +1,11 @@
 /*global dessert, troop, sntls, evan, shoeshine, jQuery, candystore */
-troop.postpone(candystore, 'Form', function (ns, className) {
+troop.postpone(candystore, 'Form', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = shoeshine.Widget,
         self = base.extend(className)
             .addTraitAndExtend(candystore.BinaryStateful)
-            .addTrait(candystore.Disableable)
-            .addTrait(shoeshine.JqueryWidget);
+            .addTrait(candystore.Disableable);
 
     /**
      * Creates a Form instance.
@@ -21,7 +20,8 @@ troop.postpone(candystore, 'Form', function (ns, className) {
      * TODO: Implement disabling for form elements like inputs, etc.
      * @class
      * @extends shoeshine.Widget
-     * @extends shoeshine.JqueryWidget
+     * @extends candystore.BinaryStateful
+     * @extends candystore.Disableable
      */
     candystore.Form = self
         .addConstants(/** @lends candystore.Form */{
@@ -95,10 +95,11 @@ troop.postpone(candystore, 'Form', function (ns, className) {
 
                 this.setTagName('form');
 
-                this
-                    .elevateMethod('onInputSubmit')
-                    .elevateMethod('onInputValid')
-                    .elevateMethod('onInputInvalid');
+                this.elevateMethods(
+                    'onSubmit',
+                    'onInputSubmit',
+                    'onInputValid',
+                    'onInputInvalid');
 
                 /**
                  * Total number of fields in the form.
@@ -128,6 +129,9 @@ troop.postpone(candystore, 'Form', function (ns, className) {
             /** @ignore */
             afterRender: function () {
                 base.afterRender.call(this);
+
+                $(this.getElement())
+                    .on('submit', this.onSubmit);
 
                 if (!this.isDisabled()) {
                     this.focusOnFirstField();
@@ -292,9 +296,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
                 event.preventDefault();
             }
         });
-
-    self.on('submit', '', 'onSubmit');
-});
+}, jQuery);
 
 (function () {
     "use strict";
@@ -308,7 +310,7 @@ troop.postpone(candystore, 'Form', function (ns, className) {
         /** @param {candystore.Form} [expr] */
         isFormOptional: function (expr) {
             return expr === undefined ||
-                   candystore.Form.isBaseOf(expr);
+                candystore.Form.isBaseOf(expr);
         }
     });
 }());

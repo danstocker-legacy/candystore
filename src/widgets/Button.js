@@ -1,10 +1,9 @@
-/*global dessert, troop, sntls, evan, shoeshine, candystore */
-troop.postpone(candystore, 'Button', function (ns, className) {
+/*global dessert, troop, sntls, evan, shoeshine, candystore, jQuery */
+troop.postpone(candystore, 'Button', function (ns, className, /**jQuery*/$) {
     "use strict";
 
     var base = shoeshine.Widget,
         self = base.extend(className)
-            .addTrait(shoeshine.JqueryWidget)
             .addTraitAndExtend(candystore.BinaryStateful)
             .addTrait(candystore.Disableable);
 
@@ -20,7 +19,6 @@ troop.postpone(candystore, 'Button', function (ns, className) {
      * Supports disabling and click events.
      * @class
      * @extends shoeshine.Widget
-     * @extends shoeshine.JqueryWidget
      * @extends candystore.BinaryStateful
      * @extends candystore.Disableable
      */
@@ -35,12 +33,21 @@ troop.postpone(candystore, 'Button', function (ns, className) {
                 base.init.call(this);
                 candystore.BinaryStateful.init.call(this);
                 candystore.Disableable.init.call(this);
+
+                this.elevateMethod('onClick');
             },
 
             /** @ignore */
             afterAdd: function () {
                 base.afterAdd.call(this);
                 candystore.BinaryStateful.afterAdd.call(this);
+            },
+
+            /** @ignore */
+            afterRender: function () {
+                base.afterRender.call(this);
+                $(this.getElement())
+                    .on('click', this.onClick);
             },
 
             /** @ignore */
@@ -69,6 +76,4 @@ troop.postpone(candystore, 'Button', function (ns, className) {
                 link.unLink();
             }
         });
-
-    self.on('click', '.Button.widget-enabled', 'onClick');
-});
+}, jQuery);
