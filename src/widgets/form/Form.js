@@ -132,10 +132,6 @@ troop.postpone(candystore, 'Form', function (ns, className, /**jQuery*/$) {
 
                 $(this.getElement())
                     .on('submit', this.onSubmit);
-
-                if (!this.isDisabled()) {
-                    this.focusOnFirstField();
-                }
             },
 
             /**
