@@ -121,6 +121,20 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
             },
 
             /**
+             * Supposed to override Widget's implementation.
+             * @returns {candystore.Popup}
+             */
+            removeFromParent: function () {
+                // must trigger before removing widget from hierarchy
+                // otherwise event won't bubble to current parent
+                this.triggerSync(this.EVENT_POPUP_CLOSE);
+
+                shoeshine.Widget.removeFromParent.call(this);
+
+                return this;
+            },
+
+            /**
              * Overrides rendering, ensuring that popups get only rendered inside the document body.
              * This override is supposed to overshadow Widget's implementation.
              * @param {HTMLElement} element
@@ -129,6 +143,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
             renderInto: function (element) {
                 if (element === document.body) {
                     shoeshine.Widget.renderInto.call(this, element);
+
+                    this.triggerSync(this.EVENT_POPUP_OPEN);
                 }
                 return this;
             },
@@ -174,12 +190,8 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
 
                 if (!this.isOpen) {
                     this.openUiEvent = this._getLastUiEvent();
-
-                    this.renderInto(document.body);
-
                     this.isOpen = true;
-
-                    this.triggerSync(this.EVENT_POPUP_OPEN);
+                    this.renderInto(document.body);
                 }
 
                 return this;
@@ -198,10 +210,6 @@ troop.postpone(candystore, 'Popup', function (ns, className, /**jQuery*/$) {
                     // otherwise event handlers would see mixed state
                     // (event says it's closed, but widget state says it's open)
                     this.isOpen = false;
-
-                    // must trigger before removing widget from hierarchy
-                    // otherwise event won't bubble
-                    this.triggerSync(this.EVENT_POPUP_CLOSE);
 
                     this.removeFromParent();
                 }
