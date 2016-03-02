@@ -33,13 +33,15 @@ troop.postpone(candystore, 'HotKeyWatcher', function () {
 
                 var link = evan.pushOriginalEvent(event);
 
-                rootWidget
-                    .spawnEvent(this.EVENT_HOT_KEY_DOWN)
-                    .setPayloadItems({
-                        charCode    : event.which,
-                        originWidget: originWidget
-                    })
-                    .broadcastSync();
+                if (rootWidget) {
+                    rootWidget
+                        .spawnEvent(this.EVENT_HOT_KEY_DOWN)
+                        .setPayloadItems({
+                            charCode    : event.which,
+                            originWidget: originWidget
+                        })
+                        .broadcastSync();
+                }
 
                 link.unLink();
             }
